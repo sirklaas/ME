@@ -20,28 +20,15 @@ echo -e "${NC}"
 
 # Configuration - FTP Credentials
 FTP_HOST="103.214.6.202"
-FTP_USER="dukowqeu"
+FTP_USER="dukowaeu"
 FTP_PASS="tTO4rf9h*ZD8!9"
 FTP_PORT="21"
 REMOTE_DIR="/ME"  # Adjust this path if needed (e.g., /public_html/ME or /domains/pinkmilk.eu/public_html/ME)
 
-echo -e "${YELLOW}⚠️  Please configure this script first!${NC}"
-echo "Edit the following variables at the top of deploy-to-server.sh:"
-echo "  - SERVER_USER"
-echo "  - SERVER_HOST"
-echo "  - SERVER_PATH"
-echo ""
-read -p "Have you configured the server details? (yes/no): " configured
-
-if [ "$configured" != "yes" ]; then
-    echo -e "${RED}❌ Deployment cancelled. Please configure the script first.${NC}"
-    exit 1
-fi
-
 # Ask for deployment confirmation
 echo ""
 echo -e "${YELLOW}This will upload files to:${NC}"
-echo -e "${BLUE}${SERVER_USER}@${SERVER_HOST}:${SERVER_PATH}${NC}"
+echo -e "${BLUE}${FTP_USER}@${FTP_HOST}:${REMOTE_DIR}${NC}"
 echo ""
 read -p "Continue with deployment? (yes/no): " confirm
 
