@@ -1,0 +1,83 @@
+{
+  "id": 7,
+  "title": {
+    "nl": "Eigenaardigheden & Gewoontes",
+    "en": "Quirks & Habits"
+  },
+  "description": {
+    "nl": "Jouw gekke gewoontes en excentrieke eigenaardigheden",
+    "en": "Your crazy habits and eccentric quirks"
+  },
+  "questions": [
+    {
+      "id": 32,
+      "type": "text",
+      "question": {
+        "nl": "Welke vreemde gewoonte heb je waar je familie altijd om lacht?",
+        "en": "What strange habit do you have that your family always laughs about?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf jouw vreemde gewoonte...",
+        "en": "Describe your strange habit..."
+      }
+    },
+    {
+      "id": 33,
+      "type": "text",
+      "question": {
+        "nl": "Wat is je meest onlogische bijgeloof of ritueel?",
+        "en": "What is your most illogical superstition or ritual?"
+      },
+      "placeholder": {
+        "nl": "Vertel er maar eens uitgebreid over",
+        "en": "Tell us about it in detail"
+      }
+    },
+    {
+      "id": 34,
+      "type": "text",
+      "question": {
+        "nl": "Welke smaakcombinatie eet je graag die anderen vies vinden?",
+        "en": "What flavor combination do you enjoy eating that others find disgusting?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf deze vreemde smaakcombinatie...",
+        "en": "Describe this strange flavor combination..."
+      }
+    },
+    {
+      "id": 35,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "Op welk moment van de dag ben je het meest productief?",
+        "en": "At what time of day are you most productive?"
+      },
+      "options": {
+        "nl": [
+          "Vroeg in de ochtend (5-8 uur)",
+          "Ochtend (8-12 uur)",
+          "Middag (12-17 uur)",
+          "Avond/nacht (21:00+ uur)"
+        ],
+        "en": [
+          "Early morning (5-8 AM)",
+          "Morning (8 AM-12 PM)",
+          "Afternoon (12-5 PM)",
+          "Evening/night (9 PM+)"
+        ]
+      }
+    },
+    {
+      "id": 36,
+      "type": "text",
+      "question": {
+        "nl": "Wat is jouw meest ongewone manier om stress af te reageren?",
+        "en": "What is your most unusual way to relieve stress?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf hoe je op een unieke manier stress afreageert...",
+        "en": "Describe how you relieve stress in a unique way..."
+      }
+    }
+  ]
+}

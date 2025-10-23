@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Loading Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-result {
+            background: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #ccc;
+        }
+        .test-result.success {
+            border-left-color: #28a745;
+        }
+        .test-result.error {
+            border-left-color: #dc3545;
+        }
+        .test-result h3 {
+            margin: 0 0 10px 0;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 JSON Files Loading Test</h1>
+    <p>This tool tests if all JSON files can be loaded correctly.</p>
+    
+    <button onclick="runTests()">🚀 Run Tests</button>
+    
+    <div id="results"></div>
+
+    <script>
+        const jsonFiles = [
+            'Questions.JSON',
+            'gameshow-config-v2.json',
+            'chapter1-introductie.json',
+            'chapter2-masked-identity.json',
+            'chapter3-persoonlijke-eigenschappen.json',
+            'chapter4-verborgen-talenten.json',
+            'chapter5-jeugd-verleden.json',
+            'chapter6-fantasie-dromen.json',
+            'chapter7-eigenaardigheden.json',
+            'chapter8-onverwachte-voorkeuren.json'
+        ];
+
+        async function testFile(filename) {
+            try {
+                console.log(`Testing ${filename}...`);
+                const response = await fetch(filename);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                
+                return {
+                    success: true,
+                    filename: filename,
+                    message: 'Loaded successfully',
+                    data: data
+                };
+            } catch (error) {
+                return {
+                    success: false,
+                    filename: filename,
+                    message: error.message,
+                    error: error
+                };
+            }
+        }
+
+        async function runTests() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<p>Running tests...</p>';
+            
+            const results = [];
+            
+            for (const file of jsonFiles) {
+                const result = await testFile(file);
+                results.push(result);
+                
+                // Display result immediately
+                const resultDiv = document.createElement('div');
+                resultDiv.className = `test-result ${result.success ? 'success' : 'error'}`;
+                
+                resultDiv.innerHTML = `
+                    <h3>${result.success ? '✅' : '❌'} ${result.filename}</h3>
+                    <p><strong>Status:</strong> ${result.message}</p>
+                    ${result.success ? 
+                        `<details>
+                            <summary>View Data</summary>
+                            <pre>${JSON.stringify(result.data, null, 2).substring(0, 500)}...</pre>
+                        </details>` : 
+                        `<p style="color: #dc3545;"><strong>Error:</strong> ${result.message}</p>`
+                    }
+                `;
+                
+                resultsDiv.appendChild(resultDiv);
+            }
+            
+            // Summary
+            const successCount = results.filter(r => r.success).length;
+            const failCount = results.filter(r => !r.success).length;
+            
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = `test-result ${failCount === 0 ? 'success' : 'error'}`;
+            summaryDiv.innerHTML = `
+                <h3>📊 Summary</h3>
+                <p>✅ Success: ${successCount} / ${jsonFiles.length}</p>
+                <p>❌ Failed: ${failCount} / ${jsonFiles.length}</p>
+                ${failCount === 0 ? 
+                    '<p><strong style="color: #28a745;">All JSON files loaded successfully! ✨</strong></p>' :
+                    '<p><strong style="color: #dc3545;">Some files failed to load. Check server configuration and file permissions.</strong></p>'
+                }
+            `;
+            
+            resultsDiv.insertBefore(summaryDiv, resultsDiv.firstChild);
+        }
+
+        // Auto-run tests on page load
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 500);
+        });
+    </script>
+</body>
+</html>

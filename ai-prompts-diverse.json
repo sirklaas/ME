@@ -1,0 +1,111 @@
+{
+  "character_types": {
+    "animals": {
+      "description": "ANY animal with human-like qualities - AI chooses based on personality",
+      "examples": ["wise owl", "energetic squirrel", "calm bear", "playful otter", "mysterious cat", "loyal dog", "clever fox", "strong elephant", "brave lion", "peaceful panda", "curious raccoon", "graceful deer", "bold eagle", "friendly dolphin", "quirky penguin", "cunning wolf", "gentle rabbit", "proud peacock", "swift cheetah", "patient turtle"],
+      "style": "Realistic animal with clothes and personality - AI selects the BEST animal match for the person's answers",
+      "note": "NOT limited to these examples - AI can choose ANY animal that fits!"
+    },
+    "fruits_vegetables": {
+      "description": "ANY fruit or vegetable with personality - AI chooses based on answers",
+      "examples": ["confident tomato", "cheerful banana", "wise avocado", "energetic carrot", "calm broccoli", "mysterious eggplant", "sweet strawberry", "bold pineapple", "gentle pumpkin", "spicy pepper", "cool cucumber", "strong potato", "elegant asparagus", "quirky mushroom", "bright orange", "smooth apple", "tangy lemon"],
+      "style": "Realistic produce with clothes, arms, legs, and expressive face",
+      "note": "NOT limited to these examples - AI can choose ANY fruit/vegetable that fits!"
+    },
+    "fantasy_heroes": {
+      "description": "Fantasy characters from various mythologies",
+      "examples": ["brave knight", "wise wizard", "skilled archer", "mystical druid", "cunning rogue", "noble paladin"],
+      "style": "Realistic fantasy character with detailed costume and props"
+    },
+    "pixar_disney": {
+      "description": "Charismatic Pixar/Disney-style characters",
+      "examples": ["quirky inventor", "optimistic dreamer", "lovable sidekick", "wise mentor", "energetic adventurer"],
+      "style": "Realistic 3D character with Pixar-quality rendering and personality"
+    },
+    "fairy_tales": {
+      "description": "Famous fairy tale characters reimagined",
+      "examples": ["modern Cinderella", "tech-savvy Little Red Riding Hood", "entrepreneurial Three Little Pigs", "adventurous Rapunzel"],
+      "style": "Realistic fairy tale character in modern or classic setting"
+    }
+  },
+  
+  "system_prompt": "You are creating diverse, creative character descriptions for a workplace game show. Characters should be VARIED - animals, fruits/vegetables, fantasy heroes, Pixar-style figures, or fairy tale characters. NO MASKS NEEDED. Each character should wear clothes and have distinct personality. Keep language simple and fun. Write in Dutch.",
+  
+  "character_selection_logic": {
+    "description": "How to determine character type based on answers",
+    "rules": [
+      "Longer text answers = more weight (count words)",
+      "Creative/unusual answers = fantasy or Pixar style",
+      "Practical/straightforward answers = animals or fruits",
+      "Adventurous answers = fantasy heroes",
+      "Playful/humorous answers = Pixar/Disney style",
+      "Traditional values = fairy tale characters"
+    ]
+  },
+  
+  "enhanced_prompt_template": {
+    "ai_summary": "Analyseer deze antwoorden en bepaal het beste karakter type (dier, fruit/groente, fantasy held, Pixar-figuur, of sprookjesfiguur).\n\nCreëer dan:\n\n1. KARAKTER (100-150 woorden):\n- Kies een specifiek dier, fruit/groente, fantasy held, Pixar-figuur, of sprookjesfiguur\n- GEEN MASKER NODIG\n- Beschrijf hun kleding (ze dragen altijd kleding!)\n- Beschrijf hun persoonlijkheid in simpele termen\n- Maak het mysterieus maar makkelijk te begrijpen\n- Wees creatief en divers!\n\nVoorbeelden:\n- Een wijze uil in een tweed jasje met leesbril\n- Een zelfverzekerde tomaat in een business pak\n- Een dappere ridder met moderne sneakers\n- Een Pixar-achtige uitvinder met gekke gadgets\n- Een moderne Roodkapje met een rugzak vol tech\n\n2. OMGEVING (50-75 woorden):\n- Waar hangt dit karakter rond?\n- Hoe ziet het er daar uit?\n- Houd het simpel en visueel\n\n3. PROPS (3-5 items):\n- Lijst 3-5 objecten die dit karakter altijd bij zich heeft\n- Formaat: '- Item naam: waarom het belangrijk is'\n\nHoud alles casual en leuk. Geen ingewikkelde woorden!\n\nWEES CREATIEF EN DIVERS - niet alle karakters moeten hetzelfde type zijn!",
+    
+    "image_generation_prompt": "STUDIO QUALITY PHOTO of [CHARACTER_TYPE]: [CHARACTER_DESCRIPTION]\n\nSTYLE: Hyper-realistic, professional studio photography, 16:9 aspect ratio\nLIGHTING: Professional studio lighting, soft shadows, dramatic highlights\nQUALITY: 8K resolution, sharp focus, photorealistic textures\nCLOTHING: [CLOTHING_DESCRIPTION] - detailed fabric textures\nSETTING: [ENVIRONMENT_DESCRIPTION]\nPROPS: [PROPS_LIST]\n\nIMPORTANT:\n- NO MASK on character\n- Photorealistic rendering, not cartoon or drawing\n- Studio-quality professional photography\n- Character wearing detailed, realistic clothing\n- Sharp focus on character\n- Cinematic composition\n- 16:9 widescreen format for video\n\nCamera: Professional DSLR, 85mm lens, f/2.8, studio lighting setup"
+  },
+  
+  "answer_weighting": {
+    "description": "How to weight different answer types",
+    "rules": {
+      "text_length": {
+        "short": "1-20 words = 1 point",
+        "medium": "21-50 words = 2 points",
+        "long": "51+ words = 3 points"
+      },
+      "creativity_indicators": {
+        "keywords": ["unique", "unusual", "creative", "different", "special", "weird", "quirky", "strange"],
+        "weight": "2x multiplier"
+      },
+      "personality_traits": {
+        "adventurous": ["adventure", "explore", "travel", "risk", "new"],
+        "practical": ["organize", "fix", "solve", "plan", "efficient"],
+        "playful": ["fun", "play", "joke", "laugh", "silly"],
+        "wise": ["learn", "teach", "wisdom", "knowledge", "understand"],
+        "creative": ["create", "imagine", "design", "art", "invent"]
+      }
+    }
+  },
+  
+  "character_type_mapping": {
+    "high_creativity_score": ["pixar_disney", "fantasy_heroes"],
+    "high_practical_score": ["animals", "fruits_vegetables"],
+    "high_adventure_score": ["fantasy_heroes", "fairy_tales"],
+    "high_playful_score": ["pixar_disney", "fruits_vegetables"],
+    "high_wisdom_score": ["animals", "fairy_tales"]
+  },
+  
+  "example_outputs": {
+    "animal_example": {
+      "character_name": "De Wijze Uil",
+      "type": "Dier met kleding",
+      "summary": "KARAKTER:\nMeet 'De Wijze Uil' - een kalme uil die altijd een tweed jasje draagt met leren elleboogstukken en een kleine leesbril op zijn snavel. Hij heeft vleugels maar gebruikt ze vooral om te gebaren tijdens gesprekken. Zijn veren zijn bruin met gouden accenten, en hij draagt een vintage horloge aan een ketting. Hij is de persoon die rustig blijft als iedereen in paniek is, en altijd precies weet waar dingen staan. 's Nachts is hij het meest alert, en overdag zie je hem vaak met een kop thee.\n\nOMGEVING:\nEen gezellige bibliotheek met hoge boekenkasten, zachte leesstoelen, en warme lampen. Door het raam zie je de maan, en overal liggen opengeslagen boeken en notities. Er hangt een geur van oud papier en verse thee.\n\nPROPS:\n- Vintage leesbril: Zit altijd op zijn snavel, ook al leest hij niet\n- Leren notitieboek: Vol met wijze observaties en tekeningen\n- Theepot: Altijd verse thee, meestal Earl Grey\n- Zakhorloge: Erfstuk van zijn grootvader, loopt altijd precies op tijd",
+      "image_prompt": "STUDIO QUALITY PHOTO of a wise owl character: A distinguished brown owl wearing a tweed jacket with leather elbow patches, small reading glasses perched on beak, vintage pocket watch on a chain. Standing upright like a human, with wings folded. Professional studio lighting, photorealistic feather textures, warm golden lighting. Setting: Cozy library with bookshelves in background. 16:9 aspect ratio. NO MASK. Hyper-realistic, 8K quality, sharp focus, cinematic composition. Camera: 85mm lens, f/2.8, professional DSLR."
+    },
+    
+    "fruit_example": {
+      "character_name": "De Zelfverzekerde Tomaat",
+      "type": "Fruit/groente met kleding",
+      "summary": "KARAKTER:\nMeet 'De Zelfverzekerde Tomaat' - een glanzende rode tomaat die altijd een strak business pak draagt met een stropdas. Hij heeft armen en benen, en loopt met veel zelfvertrouwen. Zijn gezicht is expressief met grote ogen en een brede glimlach. Hij draagt gepoetste schoenen en heeft altijd zijn aktetas bij zich. Hij is de persoon die presentaties geeft alsof het niets is, en iedereen motiveert met zijn positieve energie. Hij houdt van structuur maar kan ook improviseren.\n\nOMGEVING:\nEen modern kantoor met grote ramen, een wit bureau, en motiverende posters aan de muur. Alles is netjes georganiseerd, met een espressomachine in de hoek en een whiteboard vol met ideeën.\n\nPROPS:\n- Designer aktetas: Vol met plannen en presentaties\n- Gouden pen: Voor het tekenen van belangrijke deals\n- Smartphone: Altijd de laatste updates\n- Espresso cup: Kleine maar sterke koffie, net als hij",
+      "image_prompt": "STUDIO QUALITY PHOTO of an anthropomorphic tomato character: A glossy red tomato with expressive face, wearing a sharp business suit with tie, polished shoes, carrying a designer briefcase. Standing confidently with arms and legs, big smile. Professional studio lighting, photorealistic vegetable texture with shine, dramatic business lighting. Setting: Modern office with windows in background. 16:9 aspect ratio. NO MASK. Hyper-realistic, 8K quality, sharp focus, cinematic composition. Camera: 85mm lens, f/2.8, professional DSLR."
+    },
+    
+    "fantasy_example": {
+      "character_name": "De Dappere Ridder",
+      "type": "Fantasy held",
+      "summary": "KARAKTER:\nMeet 'De Dappere Ridder' - een moderne ridder die een mix draagt van klassiek harnas en moderne kleding. Zijn borstplaat glimt, maar daaronder draagt hij comfortabele sneakers en een hoodie. Hij heeft een zwaard aan zijn riem maar gebruikt het vooral als briefopener. Hij is de persoon die altijd klaarstaat om te helpen, of het nu gaat om een technisch probleem of een moeilijk gesprek. Hij combineert oude waarden met nieuwe ideeën.\n\nOMGEVING:\nEen mix van oud en nieuw - een kasteel kamer met moderne tech. Stenen muren met neon verlichting, een oude houten tafel met een laptop erop. Door het raam zie je zowel een moderne stad als groene heuvels.\n\nPROPS:\n- Zwaard met USB poort: Klassiek maar praktisch\n- Smartphone in harnas holster: Altijd bereikbaar\n- Moderne sneakers: Comfort boven traditie\n- Rugzak met gadgets: Voorbereid op alles",
+      "image_prompt": "STUDIO QUALITY PHOTO of a modern knight character: A brave knight wearing gleaming chest armor over a comfortable hoodie, modern sneakers, sword at belt. Standing heroically with confident posture. Professional studio lighting, photorealistic metal and fabric textures, dramatic heroic lighting. Setting: Castle room with modern tech elements in background. 16:9 aspect ratio. NO MASK. Hyper-realistic, 8K quality, sharp focus, cinematic composition. Camera: 85mm lens, f/2.8, professional DSLR."
+    },
+    
+    "pixar_example": {
+      "character_name": "De Gekke Uitvinder",
+      "type": "Pixar-stijl karakter",
+      "summary": "KARAKTER:\nMeet 'De Gekke Uitvinder' - een energiek karakter met wild haar, grote expressieve ogen, en een lab jas vol met vlekken en badges. Hij draagt een veiligheidsbril die altijd scheef staat, werkhandschoenen met gaten erin, en schoenen met verschillende veters. Hij is altijd in beweging, vol met ideeën, en zijn zakken zitten vol met rare gadgets. Hij is de persoon die problemen oplost op manieren waar niemand aan dacht, en altijd enthousiast is over nieuwe projecten.\n\nOMGEVING:\nEen chaotisch maar creatief lab vol met half-afgebouwde uitvindingen, kleurrijke post-its, en knipperende lampjes. Overal liggen gereedschappen, en er hangt een geur van soldeer en koffie. Een groot whiteboard staat vol met gekke tekeningen.\n\nPROPS:\n- Multi-tool met te veel functies: Zelfgemaakt en altijd kapot\n- Notitieboek vol schetsen: Ideeën die nog gerealiseerd moeten worden\n- Veiligheidsbril: Staat nooit recht maar beschermt wel\n- Koffie mok met formules: Nooit leeg, altijd koud",
+      "image_prompt": "STUDIO QUALITY PHOTO of a Pixar-style inventor character: An energetic character with wild hair, large expressive eyes, wearing a stained lab coat with badges, crooked safety goggles, work gloves with holes, mismatched shoelaces. Standing in dynamic pose with excited expression. Professional studio lighting, photorealistic Pixar-quality 3D rendering, vibrant colorful lighting. Setting: Creative chaotic lab with inventions in background. 16:9 aspect ratio. NO MASK. Hyper-realistic, 8K quality, sharp focus, cinematic composition. Camera: 85mm lens, f/2.8, professional DSLR."
+    }
+  }
+}

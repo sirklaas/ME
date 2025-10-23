@@ -1,0 +1,85 @@
+{
+  "id": 3,
+  "title": {
+    "nl": "Persoonlijke Eigenschappen & Karakter",
+    "en": "Personal Traits & Character"
+  },
+  "description": {
+    "nl": "Vertel ons meer over wie je werkelijk bent",
+    "en": "Tell us more about who you really are"
+  },
+  "questions": [
+    {
+      "id": 11,
+      "type": "text",
+      "question": {
+        "nl": "Als je een superkracht zou kunnen kiezen, welke zou dat zijn en waarom?",
+        "en": "If you could choose a superpower, what would it be and why?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf je superkracht en waarom je deze zou kiezen...",
+        "en": "Describe your superpower and why you would choose it..."
+      }
+    },
+    {
+      "id": 12,
+      "type": "text",
+      "question": {
+        "nl": "Wat is je meest bizarre angst waar niemand van weet?",
+        "en": "What is your most bizarre fear that nobody knows about?"
+      },
+      "placeholder": {
+        "nl": "Vertel over je meest ongewone angst...",
+        "en": "Tell about your most unusual fear..."
+      }
+    },
+    {
+      "id": 13,
+      "type": "text",
+      "question": {
+        "nl": "Welke beroemde persoon zou jouw perfecte diner-gast zijn?",
+        "en": "Which famous person would be your perfect dinner guest?"
+      },
+      "placeholder": {
+        "nl": "Noem de persoon en leg uit waarom...",
+        "en": "Name the person and explain why..."
+      }
+    },
+    {
+      "id": 14,
+      "type": "text",
+      "question": {
+        "nl": "Over welk onderwerp zou je het liefst praten tijdens dat diner?",
+        "en": "What topic would you most like to talk about during that dinner?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf twee verschillende gespreksonderwerpen...",
+        "en": "Describe two different conversation topics..."
+      }
+    },
+    {
+      "id": 15,
+      "type": "text",
+      "question": {
+        "nl": "Als je leven een Netflix-serie zou zijn, wat zou de titel zijn?",
+        "en": "If your life were a Netflix series, what would the title be?"
+      },
+      "placeholder": {
+        "nl": "Verzin een creatieve titel voor je levensserie, plus een pay-off",
+        "en": "Come up with a creative title for your life series, plus a tagline"
+      }
+    },
+    {
+      "id": 16,
+      "type": "text",
+      "question": {
+        "nl": "Wat is het meest krankzinnigste dat je ooit hebt gedaan?",
+        "en": "What is the craziest thing you've ever done?"
+      },
+      "placeholder": {
+        "nl": "Vertel over je meest krankzinnigste moment...",
+        "en": "Tell about your craziest moment..."
+      }
+    }
+  ]
+}

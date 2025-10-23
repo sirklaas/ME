@@ -1,0 +1,81 @@
+{
+  "gameshow": {
+    "id": "masked_employee_2025",
+    "name": {
+      "nl": "The Masked Employee",
+      "en": "The Masked Employee"
+    },
+    "title": {
+      "nl": "🎭 THE MASKED EMPLOYEE 🎭",
+      "en": "🎭 THE MASKED EMPLOYEE 🎭"
+    },
+    "welcome_title": {
+      "nl": "ONTDEK DE MYSTERIEUZE HELD IN JEZELF!",
+      "en": "DISCOVER THE MYSTERIOUS SUPERHERO IN YOURSELF!"
+    },
+    "congratulations": {
+      "nl": "Gefeliciteerd! Je bent uitgekozen om deel te nemen aan ons spectaculaire bedrijfsevenement: The Masked Employee. Dit wordt een onvergetelijke ervaring waarbij verborgen talenten worden onthuld en teamcultuur wordt versterkt op een compleet nieuwe manier.",
+      "en": "Congratulations! You've been selected to participate in our spectacular company event: The Masked Employee. This will be an unforgettable experience where hidden talents are revealed and team culture is strengthened in a completely new way."
+    },
+    "confidentiality_title": {
+      "nl": "⚠️ ABSOLUTE GEHEIMHOUDING VERPLICHT ⚠️",
+      "en": "⚠️ ABSOLUTE CONFIDENTIALITY REQUIRED ⚠️"
+    },
+    "confidentiality_warning": {
+      "nl": "LET OP: Door deel te nemen aan deze vragenlijst ga je akkoord met de volgende geheimhoudingsregels:",
+      "en": "WARNING: By participating in this questionnaire you agree to the following confidentiality rules:"
+    },
+    "forbidden_rules": {
+      "nl": [
+        "Het bespreken van deze vragenlijst met collega's",
+        "Het delen van je antwoorden met anderen",
+        "Het onthullen wie er deelneemt aan de show",
+        "Het bespreken van welke talenten of eigenschappen je hebt prijsgegeven",
+        "Het geven van hints over je identiteit tijdens de show"
+      ],
+      "en": [
+        "Discussing this questionnaire with colleagues",
+        "Sharing your answers with others",
+        "Revealing who is participating in the show",
+        "Discussing what talents or qualities you have revealed",
+        "Giving hints about your identity during the show"
+      ]
+    },
+    "penalty_clause": {
+      "nl": "💰 BOETECLAUSULE: Bij overtreding van de geheimhoudingsplicht wordt een boete van €9.750 in rekening gebracht. Deze regel geldt voor alle deelnemers en medewerkers die kennis hebben van de deelnemerslijst.",
+      "en": "💰 PENALTY CLAUSE: In case of violation of the confidentiality obligation, a fine of €9,750 will be charged. This rule applies to all participants and employees who have knowledge of the participants list."
+    },
+    "how_it_works_title": {
+      "nl": "🎯 HOE HET WERKT:",
+      "en": "🎯 HOW IT WORKS:"
+    },
+    "how_it_works": {
+      "nl": [
+        "Vul onderstaande vragenlijst volledig en eerlijk in",
+        "Jouw antwoorden worden gebruikt voor AI-gegenereerde mysterieuze filmpjes",
+        "Tijdens de show raden teams wie er achter elk masker schuilgaat",
+        "Alleen aan het einde wordt jouw ware identiteit onthuld!"
+      ],
+      "en": [
+        "Complete the questionnaire below fully and honestly",
+        "Your answers will be used for AI-generated mysterious videos",
+        "During the show, teams guess who is behind each mask",
+        "Only at the end will your true identity be revealed!"
+      ]
+    },
+    "final_message": {
+      "nl": "Onthoud: Het succes van deze show hangt volledig af van absolute geheimhouding. Vertrouw erop dat iedereen zich aan deze regels houdt voor een magische ervaring!",
+      "en": "Remember: The success of this show depends entirely on absolute confidentiality. Trust that everyone will adhere to these rules for a magical experience!"
+    }
+  },
+  "chapters": [
+    "chapter1-introductie.json",
+    "chapter2-masked-identity.json",
+    "chapter3-persoonlijke-eigenschappen.json",
+    "chapter4-verborgen-talenten.json",
+    "chapter5-jeugd-verleden.json",
+    "chapter6-fantasie-dromen.json",
+    "chapter7-eigenaardigheden.json",
+    "chapter8-onverwachte-voorkeuren.json"
+  ]
+}

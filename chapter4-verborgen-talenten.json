@@ -1,0 +1,73 @@
+{
+  "id": 4,
+  "title": {
+    "nl": "Verborgen Talenten & Hobby's",
+    "en": "Hidden Talents & Hobbies"
+  },
+  "description": {
+    "nl": "Onthul je geheime vaardigheden en passies",
+    "en": "Reveal your secret skills and passions"
+  },
+  "questions": [
+    {
+      "id": 17,
+      "type": "text",
+      "question": {
+        "nl": "Welk geheim talent heb je waar je collega's versteld van zouden staan?",
+        "en": "What secret talent do you have that would amaze your colleagues?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf twee of meer verborgen talenten...",
+        "en": "Describe two or more hidden talents..."
+      }
+    },
+    {
+      "id": 18,
+      "type": "text",
+      "question": {
+        "nl": "Wat is je meest ongewone hobby of verzameling waarvan niemand af weet?",
+        "en": "What is your most unusual hobby or collection that nobody knows about?"
+      },
+      "placeholder": {
+        "nl": "Vertel over deze bijzondere hobby in detail...",
+        "en": "Tell about this special hobby in detail..."
+      }
+    },
+    {
+      "id": 19,
+      "type": "text",
+      "question": {
+        "nl": "Kan je [of zou je willen kunnen ] een instrument bespelen dat niemand op het werk van je verwacht?",
+        "en": "Can you [or would you like to be able to] play an instrument that no one at work would expect from you?"
+      },
+      "placeholder": {
+        "nl": "Welk instrument is datt en waarom is het zo onverwacht...",
+        "en": "Which instrument is it and why is it so unexpected..."
+      }
+    },
+    {
+      "id": 20,
+      "type": "text",
+      "question": {
+        "nl": "Welke sport of activiteit heb je vroeger beoefend die totaal niet bij je huidige imago past?",
+        "en": "Which sport or activity did you practice in the past that doesn't fit your current image at all?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf de sport en waarom het niet past bij je imago...",
+        "en": "Describe the sport and why it doesn't fit your image..."
+      }
+    },
+    {
+      "id": 21,
+      "type": "text",
+      "question": {
+        "nl": "Wat is je meest creatieve uitlaatklep buiten je werk om?",
+        "en": "What is your most creative outlet outside of work?"
+      },
+      "placeholder": {
+        "nl": "Vertel uitvoerig over je creatieve uitlaadklep[pen]...",
+        "en": "Tell extensively about your creative outlet(s)..."
+      }
+    }
+  ]
+}

@@ -1,0 +1,318 @@
+{
+  "gameshow": {
+    "title": "🎭 THE MASKED EMPLOYEE 🎭",
+    "welcome_title": "ONTDEK DE MYSTERIEUZE HELD IN JEZELF!",
+    "congratulations": "Gefeliciteerd! Je bent uitgekozen om deel te nemen aan ons spectaculaire bedrijfsevenement: The Masked Employee. Dit wordt een onvergetelijke ervaring waarbij verborgen talenten worden onthuld en teamcultuur wordt versterkt op een compleet nieuwe manier.",
+    "confidentiality_title": "⚠️ ABSOLUTE GEHEIMHOUDING VERPLICHT ⚠️",
+    "confidentiality_warning": "LET OP: Door deel te nemen aan deze vragenlijst ga je akkoord met de volgende geheimhoudingsregels:",
+    "forbidden_rules": [
+      "Het bespreken van deze vragenlijst met collega's",
+      "Het delen van je antwoorden met anderen",
+      "Het onthullen wie er deelneemt aan de show",
+      "Het bespreken van welke talenten of eigenschappen je hebt prijsgegeven",
+      "Het geven van hints over je identiteit tijdens de show"
+    ],
+    "penalty_clause": "💰 BOETECLAUSULE: Bij overtreding van de geheimhoudingsplicht wordt een boete van €9.750 in rekening gebracht. Deze regel geldt voor alle deelnemers en medewerkers die kennis hebben van de deelnemerslijst.",
+    "how_it_works_title": "🎯 HOE HET WERKT:",
+    "how_it_works": [
+      "Vul onderstaande vragenlijst volledig en eerlijk in",
+      "Jouw antwoorden worden gebruikt voor AI-gegenereerde mysterieuze filmpjes",
+      "Tijdens de show raden teams wie er achter elk masker schuilgaat",
+      "Alleen aan het einde wordt jouw ware identiteit onthuld!"
+    ],
+    "final_message": "Onthoud: Het succes van deze show hangt volledig af van absolute geheimhouding. Vertrouw erop dat iedereen zich aan deze regels houdt voor een magische ervaring!"
+  },
+  "chapters": [
+    {
+          "id": 1,
+          "type": "multiple-choice",
+          "question": "Wat zou je willen worden?",
+          "options": ["Man", "Vrouw", "Non-binair", "Weet ik nog niet"]
+        },
+        {
+          "id": 2,
+          "type": "multiple-choice",
+          "question": "Ben je getrouwd, in een relatie, of single?",
+          "options": ["Getrouwd", "In een relatie", "Single", "Het is ingewikkeld"]
+        },
+        {
+          "id": 3,
+          "type": "multiple-choice",
+          "question": "Hoeveel fantasie heb je",
+          "options": ["geen", "best wel een beetje", "heel veel", "out of this world"]
+        },
+        {
+          "id": 4,
+          "type": "multiple-choice",
+          "question": "In welke leeftijdscategorie valt jouw character?",
+          "options": ["10-20 jaar", "20-40 jaar", "40-50 jaar", "50+ jaar"]
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "question": "Hoe lang werk je bij dit bedrijf?",
+          "options": ["Minder dan 1 jaar", "1-3 jaar", "3-5 jaar", "Heel weing"]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Vragen over jouw Masked Identity",
+      "description": "Laten we jouw mysterieuze kant ontdekken",
+      "questions": [
+        {
+          "id": 6,
+          "type": "text",
+          "question": "Als je een dier zou moeten kiezen dat jouw persoonlijkheid het beste weergeeft, welk dier zou dat zijn?",
+          "placeholder": "Bijvoorbeeld: een leeuw, omdat ik leidinggevend ben..."
+        },
+        {
+          "id": 7,
+          "type": "text",
+          "question": "Welke kleur kostuum zou het beste bij jouw karakter passen en waarom?",
+          "placeholder": "Beschrijf de kleur maar leg vooral uit waarom..."
+        },
+        {
+          "id": 8,
+          "type": "multiple-choice",
+          "question": "Welk element uit de natuur representeert jou het beste?",
+          "options": ["Vuur - passievol en energiek", "Water - kalm en aanpassingsvermogen", "Aarde - stabiel en betrouwbaar", "Lucht - vrij en creatief"]
+        },
+        {
+          "id": 9,
+          "type": "text",
+          "question": "Als je een masker zou ontwerpen voor jezelf, welk thema of symbool zou centraal staan?",
+          "placeholder": "Beschrijf het ontwerp van je masker in detail..."
+        },
+        {
+          "id": 10,
+          "type": "text",
+          "question": "Welke muziekstijl zou het beste bij jouw entrance passen?",
+          "placeholder": "Bijvoorbeeld: rock, klassiek, jazz, pop..."
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Persoonlijke Eigenschappen & Karakter",
+      "description": "Vertel ons meer over wie je werkelijk bent",
+      "questions": [
+        {
+          "id": 11,
+          "type": "text",
+          "question": "Als je een superkracht zou kunnen kiezen, welke zou dat zijn en waarom?",
+          "placeholder": "Beschrijf je superkracht en waarom je deze zou kiezen..."
+        },
+        {
+          "id": 12,
+          "type": "text",
+          "question": "Wat is je meest bizarre angst waar niemand van weet?",
+          "placeholder": "Vertel over je meest ongewone angst..."
+        },
+        {
+          "id": 13,
+          "type": "text",
+          "question": "Welke beroemde persoon zou jouw perfecte diner-gast zijn?",
+          "placeholder": "Noem de persoon en leg uit waarom..."
+        },
+        {
+          "id": 14,
+          "type": "text",
+          "question": "Over welk onderwerp zou je het liefst praten tijdens dat diner?",
+          "placeholder": "Beschrijf twee verschillende gespreksonderwerpen..."
+        },
+        {
+          "id": 15,
+          "type": "text",
+          "question": "Als je leven een Netflix-serie zou zijn, wat zou de titel zijn?",
+          "placeholder": "Verzin een creatieve titel voor je levensserie, plus een pay-off"
+        },
+        {
+          "id": 16,
+          "type": "text",
+          "question": "Wat is het meest krankzinnigste dat je ooit hebt gedaan?",
+          "placeholder": "Vertel over je meest krankzinnigste moment..."
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Verborgen Talenten & Hobby's",
+      "description": "Onthul je geheime vaardigheden en passies",
+      "questions": [
+        {
+          "id": 17,
+          "type": "text",
+          "question": "Welk geheim talent heb je waar je collega's versteld van zouden staan?",
+          "placeholder": "Beschrijf twee of meer verborgen talenten..."
+        },
+        {
+          "id": 18,
+          "type": "text",
+          "question": "Wat is je meest ongewone hobby of verzameling waarvan niemand af weet?",
+          "placeholder": "Vertel over deze bijzondere hobby in detail..."
+        },
+        {
+          "id": 19,
+          "type": "text",
+          "question": "Kan je [of zou je willen kunnen ] een instrument bespelen dat niemand op het werk van je verwacht?",
+          "placeholder": "Welk instrument is datt en waarom is het zo onverwacht..."
+        },
+        {
+          "id": 20,
+          "type": "text",
+          "question": "Welke sport of activiteit heb je vroeger beoefend die totaal niet bij je huidige imago past?",
+          "placeholder": "Beschrijf de sport en waarom het niet past bij je imago..."
+        },
+        {
+          "id": 21,
+          "type": "text",
+          "question": "Wat is je meest creatieve uitlaatklep buiten je werk om?",
+          "placeholder": "Vertel uitvoerig over je creatieve uitlaadklep[pen]..."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Jeugd & Verleden",
+      "description": "Een blik in je verleden geeft inzicht in de toekomst",
+      "questions": [
+        {
+          "id": 22,
+          "type": "text",
+          "question": "Wat wilde je worden toen je 8 jaar oud was?",
+          "placeholder": "Vertel over je kinderdroom..."
+        },
+        {
+          "id": 23,
+          "type": "text",
+          "question": "Welke schoolvakken waren vroeger je absolute favorieten en waarom?",
+          "placeholder": "Noem jouw favoriete vakken en leg uit waarom..."
+        },
+        {
+          "id": 24,
+          "type": "text",
+          "question": "Wat is je meest gênante jeugdherinnering die nu eigenlijk best grappig is?",
+          "placeholder": "Mijn gênante maar grappige herinnering..."
+        },
+        {
+          "id": 25,
+          "type": "text",
+          "question": "Welke trend uit je tienerjaren mis je het meest?",
+          "placeholder": "Deze trend mis ik nog elke dag..."
+        },
+        {
+          "id": 26,
+          "type": "text",
+          "question": "Als je terug kon gaan naar je 16e verjaardag, welk advies zou je jezelf geven?",
+          "placeholder": "Mijn advies aan mijzelf.."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Fantasie & Dromen",
+      "description": "Vertel ons over je dromen en fantasieën",
+      "questions": [
+        {
+          "id": 27,
+          "type": "text",
+          "question": "In welke film- of boekenwereld zou je het liefst een maand willen leven?",
+          "placeholder": "Beschrijf de wereld uitvoerig en waarom je daar zou willen zijn..."
+        },
+        {
+          "id": 28,
+          "type": "text",
+          "question": "Als je morgen wakker werd met het geld van Elon Musk, wat zou je daarmee dan gelijk kopen?",
+          "placeholder": "Wat zou je allereerste aankoop zijn..."
+        },
+        {
+          "id": 29,
+          "type": "text",
+          "question": "Welke periode fascineert je het meest en waarom?",
+          "placeholder": "Noem de periode en leg uit wat je fascineert..."
+        },
+        {
+          "id": 30,
+          "type": "text",
+          "question": "Als je een restaurant zou openen, welke keuken zou je serveren en hoe zou het heten?",
+          "placeholder": "Beschrijf je restaurant concept..."
+        },
+        {
+          "id": 31,
+          "type": "text",
+          "question": "Welke plek op aarde [ mag fictie zijn] staat bovenaan je bucketlist en wat trekt je daar naartoe?",
+          "placeholder": "Beschrijf deze plek en waarom je er naartoe wilt..."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Eigenaardigheden & Gewoontes",
+      "description": "Jouw gekke gewoontes en excentrieke eigenaardigheden",
+      "questions": [
+        {
+          "id": 32,
+          "type": "text",
+          "question": "Welke vreemde gewoonte heb je waar je familie altijd om lacht?",
+          "placeholder": "Beschrijf jouw vreemde gewoonte..."
+        },
+        {
+          "id": 33,
+          "type": "text",
+          "question": "Wat is je meest onlogische bijgeloof of ritueel?",
+          "placeholder": "Vertel er maar eens uitgebreid over"
+        },
+        {
+          "id": 34,
+          "type": "text",
+          "question": "Welke smaakcombinatie eet je graag die anderen vies vinden?",
+          "placeholder": "Beschrijf deze vreemde smaakcombinatie..."
+        },
+        {
+          "id": 35,
+          "type": "multiple-choice",
+          "question": "Op welk moment van de dag ben je het meest productief?",
+          "options": ["Vroeg in de ochtend (5-8 uur)", "Ochtend (8-12 uur)", "Middag (12-17 uur)", "Avond/nacht (21:00+ uur)"]
+        },
+        {
+          "id": 36,
+          "type": "text",
+          "question": "Wat is jouw meest ongewone manier om stress af te reageren?",
+          "placeholder": "Beschrijf hoe je op een unieke manier stress afreageert..."
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Onverwachte Voorkeuren",
+      "description": "Verras ons met je nogal onverwachte kanten",
+      "questions": [
+        {
+          "id": 37,
+          "type": "text",
+          "question": "Welk genre muziek luister je stiekem graag dat niemand van je zou verwachten?",
+          "placeholder": "Vertel over je guilty pleasures"
+        },
+        {
+          "id": 38,
+          "type": "text",
+          "question": "Welk type TV-programma is je guilty pleasure?",
+          "placeholder": "Beschrijf je foutste TV-programma..."
+        },
+        {
+          "id": 39,
+          "type": "text",
+          "question": "Als je een tattoo zou nemen, wat zou het zijn en waar zou je het laten zetten?",
+          "placeholder": "Beschrijf je hypothetische tattoo..."
+        },
+        {
+          "id": 40,
+          "type": "text",
+          "question": "Welke kleur beschrijft jouw persoonlijkheid het beste en waarom?",
+          "placeholder": "Noem de kleur en leg uit waarom..."
+        }
+      ]
+    }
+  ]
+}

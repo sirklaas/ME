@@ -1,0 +1,123 @@
+{
+  "id": 1,
+  "title": {
+    "nl": "Basis Informatie",
+    "en": "Basic Information"
+  },
+  "description": {
+    "nl": "Laten we beginnen met wat basis informatie",
+    "en": "Let's start with some basic information"
+  },
+  "questions": [
+    {
+      "id": 1,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "Wat zou je willen worden?",
+        "en": "What would you like to be?"
+      },
+      "options": {
+        "nl": [
+          "Man",
+          "Vrouw",
+          "Non-binair",
+          "Weet ik nog niet"
+        ],
+        "en": [
+          "Man",
+          "Woman",
+          "Non-binary",
+          "I don't know yet"
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "Ben je getrouwd, in een relatie, of single?",
+        "en": "Are you married, in a relationship, or single?"
+      },
+      "options": {
+        "nl": [
+          "Getrouwd",
+          "In een relatie",
+          "Single",
+          "Het is ingewikkeld"
+        ],
+        "en": [
+          "Married",
+          "In a relationship",
+          "Single",
+          "It's complicated"
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "Hoeveel fantasie heb je",
+        "en": "How much imagination do you have"
+      },
+      "options": {
+        "nl": [
+          "geen",
+          "best wel een beetje",
+          "heel veel",
+          "out of this world"
+        ],
+        "en": [
+          "none",
+          "quite a bit",
+          "a lot",
+          "out of this world"
+        ]
+      }
+    },
+    {
+      "id": 4,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "In welke leeftijdscategorie valt jouw character?",
+        "en": "In which age category does your character fall?"
+      },
+      "options": {
+        "nl": [
+          "10-20 jaar",
+          "20-40 jaar",
+          "40-50 jaar",
+          "50+ jaar"
+        ],
+        "en": [
+          "10-20 years",
+          "20-40 years",
+          "40-50 years",
+          "50+ years"
+        ]
+      }
+    },
+    {
+      "id": 5,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "Hoe lang werk je bij dit bedrijf?",
+        "en": "How long have you been working at this company?"
+      },
+      "options": {
+        "nl": [
+          "Minder dan 1 jaar",
+          "1-3 jaar",
+          "3-5 jaar",
+          "Heel weing"
+        ],
+        "en": [
+          "Less than 1 year",
+          "1-3 years",
+          "3-5 years",
+          "Very little"
+        ]
+      }
+    }
+  ]
+}

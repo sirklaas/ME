@@ -1,0 +1,25 @@
+# Environment variables - NEVER commit API keys!
+.env
+config-api.php
+api-keys.php
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+deploy.log
+
+# Backup files
+*.backup
+*.bak
+
+# Generated images (optional - uncomment if you don't want to commit generated images)
+# generated-images/
+
+# Node modules (if using n8n locally)
+node_modules/
+package-lock.json
+
+# PocketBase data
+pb_data/

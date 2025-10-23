@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>🎭 The Masked Employee - Gameshow Form</title>
+    <link rel="stylesheet" href="styles.css?v=20251005-3">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg-wrapper" id="wrapper"></div>
+    
+    <div class="container">
+        <!-- STEP 1: Language Selection Page (First Page) -->
+        <div id="languageSelectionPage" class="form-page active">
+            <div class="language-selection-container">
+                <!-- Hero Image -->
+                <div class="hero-image-container">
+                    <img src="mask_hero.webp" alt="Masked Employee" class="hero-image">
+                </div>
+                
+                <h1 id="languagePageHeading" class="language-heading">
+                    ONTDEK DE MYSTERIEUZE SUPERHELD IN JEZELF!
+                </h1>
+                
+                <div class="language-buttons">
+                    <button class="language-btn" data-lang="nl" id="btnDutch">
+                        <span class="lang-flag">🇳🇱</span>
+                        <span class="lang-name">Nederlands</span>
+                    </button>
+                    <button class="language-btn" data-lang="en" id="btnEnglish">
+                        <span class="lang-flag">🇬🇧</span>
+                        <span class="lang-name">English</span>
+                    </button>
+                </div>
+                
+                <!-- Player Info Fields -->
+                <div class="player-info-compact" id="playerInfoFields" style="display: none;">
+                    <div class="fields-row">
+                        <div class="form-group">
+                            <label id="labelGameNameLang">Gameshow:</label>
+                            <div class="gameshow-display" id="gameNameLang">Laden...</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="playerNameLang" id="labelPlayerNameLang">Je Naam:</label>
+                            <input type="text" id="playerNameLang" name="playerNameLang" required 
+                                   placeholder="Vul je volledige naam in...">
+                        </div>
+                    </div>
+                    
+                    <div class="button-container">
+                        <button id="letsDoThisButton" class="btn btn-primary lets-do-this-btn" style="display: none;">
+                            <span class="lets-do-this-text">Laten we beginnen!</span>
+                        </button>
+                        
+                        <!-- TEST BUTTON -->
+                        <button id="testModeButton" class="btn btn-test" style="display: none; margin-top: 10px;">
+                            🧪 TEST MODE - Auto-fill & Skip to Summary
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STEP 2: Welcome Page (After language selection) -->
+        <div id="welcomePage" class="form-page" style="display: none;">
+            <div class="welcome-section">
+                <h2 id="welcomePageTitle">ONTDEK DE MYSTERIEUZE HELD IN JEZELF!</h2>
+                
+                <p class="subheading" id="welcomePageSubheading">
+                    The Masked Employee gaat beginnen en<br>
+                    WIJ ZOEKEN JOUW VERBORGEN SUPERKRACHT!
+                </p>
+                
+                <p class="body-text" id="welcomePageBody">
+                    Dit is geen gewone vragenlijst - dit is jouw kans om te schitteren als de mysterieuze held die je altijd al was.<br>
+                    Vergeet alles wat je denkt over "normaal doen" op kantoor.<br>
+                    Het is de hoogste tijd om die gekke, creatieve, onverwachte kant van jezelf te laten zien.<br>
+                    Ben jij thuis misschien operazanger, eet je stiekum pizza met ananas,<br>
+                    ken jij als enige alle stiekem alle K-pop choreografieën uit je hoofd?
+                </p>
+                
+                <div class="excitement-section">
+                    <h3 class="excitement-title" id="excitementBoxTitle">DEZE VRAGENLIJST is JOUW TICKET NAAR ROEM!</h3>
+                    <div class="excitement-content">
+                        <div class="excitement-left">
+                            <ul id="excitementBullets">
+                                <li>Geef antwoorden die je collega's<br>in hun koffie laten verslikken van verbazing</li>
+                                <li>Denk buiten alle hokjes - hoe gekker, hoe beter!</li>
+                                <li>Dit is JOUW moment om te laten zien<br>wie je werkelijk bent</li>
+                                <li>Maak er een feestje van - neem de tijd ervoor<br>en geniet van elke vraag!</li>
+                            </ul>
+                            <div class="button-wrapper">
+                                <button class="btn btn-primary" id="startButton">JA, START DE VRAGENLIJST!</button>
+                            </div>
+                        </div>
+                        <div class="excitement-right">
+                            <img src="MaskHero2.webp" alt="Masked Hero" class="hero-image-welcome">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress indicators -->
+        <div class="step-indicator" id="stepIndicator" style="display: none;">
+            <span id="currentStep">1</span> <span id="stepOf">van</span> <span id="totalSteps">8</span>
+        </div>
+        <div class="progress-bar" id="progressBar" style="display: none;">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="content">
+            <!-- Chapter Pages -->
+            <div class="page" id="chapterPage" style="display: none;">
+                <div class="chapter-header">
+                    <h2 id="chapterTitle"><!-- Loaded dynamically --></h2>
+                    <p id="chapterDescription"><!-- Loaded dynamically --></p>
+                </div>
+
+                <form id="chapterForm">
+                    <div id="questionsContainer">
+                        <!-- Questions loaded dynamically -->
+                    </div>
+
+                    <div class="navigation">
+                        <button type="button" class="btn btn-secondary" id="prevButton" style="display: none;">
+                            <span id="prevButtonText">← Vorige</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary" id="nextButton">
+                            <span id="nextButtonText">Volgende →</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Character Preview Page (NEW) -->
+            <div class="page" id="characterPreviewPage" style="display: none;">
+                <div class="preview-container">
+                    <h2 id="previewTitle">🎭 We hebben je karakter gevonden!</h2>
+                    <p id="previewSubtitle" class="preview-subtitle">Op basis van je antwoorden hebben we dit unieke karakter voor je gecreëerd:</p>
+                    
+                    <div class="character-preview-box" id="characterPreviewBox">
+                        <div class="loading-preview">
+                            <div class="loading-spinner"></div>
+                            <p id="loadingPreviewText">AI creëert je karakter...</p>
+                        </div>
+                        <div class="preview-content" id="previewContent" style="display: none;">
+                            <!-- Character preview will appear here -->
+                        </div>
+                    </div>
+                    
+                    <div class="preview-actions">
+                        <button class="btn btn-secondary" id="regenerateButton">
+                            <span id="regenerateButtonText">🔄 Genereer opnieuw</span>
+                        </button>
+                        <button class="btn btn-primary" id="acceptCharacterButton">
+                            <span id="acceptButtonText">✅ Ja, dit ben ik!</span>
+                        </button>
+                    </div>
+                    
+                    <p class="preview-note" id="previewNote">
+                        Je krijgt straks een gedetailleerde beschrijving met omgeving, props en verhalen.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Summary Page -->
+            <div class="page" id="summaryPage" style="display: none;">
+                <div class="summary-container">
+                    <h2 id="summaryTitle">📋 Jouw Karakter Samenvatting</h2>
+                    <div class="ai-summary-box" id="aiSummaryBox">
+                        <div class="loading-summary">
+                            <div class="loading-spinner"></div>
+                            <p id="loadingSummaryText">AI analyseert je antwoorden...</p>
+                        </div>
+                        <div class="summary-content" id="summaryContent" style="display: none;">
+                            <!-- AI generated summary will appear here -->
+                        </div>
+                    </div>
+                    
+                    <div class="confirmation-section">
+                        <h3 id="confirmationQuestion">Is deze samenvatting correct?</h3>
+                        <div class="confirmation-options">
+                            <label class="confirmation-option">
+                                <input type="radio" name="confirmation" value="redo" id="redoOption">
+                                <span id="redoText">🔄 Ik wil dit nog een keer doen</span>
+                            </label>
+                            <label class="confirmation-option">
+                                <input type="radio" name="confirmation" value="confirm" id="confirmOption">
+                                <span id="confirmText">✅ Ja dit is helemaal goed</span>
+                            </label>
+                        </div>
+                        <button class="btn btn-primary" id="finalSubmitButton" disabled>
+                            <span id="finalSubmitButtonText">Bevestigen</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Modal -->
+            <div id="emailModal" class="modal" style="display: none;">
+                <div class="modal-content email-modal">
+                    <h2 id="emailModalTitle">📧 Waar mogen we de uitkomst naar toe mailen?</h2>
+                    <div class="email-input-container">
+                        <input type="email" id="emailInput" placeholder="jouw@email.nl" required>
+                    </div>
+                    <button class="btn btn-primary" id="sendEmailButton">
+                        <span id="sendEmailButtonText">Verstuur</span>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Processing Page -->
+            <div class="page" id="processingPage" style="display: none;">
+                <div class="completion">
+                    <div class="success-icon">🎨</div>
+                    <h2 id="processingTitle">Je afbeelding wordt gegenereerd!</h2>
+                    <p id="processingMessage">
+                        <span id="processingThankYou">Bedankt</span> <span id="processingPlayerName"></span>!<br>
+                        <span id="processingDescription">Je antwoorden zijn opgeslagen en we genereren nu je unieke karakter afbeelding.</span>
+                    </p>
+                    
+                    <!-- Generated Image Container -->
+                    <div id="generatedImageContainer" style="display: none; margin: 30px 0;">
+                        <!-- Image will be inserted here by JavaScript -->
+                    </div>
+                    
+                    <div class="completion-info">
+                        <h3 style="color: #155724; margin-bottom: 15px;" id="processingWhatNow">🎭 Wat gebeurt er nu?</h3>
+                        <ul id="processingSteps">
+                            <li id="processingStep1">✅ Je antwoorden zijn opgeslagen</li>
+                            <li id="processingStep2">🎨 AI genereert je karakter afbeelding</li>
+                            <li id="processingStep3">📧 Je ontvangt een kopie per email</li>
+                            <li id="processingStep4">🔒 Onthoud: absolute geheimhouding blijft van kracht!</li>
+                        </ul>
+                    </div>
+
+                    <button class="btn btn-primary" id="restartButton">
+                        <span id="restartButtonText">Terug naar start</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p id="loadingText">Antwoorden worden opgeslagen...</p>
+    </div>
+    
+    <!-- Confidentiality Popup Modal -->
+    <div class="modal-overlay" id="confidentialityModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalConfidentialityTitle">⚠️ ABSOLUTE GEHEIMHOUDING VERPLICHT ⚠️</h3>
+            </div>
+            <div class="modal-body">
+                <p id="modalConfidentialityWarning">LET OP: Door deel te nemen aan deze vragenlijst<br>ga je akkoord met de volgende geheimhoudingsregels:</p>
+                
+                <ul class="forbidden-list" id="modalForbiddenRules">
+                    <li>Het bespreken van deze vragenlijst met collega's</li>
+                    <li>Het delen van je antwoorden met anderen</li>
+                    <li>Het onthullen wie er deelneemt aan de show</li>
+                    <li>Het bespreken van welke talenten of eigenschappen je hebt prijsgegeven</li>
+                    <li>Het geven van hints over je identiteit tijdens de show</li>
+                </ul>
+
+                <div class="penalty-box">
+                    <div class="penalty" id="modalPenaltyClause">
+                        <strong>💰 BOETECLAUSULE:</strong><br>
+                        Bij overtreding van de geheimhoudingsplicht wordt een boete van €9.750 in rekening gebracht.<br>
+                        Deze regel geldt voor alle deelnemers en medewerkers alsmede hun familie en vrienden.<br>
+                        Kortom iedereen die kennis zou kunnen hebben van de deelnemerslijst.
+                    </div>
+                    
+                    <div class="agreement-checkbox">
+                        <label>
+                            <input type="checkbox" id="confidentialityAgree">
+                            <span id="agreementText">Ja, ik ga volledig akkoord en zweer dit absoluut geheim te houden voor alles en iedereen.</span>
+                        </label>
+                    </div>
+                    
+                    <div class="modal-footer-inside">
+                        <button class="btn btn-primary" id="modalAcceptButton" disabled>
+                            <span id="modalAcceptButtonText">Ik ga akkoord</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/pocketbase@0.19.0/dist/pocketbase.umd.js"></script>
+    <script src="script.js?v=20251005-3"></script>
+</body>
+</html>

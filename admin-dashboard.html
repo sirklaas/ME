@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - ME</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 Admin Dashboard</h1>
+        
+        <div class="card">
+            <h2>Game Settings</h2>
+            <div class="form-group">
+                <label>Game Name</label>
+                <input type="text" id="gameName" placeholder="The Masked Employee - Shell - 12 Oktober">
+            </div>
+            <button class="btn" onclick="saveGameName()">Save Game Name</button>
+        </div>
+        
+        <div class="card">
+            <h2>AI Image Generation Settings</h2>
+            <div class="form-group">
+                <label>AI Provider</label>
+                <select id="aiProvider">
+                    <option value="flux">Freepik - Flux</option>
+                    <option value="nano">Freepik - Nano</option>
+                    <option value="banana">Freepik - Banana</option>
+                    <option value="kling">Kling AI</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Image Format</label>
+                <select id="imageFormat">
+                    <option value="1:1">1:1 (Square)</option>
+                    <option value="16:9" selected>16:9 (Widescreen - Recommended for video)</option>
+                    <option value="9:16">9:16 (Portrait)</option>
+                    <option value="4:3">4:3 (Standard)</option>
+                </select>
+            </div>
+            <button class="btn" onclick="saveAISettings()">Save AI Settings</button>
+        </div>
+        
+        <div class="card">
+            <h2>View Submissions</h2>
+            <button class="btn" onclick="viewSubmissions()">View All Submissions</button>
+            <button class="btn btn-secondary" onclick="exportData()">Export to CSV</button>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/pocketbase@0.19.0/dist/pocketbase.umd.js"></script>
+    <script>
+        const pb = new PocketBase('https://pinkmilk.pockethost.io');
+        const credentials = 'biknu8-pyrnaB-mytvyx';
+        pb.authStore.save(credentials, { admin: true });
+        
+        async function saveGameName() {
+            const gameName = document.getElementById('gameName').value;
+            alert('Game name saved: ' + gameName);
+        }
+        
+        async function saveAISettings() {
+            const provider = document.getElementById('aiProvider').value;
+            const format = document.getElementById('imageFormat').value;
+            alert('AI Settings saved: ' + provider + ', ' + format);
+        }
+        
+        async function viewSubmissions() {
+            window.location.href = 'submissions.html';
+        }
+        
+        async function exportData() {
+            alert('Export functionality coming soon');
+        }
+    </script>
+</body>
+</html>

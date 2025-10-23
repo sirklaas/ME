@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test AI Generation</title>
+    <style>
+        body {
+            font-family: 'Barlow Semi Condensed', sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        
+        .test-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #7c3aed;
+        }
+        
+        .btn {
+            background: #7c3aed;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+        }
+        
+        .btn:hover {
+            background: #6d28d9;
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        
+        .success {
+            border-left: 4px solid #10b981;
+        }
+        
+        .error {
+            border-left: 4px solid #ef4444;
+        }
+        
+        .loading {
+            color: #7c3aed;
+            font-weight: bold;
+        }
+        
+        select {
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test AI Character Generation</h1>
+    
+    <div class="test-card">
+        <h2>Test with Sample Data</h2>
+        <p>Select a test user profile and generate their character:</p>
+        
+        <select id="testUserSelect">
+            <option value="user1">Test User 1 - The Quiet Organizer</option>
+            <option value="user2">Test User 2 - The Energetic Creator</option>
+            <option value="user3">Test User 3 - The Practical Problem Solver</option>
+        </select>
+        
+        <button class="btn" onclick="testGeneration()" id="testBtn">
+            🚀 Generate Character
+        </button>
+        
+        <div id="result"></div>
+    </div>
+    
+    <div class="test-card">
+        <h2>📊 API Call Breakdown</h2>
+        <ul>
+            <li><strong>Call 1:</strong> Combined Summary (Character + Environment + Props)</li>
+            <li><strong>Call 2:</strong> Story Prompt Level 1 (Surface)</li>
+            <li><strong>Call 3:</strong> Story Prompt Level 2 (Hidden)</li>
+            <li><strong>Call 4:</strong> Story Prompt Level 3 (Deep)</li>
+        </ul>
+        <p><strong>Total:</strong> 4 API calls per user (~$0.23 per user)</p>
+    </div>
+    
+    <script>
+        const testData = {
+            user1: {
+                playerName: "Test User 1",
+                answers: {
+                    "1": 0, "2": 1, "3": 1, "4": 1, "5": 2,
+                    "6": "The Silent Architect",
+                    "7": "Someone who builds systems in the background",
+                    "8": "A calm library at night",
+                    "9": "Deep blue and silver",
+                    "10": "Classical music and the sound of rain",
+                    "11": "I'd choose the ability to pause time so I could finish everything without rushing",
+                    "12": "Public speaking - my hands shake and my voice gets quiet",
+                    "13": "Marie Curie - I'd ask her how she stayed focused despite all the obstacles",
+                    "14": "How the brain stores memories and why we forget things",
+                    "15": "The Art of Invisible Systems",
+                    "16": "I once reorganized the entire office filing system over a weekend without telling anyone",
+                    "17": "I can solve a Rubik's cube in under 2 minutes",
+                    "18": "I taught myself calligraphy during lockdown",
+                    "19": "I'm really good at remembering people's birthdays and small details about them",
+                    "20": "I once won a local chess tournament",
+                    "21": "I can type 95 words per minute without looking",
+                    "22": "I was the kid who organized all the board games and made sure everyone followed the rules",
+                    "23": "My grandmother taught me how to knit, and I still have the first scarf I made",
+                    "24": "Moving to a new city for university - I knew nobody",
+                    "25": "My high school math teacher who showed me that structure can be creative",
+                    "26": "I wanted to be an architect, but ended up in project management instead",
+                    "27": "Running a small bookshop with a cozy reading corner",
+                    "28": "Japan - the mix of tradition and efficiency fascinates me",
+                    "29": "Having a perfectly organized home office with custom shelving",
+                    "30": "I'd invent a device that automatically organizes your digital files",
+                    "31": "Living in a tiny house in the mountains with a huge library",
+                    "32": "I always have to have my pens arranged by color",
+                    "33": "I count steps when I walk up stairs",
+                    "34": "I can't start work until my desk is completely clear",
+                    "35": "I eat one food at a time on my plate, never mixing",
+                    "36": "I always wear the same watch - it was my grandfather's",
+                    "37": "I love watching competitive cooking shows at 2 AM",
+                    "38": "Pineapple on pizza is actually good",
+                    "39": "I collect vintage typewriters even though I never use them",
+                    "40": "I prefer working late at night when the office is empty"
+                }
+            },
+            user2: {
+                playerName: "Test User 2",
+                answers: {
+                    "1": 1, "2": 0, "3": 2, "4": 0, "5": 1,
+                    "6": "The Spark Starter",
+                    "7": "Someone who brings energy and new ideas everywhere",
+                    "8": "A colorful art studio with music playing",
+                    "9": "Bright orange and electric purple",
+                    "10": "Upbeat indie music and people laughing",
+                    "11": "I'd want the power to make anyone smile instantly",
+                    "12": "Silence - I get uncomfortable when things are too quiet",
+                    "13": "Robin Williams - I'd want to understand how he brought so much joy to others",
+                    "14": "How creativity works and where ideas come from",
+                    "15": "The Joy of Making Mistakes",
+                    "16": "I once threw a surprise party for my entire team just because it was Tuesday",
+                    "17": "I can juggle while riding a unicycle",
+                    "18": "I learned to play ukulele in one weekend",
+                    "19": "I'm great at coming up with team building activities on the spot",
+                    "20": "I won a karaoke competition at a company event",
+                    "21": "I can do impressions of all my favorite cartoon characters",
+                    "22": "I was the class clown who also somehow got good grades",
+                    "23": "My dad taught me that life's too short to be boring",
+                    "24": "Performing in my first school play - I was terrified but loved it",
+                    "25": "My art teacher who said 'There are no mistakes, only happy accidents'",
+                    "26": "I wanted to be a circus performer, ended up in marketing",
+                    "27": "Running a creative agency where every day is different",
+                    "28": "Brazil - the energy, music, and colors",
+                    "29": "Having a home with a dedicated room for crafts and projects",
+                    "30": "I'd create an app that randomly suggests fun activities based on your mood",
+                    "31": "Living in a converted warehouse loft in a vibrant city",
+                    "32": "I always wear mismatched socks on purpose",
+                    "33": "I give inanimate objects names and personalities",
+                    "34": "I can't have a meal without music playing",
+                    "35": "I rearrange my desk every week",
+                    "36": "I collect stickers and put them on everything",
+                    "37": "I watch documentaries about random topics at 3 AM",
+                    "38": "I put hot sauce on everything, including ice cream",
+                    "39": "I have a collection of 47 different types of tea I never drink",
+                    "40": "I prefer working in coffee shops with lots of background noise"
+                }
+            },
+            user3: {
+                playerName: "Test User 3",
+                answers: {
+                    "1": 0, "2": 0, "3": 0, "4": 2, "5": 3,
+                    "6": "The Fix-It Specialist",
+                    "7": "The person everyone calls when something breaks",
+                    "8": "A well-organized workshop with tools everywhere",
+                    "9": "Gray and forest green",
+                    "10": "Podcasts and the sound of things being built",
+                    "11": "I'd choose super strength so I could help people move furniture",
+                    "12": "Asking for help - I always try to figure things out myself first",
+                    "13": "My grandfather - he could fix anything with duct tape and patience",
+                    "14": "How things are made and why they break",
+                    "15": "The Manual for Everything",
+                    "16": "I once fixed the office printer that three IT people couldn't solve",
+                    "17": "I can fix almost any household appliance",
+                    "18": "I taught myself basic plumbing and electrical work",
+                    "19": "I'm really good at explaining complex things in simple terms",
+                    "20": "I built a treehouse for my kids using only recycled materials",
+                    "21": "I can parallel park a truck in one try",
+                    "22": "I was the kid who took apart toys to see how they worked",
+                    "23": "My dad's toolbox - I learned that every problem has a solution",
+                    "24": "When our family car broke down on a road trip and I helped fix it",
+                    "25": "My shop teacher who taught me to measure twice, cut once",
+                    "26": "I wanted to be an engineer, ended up in operations",
+                    "27": "Running a repair cafe where people learn to fix their own stuff",
+                    "28": "Germany - the engineering and efficiency",
+                    "29": "Having a fully equipped workshop in my garage",
+                    "30": "I'd invent a universal tool that adapts to any job",
+                    "31": "Living in a self-sufficient cabin I built myself",
+                    "32": "I always carry a multi-tool in my pocket",
+                    "33": "I read instruction manuals for fun",
+                    "34": "I can't throw away broken things until I've tried to fix them",
+                    "35": "I organize my tools by size and frequency of use",
+                    "36": "I always wear steel-toe boots, even on weekends",
+                    "37": "I watch home renovation shows and critique their techniques",
+                    "38": "I actually enjoy assembling IKEA furniture",
+                    "39": "I collect old tools from flea markets",
+                    "40": "I prefer working early morning when I can think clearly"
+                }
+            }
+        };
+        
+        async function testGeneration() {
+            const select = document.getElementById('testUserSelect');
+            const btn = document.getElementById('testBtn');
+            const resultDiv = document.getElementById('result');
+            
+            const selectedUser = select.value;
+            const data = testData[selectedUser];
+            
+            btn.disabled = true;
+            resultDiv.innerHTML = '<div class="result loading">⏳ Generating character... This takes 10-15 seconds...</div>';
+            
+            try {
+                const response = await fetch('generate-character.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="result success">
+                            <h3>✅ Success!</h3>
+                            <p><strong>Character Name:</strong> ${result.character_name}</p>
+                            <hr>
+                            <h4>AI Summary:</h4>
+                            <p>${result.ai_summary}</p>
+                            <hr>
+                            <h4>Story Level 1:</h4>
+                            <p>${result.story_prompt_level1}</p>
+                            <hr>
+                            <h4>Story Level 2:</h4>
+                            <p>${result.story_prompt_level2}</p>
+                            <hr>
+                            <h4>Story Level 3:</h4>
+                            <p>${result.story_prompt_level3}</p>
+                            <hr>
+                            <p><strong>API Calls Used:</strong> ${result.api_calls_used}</p>
+                            <p><strong>Timestamp:</strong> ${result.timestamp}</p>
+                        </div>
+                    `;
+                } else {
+                    throw new Error(result.error || 'Unknown error');
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="result error">
+                        <h3>❌ Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            } finally {
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

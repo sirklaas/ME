@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Je Karakter - The Masked Employee</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .result-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .character-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .character-name {
+            font-size: 2.5em;
+            color: #7c3aed;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .summary-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            white-space: pre-wrap;
+            line-height: 1.8;
+            font-size: 1.1em;
+        }
+        
+        .story-prompts {
+            margin-top: 40px;
+        }
+        
+        .story-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .story-card h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .story-card p {
+            line-height: 1.6;
+            font-size: 1.05em;
+        }
+        
+        .level-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #7c3aed;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #fee;
+            border: 2px solid #fcc;
+            color: #c33;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .actions {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: #7c3aed;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            transition: background 0.3s;
+        }
+        
+        .btn:hover {
+            background: #6d28d9;
+        }
+        
+        .btn-secondary {
+            background: #64748b;
+            margin-left: 10px;
+        }
+        
+        .btn-secondary:hover {
+            background: #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="header-content">
+                <h1>🎭 THE MASKED EMPLOYEE 🎭</h1>
+            </div>
+        </div>
+        
+        <div class="result-container">
+            <!-- Loading State -->
+            <div id="loadingState" class="loading">
+                <div class="loading-spinner"></div>
+                <h2>🎭 We gaan aan jouw fantasie karakter werken</h2>
+                <p>Op basis van je antwoorden hebben we dit unieke karakter voor je gecreëerd</p>
+                <p style="margin-top: 10px; font-size: 0.9em; color: #64748b;">Dit kan 10-15 seconden duren...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="errorState" class="error" style="display: none;">
+                <h3>❌ Er ging iets mis</h3>
+                <p id="errorMessage"></p>
+                <button class="btn" onclick="location.reload()">Probeer opnieuw</button>
+            </div>
+            
+            <!-- Result State -->
+            <div id="resultState" style="display: none;">
+                <div class="character-card">
+                    <h2 class="character-name" id="characterName"></h2>
+                    <div class="summary-section" id="aiSummary"></div>
+                </div>
+                
+                <div class="story-prompts">
+                    <h2 style="text-align: center; margin-bottom: 30px;">📹 Jouw Video Story Prompts</h2>
+                    
+                    <div class="story-card">
+                        <span class="level-badge">Level 1: Oppervlakte</span>
+                        <h3>🌟 Je Prestatie</h3>
+                        <p id="storyLevel1"></p>
+                    </div>
+                    
+                    <div class="story-card">
+                        <span class="level-badge">Level 2: Verborgen</span>
+                        <h3>🎭 Je Geheime Talent</h3>
+                        <p id="storyLevel2"></p>
+                    </div>
+                    
+                    <div class="story-card">
+                        <span class="level-badge">Level 3: Diepgang</span>
+                        <h3>💫 Je Transformatie</h3>
+                        <p id="storyLevel3"></p>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <a href="questions.html" class="btn">Terug naar start</a>
+                    <button class="btn btn-secondary" onclick="window.print()">Print resultaat</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/pocketbase@0.19.0/dist/pocketbase.umd.js"></script>
+    <script>
+        // Get record ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const recordId = urlParams.get('id');
+        
+        if (!recordId) {
+            showError('Geen record ID gevonden in URL');
+        } else {
+            generateCharacter(recordId);
+        }
+        
+        async function generateCharacter(recordId) {
+            try {
+                // Get player data from PocketBase
+                const pb = new PocketBase('https://pinkmilk.pockethost.io');
+                const credentials = 'biknu8-pyrnaB-mytvyx';
+                pb.authStore.save(credentials, { admin: true });
+                
+                const record = await pb.collection('MEQuestions').getOne(recordId);
+                
+                // Combine all chapter answers
+                const allAnswers = {
+                    ...record.chapter01,
+                    ...record.chapter02,
+                    ...record.chapter03,
+                    ...record.chapter04,
+                    ...record.chapter05,
+                    ...record.chapter06,
+                    ...record.chapter07,
+                    ...record.chapter08
+                };
+                
+                // Call AI generation endpoint
+                const response = await fetch('generate-character.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        playerName: record.nameplayer,
+                        answers: allAnswers
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error || 'AI generatie mislukt');
+                }
+                
+                // Update PocketBase record with AI results
+                await pb.collection('MEQuestions').update(recordId, {
+                    character_name: result.character_name,
+                    ai_summary: result.ai_summary,
+                    story_prompt_level1: result.story_prompt_level1,
+                    story_prompt_level2: result.story_prompt_level2,
+                    story_prompt_level3: result.story_prompt_level3,
+                    ai_generated_at: new Date().toISOString(),
+                    status: 'ai_complete'
+                });
+                
+                // Display results
+                displayResults(result);
+                
+            } catch (error) {
+                console.error('Generation error:', error);
+                showError(error.message);
+            }
+        }
+        
+        function displayResults(data) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('resultState').style.display = 'block';
+            
+            document.getElementById('characterName').textContent = data.character_name;
+            document.getElementById('aiSummary').textContent = data.ai_summary;
+            document.getElementById('storyLevel1').textContent = data.story_prompt_level1;
+            document.getElementById('storyLevel2').textContent = data.story_prompt_level2;
+            document.getElementById('storyLevel3').textContent = data.story_prompt_level3;
+        }
+        
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+    </script>
+</body>
+</html>

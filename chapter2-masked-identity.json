@@ -1,0 +1,83 @@
+{
+  "id": 2,
+  "title": {
+    "nl": "Vragen over jouw Masked Identity",
+    "en": "Questions about your Masked Identity"
+  },
+  "description": {
+    "nl": "Laten we jouw mysterieuze kant ontdekken",
+    "en": "Let's discover your mysterious side"
+  },
+  "questions": [
+    {
+      "id": 6,
+      "type": "text",
+      "question": {
+        "nl": "Als je een dier zou moeten kiezen dat jouw persoonlijkheid het beste weergeeft, welk dier zou dat zijn?",
+        "en": "If you had to choose an animal that best reflects your personality, which animal would that be?"
+      },
+      "placeholder": {
+        "nl": "Bijvoorbeeld: een leeuw, omdat ik leidinggevend ben...",
+        "en": "For example: a lion, because I'm a leader..."
+      }
+    },
+    {
+      "id": 7,
+      "type": "text",
+      "question": {
+        "nl": "Welke kleur kostuum zou het beste bij jouw karakter passen en waarom?",
+        "en": "Which color costume would best suit your character and why?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf de kleur maar leg vooral uit waarom...",
+        "en": "Describe the color but especially explain why..."
+      }
+    },
+    {
+      "id": 8,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "Welk element uit de natuur representeert jou het beste?",
+        "en": "Which element from nature represents you best?"
+      },
+      "options": {
+        "nl": [
+          "Vuur - passievol en energiek",
+          "Water - kalm en aanpassingsvermogen",
+          "Aarde - stabiel en betrouwbaar",
+          "Lucht - vrij en creatief"
+        ],
+        "en": [
+          "Fire - passionate and energetic",
+          "Water - calm and adaptable",
+          "Earth - stable and reliable",
+          "Air - free and creative"
+        ]
+      }
+    },
+    {
+      "id": 9,
+      "type": "text",
+      "question": {
+        "nl": "Als je een masker zou ontwerpen voor jezelf, welk thema of symbool zou centraal staan?",
+        "en": "If you were to design a mask for yourself, what theme or symbol would be central?"
+      },
+      "placeholder": {
+        "nl": "Beschrijf het ontwerp van je masker in detail...",
+        "en": "Describe the design of your mask in detail..."
+      }
+    },
+    {
+      "id": 10,
+      "type": "text",
+      "question": {
+        "nl": "Welke muziekstijl zou het beste bij jouw entrance passen?",
+        "en": "Which music style would best suit your entrance?"
+      },
+      "placeholder": {
+        "nl": "Bijvoorbeeld: rock, klassiek, jazz, pop...",
+        "en": "For example: rock, classical, jazz, pop..."
+      }
+    }
+  ]
+}

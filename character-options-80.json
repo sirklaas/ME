@@ -1,0 +1,64 @@
+{
+  "animals_80": [
+    "uil", "vos", "beer", "leeuw", "panda", "wasbeer", "kat", "hond", "olifant", "eekhoorn",
+    "konijn", "wolf", "adelaar", "dolfijn", "pinguïn", "otter", "hert", "zebra", "giraffe", "tijger",
+    "luipaard", "jaguar", "panter", "cheetah", "schildpad", "haas", "muis", "rat", "hamster", "cavia",
+    "papegaai", "kraai", "raaf", "valk", "havik", "uil", "flamingo", "zwaan", "eend", "gans",
+    "krokodil", "alligator", "hagedis", "kameleon", "slang", "kikker", "pad", "salamander", "axolotl", "newt",
+    "walvis", "orka", "dolfijn", "zeehond", "zeeleeuw", "otter", "bever", "muskusrat", "nijlpaard", "neushoorn",
+    "kameel", "lama", "alpaca", "hert", "eland", "rendier", "antilope", "gazelle", "buffel", "bizon",
+    "aap", "gorilla", "chimpansee", "orangoetan", "gibbon", "lemur", "maki", "koala", "kangoeroe", "wombat"
+  ],
+  
+  "fruits_vegetables_80": [
+    "tomaat", "banaan", "avocado", "wortel", "broccoli", "aubergine", "aardbei", "ananas", "pompoen", "paprika",
+    "komkommer", "aardappel", "asperge", "champignon", "sinaasappel", "appel", "citroen", "watermeloen", "druif", "kers",
+    "perzik", "peer", "pruim", "abrikoos", "mango", "kiwi", "passievrucht", "papaja", "lychee", "drakenfruit",
+    "bloemkool", "kool", "spruitjes", "prei", "ui", "knoflook", "sjalot", "selderij", "venkel", "radicchio",
+    "sla", "spinazie", "boerenkool", "andijvie", "rucola", "waterkers", "postelein", "veldsla", "witlof", "raapstelen",
+    "courgette", "courget", "butternut", "patisson", "radijs", "rammenas", "knolselderij", "pastinaak", "schorseneer", "rode biet",
+    "zoete aardappel", "yam", "cassave", "taro", "artisjok", "okra", "mais", "erwt", "boon", "linze",
+    "kikkererwt", "sojaboon", "edamame", "tofu", "tempeh", "seitan", "quinoa", "amarant", "boekweit", "gierst"
+  ],
+  
+  "fantasy_heroes_80": [
+    "ridder", "tovenaar", "magiër", "boogschutter", "druïde", "paladin", "ranger", "krijger", "barbaar", "monnik",
+    "kluizenaar", "bard", "troubadour", "alchemist", "necromancer", "illusionist", "bezweerder", "elementalist", "pyromancer", "cryomancer",
+    "geomancer", "aeromancer", "hydromancer", "lichtmagiër", "schaduwmagiër", "bloedmagiër", "runenmeester", "enchanter", "summoner", "warlock",
+    "heks", "tovenares", "sjamaan", "orakel", "ziener", "profeet", "healer", "genezer", "priester", "priesteres",
+    "tempelier", "kruisvaarder", "gladiator", "samurai", "ninja", "shinobi", "ronin", "shogun", "daimyo", "geisha",
+    "viking", "berserker", "schildmaagd", "amazone", "valkyrie", "centaur", "faun", "satyr", "elf", "dwerg",
+    "gnoom", "halfling", "hobbit", "ork", "goblin", "troll", "ogre", "reus", "titan", "god",
+    "godin", "halfgod", "demigod", "engel", "demon", "duivel", "draak", "phoenix", "griffioen", "eenhoorn"
+  ],
+  
+  "pixar_disney_80": [
+    "uitvinder", "dromer", "avonturier", "ontdekkingsreiziger", "wetenschapper", "kunstenaar", "schilder", "beeldhouwer", "muzikant", "zanger",
+    "danser", "acrobaat", "goochelaar", "clown", "komiek", "entertainer", "presentator", "verteller", "schrijver", "dichter",
+    "kok", "chef", "bakker", "banketbakker", "barista", "sommelier", "tuinier", "bloemist", "architect", "ontwerper",
+    "modeontwerper", "stylist", "kapper", "visagist", "fotograaf", "filmmaker", "regisseur", "acteur", "actrice", "model",
+    "atleet", "sporter", "coach", "trainer", "leraar", "docent", "professor", "mentor", "gids", "adviseur",
+    "detective", "speurder", "rechercheur", "agent", "superheld", "held", "heldin", "redder", "beschermer", "wachter",
+    "piraat", "zeevaarder", "kapitein", "matroos", "piloot", "astronaut", "ruimtevaarder", "tijdreiziger", "verkenner", "pionier",
+    "rebel", "revolutionair", "activist", "leider", "koning", "koningin", "prins", "prinses", "edelman", "edelvrouw"
+  ],
+  
+  "fairy_tales_80": [
+    "Assepoester", "Sneeuwwitje", "Roodkapje", "Rapunzel", "Belle", "Ariel", "Doornroosje", "Mulan", "Pocahontas", "Jasmine",
+    "Elsa", "Anna", "Moana", "Merida", "Tiana", "Aurora", "Esmeralda", "Megara", "Alice", "Wendy",
+    "Tinkerbell", "Peter Pan", "Pinocchio", "Gepetto", "Jiminy Cricket", "Blauwe Fee", "Prins Charmant", "Beest", "Gaston", "Aladdin",
+    "Genie", "Jafar", "Simba", "Mufasa", "Scar", "Timon", "Pumbaa", "Nala", "Hercules", "Megara",
+    "Hades", "Zeus", "Tarzan", "Jane", "Quasimodo", "Frollo", "Esmeralda", "Phoebus", "Kuzco", "Pacha",
+    "Yzma", "Kronk", "Lilo", "Stitch", "Nani", "Jumba", "Milo", "Kida", "Atlantis", "Treasure Planet",
+    "Big Bad Wolf", "Drie Biggetjes", "Goudlokje", "Drie Beren", "Hans en Grietje", "Heks", "Peperkoekman", "Kleine Duimpje", "Reus", "Boonenstalk",
+    "Kleine Zeemeermin", "Zeekoning", "Ursula", "Flounder", "Sebastian", "Scuttle", "Prins Eric", "Koning Arthur", "Merlijn", "Guinevere"
+  ],
+  
+  "usage_instructions": {
+    "animals": "Kies uit deze 80 dieren. Elk dier krijgt unieke kleding en persoonlijkheid gebaseerd op de antwoorden.",
+    "fruits_vegetables": "Kies uit deze 80 groenten en fruit. Elk krijgt armen, benen, gezicht en kleding gebaseerd op persoonlijkheid.",
+    "fantasy_heroes": "Kies uit deze 80 fantasy karakters. Mix klassiek met modern, voeg unieke twist toe.",
+    "pixar_disney": "Kies uit deze 80 Pixar/Disney-stijl karakters. Maak ze charismatisch en herkenbaar.",
+    "fairy_tales": "Kies uit deze 80 sprookjesfiguren. Moderniseer ze, maak ze relevant voor nu."
+  }
+}
