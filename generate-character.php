@@ -24,9 +24,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// Get OpenAI API key from environment
-$apiKey = getenv('OPENAI_API_KEY');
-if (!$apiKey) {
+// Load API keys
+define('MASKED_EMPLOYEE_APP', true);
+require_once __DIR__ . '/api-keys.php';
+
+// Get OpenAI API key
+$apiKey = defined('OPENAI_API_KEY') ? OPENAI_API_KEY : '';
+if (empty($apiKey) || $apiKey === 'YOUR_OPENAI_API_KEY_HERE') {
     http_response_code(500);
     echo json_encode(['error' => 'API key not configured']);
     exit;
@@ -180,15 +184,16 @@ function formatAnswersForAI($answers, $chapters) {
  */
 function generateImagePrompt($characterName, $aiSummary, $characterType) {
     // Extract key details from summary
-    $prompt = "STUDIO QUALITY PHOTO, 16:9 aspect ratio, hyper-realistic: ";
+    $prompt = "⚠️ CRITICAL: 16:9 WIDESCREEN ASPECT RATIO (1920x1080 or 1280x720) - MANDATORY\n\n";
+    $prompt .= "STUDIO QUALITY PHOTO, hyper-realistic: ";
     
     // Add character type context
     $typeDescriptions = [
-        'animals' => 'anthropomorphic animal character',
-        'fruits_vegetables' => 'anthropomorphic fruit/vegetable character',
-        'fantasy_heroes' => 'fantasy hero character',
-        'pixar_disney' => 'Pixar-style 3D character',
-        'fairy_tales' => 'fairy tale character'
+        'animals' => 'anthropomorphic animal character (actual animal with clothes)',
+        'fruits_vegetables' => 'HUMANIZED fruit/vegetable character with EXPRESSIVE EYES, SMILING MOUTH, ARMS with HANDS, LEGS with FEET (Pixar-style, cartoon-like features on actual fruit/vegetable body)',
+        'fantasy_heroes' => 'fantasy hero character (elf, wizard, knight, etc)',
+        'pixar_disney' => 'Pixar-style 3D animated character',
+        'fairy_tales' => 'fairy tale character (from classic stories)'
     ];
     
     $prompt .= $typeDescriptions[$characterType] ?? 'character';
@@ -199,12 +204,28 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $prompt .= "Wearing " . trim($matches[1]) . ". ";
     }
     
-    $prompt .= "\n\nSTYLE: Hyper-realistic, professional studio photography";
+    $prompt .= "\n\n=== TECHNICAL SPECS ===";
+    $prompt .= "\nASPECT RATIO: 16:9 widescreen (1920x1080 or 1280x720) - MANDATORY";
+    $prompt .= "\nSTYLE: Hyper-realistic, professional studio photography";
     $prompt .= "\nLIGHTING: Professional studio lighting, soft shadows, dramatic highlights";
     $prompt .= "\nQUALITY: 8K resolution, sharp focus, photorealistic textures";
-    $prompt .= "\nCOMPOSITION: Cinematic, 16:9 widescreen format for video";
-    $prompt .= "\nIMPORTANT: NO MASK on character, photorealistic rendering (not cartoon or drawing)";
+    $prompt .= "\nCOMPOSITION: Cinematic widescreen, horizontal orientation";
+    $prompt .= "\nFRAMING: Full body or 3/4 body shot, centered in 16:9 frame";
+    $prompt .= "\nIMPORTANT: NO MASK, NO human face - character IS the animal/fruit/fantasy being";
+    
+    // Add special note for fruits/vegetables
+    if ($characterType === 'fruits_vegetables') {
+        $prompt .= "\n\n🥕 CRITICAL FOR FRUIT/VEGETABLE:";
+        $prompt .= "\n- MUST show cartoon-style EYES (big, expressive, with pupils and emotion)";
+        $prompt .= "\n- MUST show MOUTH (smiling, talking, or showing emotion)";
+        $prompt .= "\n- MUST show ARMS (thin limbs with hands/gloves that can hold things)";
+        $prompt .= "\n- MUST show LEGS (thin limbs with feet/shoes for standing/walking)";
+        $prompt .= "\n- Think: Pixar vegetables/fruits like from 'Veggie Tales' or animated produce";
+        $prompt .= "\n- Body is the actual fruit/vegetable, but with added cartoon facial features and limbs";
+    }
+    
     $prompt .= "\nCamera: Professional DSLR, 85mm lens, f/2.8, studio lighting setup";
+    $prompt .= "\n\n⚠️ VERIFY: Image MUST be 16:9 widescreen format (horizontal rectangle, NOT square or vertical)";
     
     return $prompt;
 }
@@ -212,8 +233,11 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
 /**
  * Call OpenAI API
  */
-function callOpenAI($apiKey, $systemPrompt, $userPrompt, $maxTokens = 500) {
+function callOpenAI($apiKey, $systemPrompt, $userPrompt, $maxTokens = 500, $isRegenerate = false) {
     $ch = curl_init('https://api.openai.com/v1/chat/completions');
+    
+    // Increase temperature for regeneration to get more variation
+    $temperature = $isRegenerate ? 1.0 : 0.8;
     
     $payload = [
         'model' => 'gpt-4',
@@ -222,7 +246,7 @@ function callOpenAI($apiKey, $systemPrompt, $userPrompt, $maxTokens = 500) {
             ['role' => 'user', 'content' => $userPrompt]
         ],
         'max_tokens' => $maxTokens,
-        'temperature' => 0.8
+        'temperature' => $temperature
     ];
     
     curl_setopt_array($ch, [
@@ -253,6 +277,9 @@ function callOpenAI($apiKey, $systemPrompt, $userPrompt, $maxTokens = 500) {
 }
 
 try {
+    // Check if this is a regeneration request
+    $isRegenerate = isset($data['regenerate']) && $data['regenerate'] === true;
+    
     // Analyze personality and determine character type
     $personalityTraits = analyzePersonality($data['answers']);
     $characterType = determineCharacterType($personalityTraits);
@@ -267,32 +294,54 @@ try {
     }
     $formattedAnswers .= "\nSUGGESTED CHARACTER TYPE: $characterType\n\n";
     
+    // Add regeneration note if applicable
+    if ($isRegenerate) {
+        $formattedAnswers .= "\n⚠️ REGENERATION REQUEST: Create a DIFFERENT character than before. Use different name, different specific animal/fruit/hero from the list, different clothing style, different personality emphasis. Be creative and varied!\n\n";
+    }
+    
     // CALL 1: Generate combined character summary (character + environment + props)
-    $systemPrompt1 = "You are creating diverse, creative character descriptions for a workplace game show. Characters should be VARIED - animals, fruits/vegetables, fantasy heroes, Pixar-style figures, or fairy tale characters. NO MASKS NEEDED. Each character should wear clothes and have distinct personality. Keep language simple and fun. Write in Dutch.";
+    $systemPrompt1 = "You are creating diverse, creative character descriptions for a workplace game show. CRITICAL RULES: 1) Characters MUST be actual animals, fruits/vegetables, fantasy heroes, Pixar-style figures, or fairy tale characters - NOT people with masks. 2) Pick ONE specific option from the provided list. 3) ABSOLUTELY NO MASKS ANYWHERE - the character IS the animal/fruit/etc itself. 4) Characters wear clothes and have personality. 5) NEVER mention masks, maskers, or masked in your description. Write in Dutch.";
     
     // Load 80 options per character type
     $characterOptions = json_decode(file_get_contents('character-options-80.json'), true);
     
     $characterTypeExamples = [
-        'animals' => 'Kies uit deze 80 dieren: ' . implode(', ', array_slice($characterOptions['animals_80'], 0, 40)) . ', en 40 meer! Wees creatief!',
-        'fruits_vegetables' => 'Kies uit deze 80 groenten/fruit: ' . implode(', ', array_slice($characterOptions['fruits_vegetables_80'], 0, 40)) . ', en 40 meer! Wees creatief!',
-        'fantasy_heroes' => 'Kies uit deze 80 fantasy karakters: ' . implode(', ', array_slice($characterOptions['fantasy_heroes_80'], 0, 40)) . ', en 40 meer! Mix klassiek met modern!',
-        'pixar_disney' => 'Kies uit deze 80 Pixar/Disney karakters: ' . implode(', ', array_slice($characterOptions['pixar_disney_80'], 0, 40)) . ', en 40 meer! Denk aan Pixar!',
-        'fairy_tales' => 'Kies uit deze 80 sprookjesfiguren: ' . implode(', ', array_slice($characterOptions['fairy_tales_80'], 0, 40)) . ', en 40 meer! Maak het modern!'
+        'animals' => "VERPLICHT: Kies EEN dier uit deze lijst:\n" . implode(', ', $characterOptions['animals_80']),
+        'fruits_vegetables' => "VERPLICHT: Kies EEN groente/fruit uit deze lijst:\n" . implode(', ', $characterOptions['fruits_vegetables_80']),
+        'fantasy_heroes' => "VERPLICHT: Kies EEN fantasy karakter uit deze lijst:\n" . implode(', ', $characterOptions['fantasy_heroes_80']),
+        'pixar_disney' => "VERPLICHT: Kies EEN Pixar/Disney karakter uit deze lijst:\n" . implode(', ', $characterOptions['pixar_disney_80']),
+        'fairy_tales' => "VERPLICHT: Kies EEN sprookjesfiguur uit deze lijst:\n" . implode(', ', $characterOptions['fairy_tales_80'])
     ];
     
     $typeExample = $characterTypeExamples[$characterType] ?? $characterTypeExamples['animals'];
     
-    $userPrompt1 = "SUGGESTED CHARACTER TYPE: $characterType\n\n" .
-        "Based on the personality analysis and questionnaire answers, create a character description in Dutch with these 3 sections:\n\n" .
+    // Add special instructions for fruits/vegetables
+    $specialInstructions = "";
+    if ($characterType === 'fruits_vegetables') {
+        $specialInstructions = "🥕 EXTRA BELANGRIJK VOOR GROENTE/FRUIT:\n" .
+            "- Het fruit/groente MOET gehumaniseerd zijn met:\n" .
+            "  * Expressieve ogen (groot, levendig, met emotie)\n" .
+            "  * Een mond (kan glimlachen, praten, emoties tonen)\n" .
+            "  * Armen (kunnen dingen vasthouden, gebaren maken)\n" .
+            "  * Benen (kunnen lopen, dansen, bewegen)\n" .
+            "  * Handen en voeten (met vingers/tenen of handschoenen/schoenen)\n" .
+            "- Denk aan Pixar-stijl: levendig, expressief, vol persoonlijkheid!\n" .
+            "- Bijvoorbeeld: Een tomaat met grote ronde ogen, brede glimlach, dunne armpjes in een jasje, en kleine beentjes in sneakers\n\n";
+    }
+    
+    $userPrompt1 = "⚠️ BELANGRIJK: Het karakter MOET een echt dier/fruit/fantasy wezen zijn - GEEN persoon met masker!\n\n" .
+        "CHARACTER TYPE: $characterType\n\n" .
+        "$typeExample\n\n" .
+        $specialInstructions .
+        "Creëer een karakter beschrijving in het Nederlands met deze 3 secties:\n\n" .
         "1. KARAKTER (100-150 woorden):\n" .
-        "- Kies een specifiek dier, fruit/groente, fantasy held, Pixar-figuur, of sprookjesfiguur\n" .
-        "- GEEN MASKER NODIG\n" .
+        "- Begin met: 'De [DIER/FRUIT/HELD NAAM] genaamd [Creatieve Naam]'\n" .
+        "- Bijvoorbeeld: 'De Vos genaamd Luna' of 'De Tomaat genaamd Rooie Rico'\n" .
+        "- GEEN MASKER - het karakter IS het dier/fruit/held zelf\n" .
+        ($characterType === 'fruits_vegetables' ? "- VERPLICHT: Beschrijf de ogen, mond, armen en benen van het fruit/groente!\n" : "") .
         "- Beschrijf hun kleding (ze dragen altijd kleding!)\n" .
-        "- Beschrijf hun persoonlijkheid in simpele termen\n" .
-        "- Maak het mysterieus maar makkelijk te begrijpen\n" .
-        "- Wees creatief en divers!\n\n" .
-        "Voorbeelden voor $characterType: $typeExample\n\n" .
+        "- Beschrijf hun persoonlijkheid\n" .
+        "- Maak het levendig en visueel\n\n" .
         "2. OMGEVING (50-75 woorden):\n" .
         "- Waar hangt dit karakter rond?\n" .
         "- Hoe ziet het er daar uit?\n" .
@@ -300,60 +349,73 @@ try {
         "3. PROPS (3-5 items):\n" .
         "- Lijst 3-5 objecten die dit karakter altijd bij zich heeft\n" .
         "- Formaat: '- Item naam: waarom het belangrijk is'\n\n" .
-        "Houd alles casual en leuk. Geen ingewikkelde woorden!\n" .
-        "WEES CREATIEF EN DIVERS - niet alle karakters moeten hetzelfde type zijn!\n\n" .
+        "⚠️ NOGMAALS: Kies EEN specifiek item uit de lijst hierboven. GEEN gemaskeerde personen!\n" .
+        "⚠️ VERBODEN WOORDEN: Gebruik NOOIT de woorden 'masker', 'mask', 'gemaskeerd', 'masked' in je beschrijving!\n\n" .
+        "Antwoorden van de speler:\n" .
         $formattedAnswers;
     
-    $aiSummary = callOpenAI($apiKey, $systemPrompt1, $userPrompt1, 600);
+    $aiSummary = callOpenAI($apiKey, $systemPrompt1, $userPrompt1, 600, $isRegenerate);
     
     // Extract character name from the summary
     preg_match("/'([^']+)'/", $aiSummary, $matches);
     $characterName = $matches[1] ?? 'De Gemaskeerde Medewerker';
     
-    // CALL 2: Story Level 1 (Surface - work achievement)
-    $systemPrompt2 = "You create simple video prompts for a game show. Keep it casual and easy to answer. Write in Dutch.";
+    // Use Chapter 9 answers directly (Questions 41-43 with 3 scenes each)
+    // Story 1: Question 41 (3 scenes)
+    $storyLevel1 = "";
+    if (isset($data['answers']['41_scene1'])) {
+        $storyLevel1 .= "Scene 1: " . $data['answers']['41_scene1'] . "\n\n";
+        $storyLevel1 .= "Scene 2: " . $data['answers']['41_scene2'] . "\n\n";
+        $storyLevel1 .= "Scene 3: " . $data['answers']['41_scene3'];
+    } elseif (isset($data['answers'][41])) {
+        // Fallback for old format
+        $storyLevel1 = $data['answers'][41];
+    }
     
-    $userPrompt2 = "Based on this character and their answers, create a simple video prompt in Dutch about a work achievement.\n\n" .
-        "Character: $characterName\n\n" .
-        "Format: 'Als [CHARACTER_NAME], vertel over een moment waarop je...' (30-60 seconden)\n\n" .
-        "Keep it simple - like talking to a friend.\n\n" .
-        $formattedAnswers;
+    // Story 2: Question 42 (3 scenes)
+    $storyLevel2 = "";
+    if (isset($data['answers']['42_scene1'])) {
+        $storyLevel2 .= "Scene 1: " . $data['answers']['42_scene1'] . "\n\n";
+        $storyLevel2 .= "Scene 2: " . $data['answers']['42_scene2'] . "\n\n";
+        $storyLevel2 .= "Scene 3: " . $data['answers']['42_scene3'];
+    } elseif (isset($data['answers'][42])) {
+        // Fallback for old format
+        $storyLevel2 = $data['answers'][42];
+    }
     
-    $storyLevel1 = callOpenAI($apiKey, $systemPrompt2, $userPrompt2, 200);
-    
-    // CALL 3: Story Level 2 (Hidden talent)
-    $userPrompt3 = "Based on this character and their answers, create a fun prompt in Dutch about a hidden talent or surprising skill.\n\n" .
-        "Character: $characterName\n\n" .
-        "Format: 'Als [CHARACTER_NAME], deel iets verrassends over jezelf...' (60-90 seconden)\n\n" .
-        "Make it interesting!\n\n" .
-        $formattedAnswers;
-    
-    $storyLevel2 = callOpenAI($apiKey, $systemPrompt2, $userPrompt3, 200);
-    
-    // CALL 4: Story Level 3 (Deep/personal growth)
-    $userPrompt4 = "Based on this character and their answers, create a deeper prompt in Dutch about personal growth or a meaningful moment.\n\n" .
-        "Character: $characterName\n\n" .
-        "Format: 'Als [CHARACTER_NAME], deel een moment dat je veranderde...' (90-120 seconden)\n\n" .
-        "Be real and honest, but not too heavy.\n\n" .
-        $formattedAnswers;
-    
-    $storyLevel3 = callOpenAI($apiKey, $systemPrompt2, $userPrompt4, 250);
+    // Story 3: Question 43 (3 scenes)
+    $storyLevel3 = "";
+    if (isset($data['answers']['43_scene1'])) {
+        $storyLevel3 .= "Scene 1: " . $data['answers']['43_scene1'] . "\n\n";
+        $storyLevel3 .= "Scene 2: " . $data['answers']['43_scene2'] . "\n\n";
+        $storyLevel3 .= "Scene 3: " . $data['answers']['43_scene3'];
+    } elseif (isset($data['answers'][43])) {
+        // Fallback for old format
+        $storyLevel3 = $data['answers'][43];
+    }
     
     // Generate image prompt for realistic studio photo
     $imagePrompt = generateImagePrompt($characterName, $aiSummary, $characterType);
+    
+    // Format personality traits as string for PocketBase
+    $personalityTraitsString = "";
+    foreach ($personalityTraits as $trait => $score) {
+        $personalityTraitsString .= ucfirst($trait) . ": " . $score . "\n";
+    }
+    $personalityTraitsString = trim($personalityTraitsString);
     
     // Return all generated content
     $result = [
         'success' => true,
         'character_name' => $characterName,
         'character_type' => $characterType,
-        'personality_traits' => $personalityTraits,
+        'personality_traits' => $personalityTraitsString,
         'ai_summary' => $aiSummary,
         'story_prompt_level1' => $storyLevel1,
         'story_prompt_level2' => $storyLevel2,
         'story_prompt_level3' => $storyLevel3,
         'image_generation_prompt' => $imagePrompt,
-        'api_calls_used' => 4,
+        'api_calls_used' => 1, // Only 1 call now (character generation)
         'timestamp' => date('Y-m-d H:i:s')
     ];
     

@@ -62,7 +62,7 @@ class MaskedEmployeeForm {
                 loadingPreview: 'AI creëert je karakter...',
                 regenerateButton: '🔄 Genereer opnieuw',
                 acceptButton: '✅ Ja, dit ben ik!',
-                previewNote: 'Je krijgt straks een gedetailleerde beschrijving met omgeving, props en verhalen.',
+                previewNote: 'Je krijgt straks een gedetailleerde beschrijving met omgeving, en props.',
                 // Summary Page
                 summaryTitle: '📋 Jouw Karakter Samenvatting',
                 confirmationQuestion: 'Is deze samenvatting correct?',
@@ -126,7 +126,7 @@ class MaskedEmployeeForm {
                 previewTitle: '🎭 We found your character!',
                 previewSubtitle: 'Based on your answers, we created this unique character for you:',
                 loadingPreview: 'AI is creating your character...',
-                regenerateButton: '🔄 Regenerate',
+                regenerateButton: '🔄 No, please Regenerate',
                 acceptButton: '✅ Yes, this is me!',
                 previewNote: 'You will receive a detailed description with environment, props and stories shortly.',
                 // Summary Page
@@ -185,10 +185,10 @@ class MaskedEmployeeForm {
 
     async loadConfig() {
         try {
-            // Load main gameshow configuration with STRONG cache busting
+            // Load unified questions file with STRONG cache busting
             const timestamp = new Date().getTime();
             const random = Math.random().toString(36).substring(7);
-            const configResponse = await fetch(`gameshow-config-v2.json?v=${timestamp}&r=${random}&nocache=1`, {
+            const configResponse = await fetch(`questions-unified.json?v=${timestamp}&r=${random}&nocache=1`, {
                 method: 'GET',
                 headers: {
                     'Cache-Control': 'no-cache, no-store, must-revalidate',
@@ -196,18 +196,17 @@ class MaskedEmployeeForm {
                     'Expires': '0'
                 }
             });
-            console.log('🔄 Loading config with cache busting:', `gameshow-config-v2.json?v=${timestamp}&r=${random}&nocache=1`);
+            console.log('🔄 Loading unified questions with cache busting:', `questions-unified.json?v=${timestamp}&r=${random}&nocache=1`);
             if (!configResponse.ok) {
                 throw new Error(`HTTP error! status: ${configResponse.status}`);
             }
             const config = await configResponse.json();
-            console.log('📊 Raw config loaded:', config);
+            console.log('📊 Unified questions loaded:', config);
             
-            // Store the complete config structure
-            this.questionsData = {
-                gameshow: config.gameshow,
-                chapters: config.chapters
-            };
+            // Store the complete config structure (chapters already included)
+            this.questionsData = config;
+            this.totalChapters = config.chapters.length;
+            console.log(`✅ Loaded ${this.totalChapters} chapters from unified file`);
         } catch (error) {
             console.error('Error loading config:', error);
             throw error;
@@ -215,27 +214,9 @@ class MaskedEmployeeForm {
     }
 
     async loadAllChapters() {
-        try {
-            // Load individual chapter files
-            const chapterData = [];
-            for (const chapterFile of this.questionsData.chapters) {
-                const chapterResponse = await fetch(chapterFile);
-                if (!chapterResponse.ok) {
-                    throw new Error(`HTTP error loading ${chapterFile}! status: ${chapterResponse.status}`);
-                }
-                const chapterContent = await chapterResponse.json();
-                chapterData.push(chapterContent);
-            }
-            
-            // Replace the file names with the actual chapter data
-            this.questionsData.chapters = chapterData;
-            
-            this.totalChapters = chapterData.length;
-            console.log(`Loaded ${this.totalChapters} chapters successfully`);
-        } catch (error) {
-            console.error('Error loading chapters:', error);
-            throw error;
-        }
+        // No longer needed - chapters are already loaded in loadConfig()
+        // Keeping function for compatibility
+        console.log('✅ Chapters already loaded from unified file');
     }
 
     async loadGamename() {
@@ -571,11 +552,11 @@ class MaskedEmployeeForm {
         }
     }
 
-    async saveToPocketBase(data) {
+    async saveToPocketBase(data, characterData) {
         // Organize answers by chapter to match PocketBase structure
         const chapterAnswers = this.organizeAnswersByChapter(data.answers);
         
-        // Prepare data for PocketBase schema with separate chapter fields
+        // Prepare data for PocketBase schema with separate chapter fields AND character data
         const submissionData = {
             gamename: this.gameName,
             nameplayer: data.playerName,
@@ -587,9 +568,20 @@ class MaskedEmployeeForm {
             chapter06: chapterAnswers.chapter06 || {},
             chapter07: chapterAnswers.chapter07 || {},
             chapter08: chapterAnswers.chapter08 || {},
+            chapter09: chapterAnswers.chapter09 || {},
             submission_date: data.timestamp,
             total_questions: data.totalQuestions,
-            status: 'completed'
+            status: 'completed',
+            // Add character data fields
+            character_name: characterData.character_name || '',
+            character_type: characterData.character_type || '',
+            personality_traits: characterData.personality_traits || '',
+            ai_summary: characterData.ai_summary || '',
+            story_prompt1: characterData.story_prompt_level1 || '',
+            story_prompt2: characterData.story_prompt_level2 || '',
+            story_prompt3: characterData.story_prompt_level3 || '',
+            image_generation_prompt: characterData.image_generation_prompt || '',
+            character_generation_success: characterData.success || false
         };
         
         try {
@@ -601,15 +593,24 @@ class MaskedEmployeeForm {
             submissions.push(submissionData);
             localStorage.setItem('maskedEmployeeSubmissions', JSON.stringify(submissions));
             
-            console.log('Submission saved:', submissionData);
+            console.log('💾 Submission data prepared:', submissionData);
             
             // PocketBase integration
             const pb = new PocketBase('https://pinkmilk.pockethost.io');
-            const record = await pb.collection('submissions').create(submissionData);
-            console.log('Submission saved to PocketBase:', record);
+            const credentials = 'biknu8-pyrnaB-mytvyx';
+            pb.authStore.save(credentials, { admin: true });
+            
+            const record = await pb.collection('MEQuestions').create(submissionData);
+            console.log('✅ Submission saved to PocketBase:', record);
+            
+            // Store record ID for image upload
+            this.playerRecordId = record.id;
+            console.log('📝 Stored playerRecordId:', this.playerRecordId);
+            
             return record;
         } catch (error) {
-            console.error('PocketBase save error:', error);
+            console.error('❌ PocketBase save error:', error);
+            console.error('Error details:', error.response || error.message);
             throw error;
         }
     }
@@ -624,7 +625,8 @@ class MaskedEmployeeForm {
             chapter05: [22, 23, 24, 25, 26],      // Jeugd & Verleden
             chapter06: [27, 28, 29, 30, 31],      // Fantasie & Dromen
             chapter07: [32, 33, 34, 35, 36],      // Eigenaardigheden
-            chapter08: [37, 38, 39, 40]           // Onverwachte Voorkeuren
+            chapter08: [37, 38, 39, 40],          // Onverwachte Voorkeuren
+            chapter09: [41, 42, 43]               // Film Maken
         };
 
         const chapterAnswers = {};
@@ -728,7 +730,7 @@ class MaskedEmployeeForm {
         
         // Hide progress indicators
         document.getElementById('stepIndicator').style.display = 'none';
-        document.getElementById('progressBar').style.display = 'none';
+        document.getElementById('progressContainer').style.display = 'none';
         
         // Show loading state
         document.querySelector('.loading-summary').style.display = 'flex';
@@ -938,7 +940,7 @@ class MaskedEmployeeForm {
                 document.getElementById('summaryPage').style.display = 'none';
                 document.getElementById('chapterPage').style.display = 'block';
                 document.getElementById('stepIndicator').style.display = 'block';
-                document.getElementById('progressBar').style.display = 'block';
+                document.getElementById('progressContainer').style.display = 'flex';
                 this.displayChapter(this.currentChapter);
             }
         } else {
@@ -996,15 +998,23 @@ class MaskedEmployeeForm {
         this.showLoading(true);
         
         try {
-            // STEP 3: Send email with descriptions
-            console.log('📧 Starting email send...');
+            // Send initial email with character description
+            console.log('📧 Sending initial email with character data...');
             await this.sendDescriptionEmail();
-            console.log('✅ Email sent successfully');
+            console.log('✅ Initial email sent');
             
-            // STEP 4 & 5: Generate image
-            console.log('🎨 Starting image generation...');
-            await this.generateCharacterImage();
-            console.log('✅ Image generation completed');
+            // Show processing page
+            this.showProcessingPage();
+            
+            // Start image generation with stored character data
+            console.log('🎨 Starting image generation with email:', email);
+            if (this.currentCharacterData) {
+                this.generateAndUploadImage(this.currentCharacterData).catch(err => {
+                    console.error('❌ Image generation failed:', err);
+                });
+            } else {
+                console.warn('⚠️ No character data available for image generation');
+            }
             
         } catch (error) {
             console.error('❌ Error in email/image flow:', error);
@@ -1018,7 +1028,10 @@ class MaskedEmployeeForm {
 
     async sendDescriptionEmail() {
         try {
-            console.log('📧 Sending email with character + world descriptions...');
+            console.log('📧 Sending email with character data...');
+            
+            // Use new character data structure
+            const characterData = this.currentCharacterData || {};
             
             const response = await fetch('https://www.pinkmilk.eu/ME/send-description-email.php', {
                 method: 'POST',
@@ -1030,9 +1043,9 @@ class MaskedEmployeeForm {
                     playerName: this.playerName,
                     gameName: this.gameName,
                     language: this.currentLanguage,
-                    characterDescription: this.characterDescription,
-                    worldDescription: this.worldDescription,
-                    characterName: this.characterName
+                    characterDescription: characterData.ai_summary || '',
+                    worldDescription: '', // Not used in new flow
+                    characterName: characterData.character_name || 'Your Character'
                 })
             });
 
@@ -1052,26 +1065,32 @@ class MaskedEmployeeForm {
 
     async generateCharacterImage() {
         try {
-            console.log('🎨 Generating character image...');
-            console.log('📝 Character:', this.characterDescription.substring(0, 100) + '...');
-            console.log('🌍 World:', this.worldDescription.substring(0, 100) + '...');
+            console.log('🎨 Generating character image via Freepik...');
+            
+            // Use the image_generation_prompt from character data
+            const characterData = this.currentCharacterData || {};
+            const imagePrompt = characterData.image_generation_prompt;
+            
+            if (!imagePrompt) {
+                throw new Error('No image generation prompt available');
+            }
+            
+            console.log('📝 Using image prompt:', imagePrompt.substring(0, 150) + '...');
             
             // Timeout after 60 seconds (image generation takes time)
             const timeout = new Promise((_, reject) => 
                 setTimeout(() => reject(new Error('Image generation timeout')), 60000)
             );
             
-            const fetchPromise = fetch('https://www.pinkmilk.eu/ME/generate-character-real.php', {
+            // Call Freepik API via PHP wrapper
+            const fetchPromise = fetch('https://www.pinkmilk.eu/ME/generate-image-freepik.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    playerName: this.playerName,
-                    language: this.currentLanguage,
-                    step: 'generate_image',
-                    character_description: this.characterDescription,
-                    world_description: this.worldDescription
+                    prompt: imagePrompt,
+                    playerName: this.playerName
                 })
             });
             
@@ -1433,13 +1452,13 @@ class MaskedEmployeeForm {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
-    showCompletionPage() {
+    showCompletionPage(characterData) {
         // Show character preview page first (new 2-step approach)
-        this.showCharacterPreviewPage();
+        this.showCharacterPreviewPage(characterData);
     }
 
-    async showCharacterPreviewPage() {
-        console.log('🎭 Showing character preview page');
+    async showCharacterPreviewPage(characterData) {
+        console.log('🎭 Showing character preview page with data:', characterData);
         
         // Hide chapter page, show preview page
         document.getElementById('chapterPage').style.display = 'none';
@@ -1447,7 +1466,7 @@ class MaskedEmployeeForm {
         
         // Hide progress indicators
         document.getElementById('stepIndicator').style.display = 'none';
-        document.getElementById('progressBar').style.display = 'none';
+        document.getElementById('progressContainer').style.display = 'none';
         
         // Reset preview page
         document.querySelector('.loading-preview').style.display = 'block';
@@ -1455,8 +1474,15 @@ class MaskedEmployeeForm {
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
         
-        // Generate character preview
-        await this.generateCharacterPreview();
+        // If we already have character data, display it directly
+        if (characterData && characterData.success) {
+            console.log('✅ Using pre-generated character data');
+            this.displayCharacterData(characterData);
+        } else {
+            // Fallback: Generate character preview (old method)
+            console.log('⚠️ No character data, using fallback generation');
+            await this.generateCharacterPreview();
+        }
     }
 
     async generateCharacterPreview() {
@@ -1470,7 +1496,7 @@ class MaskedEmployeeForm {
                 setTimeout(() => reject(new Error('Request timeout')), 30000)
             );
             
-            const fetchPromise = fetch('https://www.pinkmilk.eu/ME/generate-character-real.php', {
+            const fetchPromise = fetch('generate-character.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1478,8 +1504,7 @@ class MaskedEmployeeForm {
                 body: JSON.stringify({
                     answers: formattedAnswers,
                     playerName: this.playerName,
-                    language: this.currentLanguage,
-                    step: 'generate_description'
+                    gameName: this.gameName
                 })
             });
             
@@ -1492,26 +1517,14 @@ class MaskedEmployeeForm {
             const result = await response.json();
             
             if (!result.success) {
-                throw new Error(result.error || 'Failed to generate descriptions');
+                throw new Error(result.error || 'Failed to generate character');
             }
             
-            // Store the descriptions
-            this.characterDescription = result.character_description;
-            this.worldDescription = result.world_description;
-            this.characterName = this.extractCharacterName(result.character_description);
+            // New endpoint returns different structure - use displayCharacterData
+            this.displayCharacterData(result);
             
-            console.log('✅ Character + world descriptions generated');
-            console.log('Character Name:', this.characterName);
-            console.log('Character:', this.characterDescription.substring(0, 100) + '...');
-            console.log('World:', this.worldDescription.substring(0, 100) + '...');
-            
-            // Display preview (combined)
-            const previewHTML = this.formatPreviewDisplay(result.character_description, result.world_description);
-            
-            document.querySelector('.loading-preview').style.display = 'none';
-            const previewContent = document.getElementById('previewContent');
-            previewContent.innerHTML = previewHTML;
-            previewContent.style.display = 'block';
+            console.log('✅ Character generated via fallback');
+            console.log('Character Name:', result.character_name);
             
         } catch (error) {
             console.error('❌ Error generating character descriptions:', error.message);
@@ -1531,6 +1544,39 @@ class MaskedEmployeeForm {
             
             console.log('✅ Mock descriptions displayed');
         }
+    }
+
+    displayCharacterData(characterData) {
+        console.log('📺 Displaying character data:', characterData);
+        
+        // Hide loading, show content
+        document.querySelector('.loading-preview').style.display = 'none';
+        const previewContent = document.getElementById('previewContent');
+        
+        const html = `
+            <div class="character-preview">
+                <div class="character-section">
+                    <h3>🎭 ${characterData.character_name || 'Your Character'}</h3>
+                    <p><strong>${this.currentLanguage === 'nl' ? 'Type' : 'Type'}:</strong> ${characterData.character_type || 'N/A'}</p>
+                    <p><strong>${this.currentLanguage === 'nl' ? 'Persoonlijkheid' : 'Personality'}:</strong><br>${characterData.personality_traits || 'N/A'}</p>
+                </div>
+                <div class="world-section">
+                    <h3>📖 ${this.currentLanguage === 'nl' ? 'AI Samenvatting' : 'AI Summary'}</h3>
+                    <p>${characterData.ai_summary || 'N/A'}</p>
+                </div>
+                ${characterData.story_prompt_level1 ? `
+                <div class="story-section">
+                    <h3>🎬 ${this.currentLanguage === 'nl' ? 'Verhaal Prompts' : 'Story Prompts'}</h3>
+                    <p><strong>${this.currentLanguage === 'nl' ? 'Video 1 (Subtiel)' : 'Video 1 (Subtle)'}:</strong><br>${characterData.story_prompt_level1}</p>
+                    <p><strong>${this.currentLanguage === 'nl' ? 'Video 2 (Meer hints)' : 'Video 2 (More clues)'}:</strong><br>${characterData.story_prompt_level2}</p>
+                    <p><strong>${this.currentLanguage === 'nl' ? 'Video 3 (Onthulling)' : 'Video 3 (Reveal)'}:</strong><br>${characterData.story_prompt_level3}</p>
+                </div>
+                ` : ''}
+            </div>
+        `;
+        
+        previewContent.innerHTML = html;
+        previewContent.style.display = 'block';
     }
 
     formatPreviewDisplay(characterDesc, worldDesc) {
@@ -1573,7 +1619,7 @@ class MaskedEmployeeForm {
     }
 
     async regenerateCharacter() {
-        console.log('🔄 Regenerating character...');
+        console.log('🔄 Regenerating character with variation...');
         
         // Reset and show loading
         document.querySelector('.loading-preview').style.display = 'block';
@@ -1581,34 +1627,43 @@ class MaskedEmployeeForm {
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
         
-        // Generate new preview
-        await this.generateCharacterPreview();
+        try {
+            // Prepare submission data
+            const submissionData = {
+                timestamp: new Date().toISOString(),
+                playerName: this.playerName,
+                answers: this.answers,
+                totalQuestions: Object.keys(this.answers).length,
+                regenerate: true  // Flag to add variation
+            };
+            
+            // Generate new character with variation
+            const characterData = await this.generateCharacterData(submissionData);
+            console.log('✅ New character generated:', characterData);
+            
+            // Display the new character
+            if (characterData && characterData.success) {
+                this.displayCharacterData(characterData);
+            } else {
+                throw new Error('Character generation failed');
+            }
+        } catch (error) {
+            console.error('❌ Regeneration error:', error);
+            alert(this.currentLanguage === 'nl' ? 
+                'Er ging iets mis bij het regenereren. Probeer het opnieuw.' : 
+                'Something went wrong while regenerating. Please try again.');
+            document.querySelector('.loading-preview').style.display = 'none';
+        }
     }
 
     async acceptCharacterAndContinue() {
-        console.log('✅ Character + world accepted!');
+        console.log('✅ Character accepted!');
         
-        // Show loading
-        this.showLoading(true);
+        // Hide preview page
+        document.getElementById('characterPreviewPage').style.display = 'none';
         
-        try {
-            // STEP 3: Save descriptions to PocketBase and get email
-            await this.saveDescriptionsToPocketBase();
-            
-            // Hide preview page
-            document.getElementById('characterPreviewPage').style.display = 'none';
-            
-            // Show email modal
-            this.showEmailModal();
-            
-        } catch (error) {
-            console.error('❌ Error saving descriptions:', error);
-            alert(this.currentLanguage === 'nl' ? 
-                'Er ging iets mis bij het opslaan. Probeer het opnieuw.' : 
-                'Something went wrong while saving. Please try again.');
-        } finally {
-            this.showLoading(false);
-        }
+        // Show email modal
+        this.showEmailModal();
     }
 
     async saveDescriptionsToPocketBase() {
@@ -1759,7 +1814,7 @@ class MaskedEmployeeForm {
         
         // Hide progress indicators
         document.getElementById('stepIndicator').style.display = 'none';
-        document.getElementById('progressBar').style.display = 'none';
+        document.getElementById('progressContainer').style.display = 'none';
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1776,13 +1831,24 @@ class MaskedEmployeeForm {
 
     setupEventListeners() {
         // Language selection buttons
-        document.getElementById('btnDutch').addEventListener('click', () => {
-            this.selectLanguage('nl');
-        });
+        const btnDutch = document.getElementById('btnDutch');
+        const btnEnglish = document.getElementById('btnEnglish');
         
-        document.getElementById('btnEnglish').addEventListener('click', () => {
-            this.selectLanguage('en');
-        });
+        if (btnDutch) {
+            btnDutch.addEventListener('click', () => {
+                this.selectLanguage('nl');
+            });
+        } else {
+            console.error('❌ btnDutch element not found!');
+        }
+        
+        if (btnEnglish) {
+            btnEnglish.addEventListener('click', () => {
+                this.selectLanguage('en');
+            });
+        } else {
+            console.error('❌ btnEnglish element not found!');
+        }
         
         // "Let's do this!" button
         document.getElementById('letsDoThisButton').addEventListener('click', () => {
@@ -1890,16 +1956,28 @@ class MaskedEmployeeForm {
         const btnDutch = document.getElementById('btnDutch');
         const btnEnglish = document.getElementById('btnEnglish');
         
-        btnDutch.classList.toggle('selected', lang === 'nl');
-        btnEnglish.classList.toggle('selected', lang === 'en');
+        if (btnDutch && btnEnglish) {
+            btnDutch.classList.toggle('selected', lang === 'nl');
+            btnEnglish.classList.toggle('selected', lang === 'en');
+            console.log('✅ Button states updated');
+        }
         
         // Update heading to welcome title in selected language
         const heading = document.getElementById('languagePageHeading');
-        heading.textContent = this.translations[lang].welcomeTitle;
+        if (heading) {
+            heading.textContent = this.translations[lang].welcomeTitle;
+            console.log('✅ Heading updated');
+        }
         
         // Show player info fields with translated labels
         const playerInfoFields = document.getElementById('playerInfoFields');
-        playerInfoFields.style.display = 'block';
+        if (playerInfoFields) {
+            console.log('📋 Player info fields found, showing...');
+            playerInfoFields.style.display = 'block';
+            console.log('✅ Player info fields displayed:', playerInfoFields.style.display);
+        } else {
+            console.error('❌ playerInfoFields element not found!');
+        }
         
         // Update field labels
         document.getElementById('labelGameNameLang').textContent = this.translations[lang].gameNameLabel;
@@ -2189,7 +2267,7 @@ class MaskedEmployeeForm {
             
             // Show progress indicators
             document.getElementById('stepIndicator').style.display = 'block';
-            document.getElementById('progressBar').style.display = 'block';
+            document.getElementById('progressContainer').style.display = 'flex';
             
             this.displayChapter(this.currentChapter);
             
@@ -2224,7 +2302,9 @@ class MaskedEmployeeForm {
 
         // Update header
         document.getElementById('currentStep').textContent = chapterNumber;
-        document.getElementById('progressFill').style.width = `${(chapterNumber / this.totalChapters) * 100}%`;
+        const progressPercentage = Math.round((chapterNumber / this.totalChapters) * 100);
+        document.getElementById('progressFill').style.width = `${progressPercentage}%`;
+        document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
 
         // Update chapter info with language support
         document.getElementById('chapterTitle').textContent = chapter.title[lang] || chapter.title;
@@ -2297,21 +2377,58 @@ class MaskedEmployeeForm {
 
             questionDiv.appendChild(optionsList);
         } else if (question.type === 'text') {
-            const placeholder = question.placeholder ? (question.placeholder[lang] || question.placeholder) : 
-                (lang === 'nl' ? 'Vul je antwoord hier in...' : 'Enter your answer here...');
-            
-            const textarea = document.createElement('textarea');
-            textarea.className = 'text-input';
-            textarea.name = `question_${question.id}`;
-            textarea.placeholder = placeholder;
-            textarea.required = true;
+            // Check if this question has scenes (Chapter 9 questions)
+            if (question.scenes && Array.isArray(question.scenes[lang])) {
+                const scenesContainer = document.createElement('div');
+                scenesContainer.className = 'scenes-container';
+                
+                question.scenes[lang].forEach((sceneText, index) => {
+                    const sceneDiv = document.createElement('div');
+                    sceneDiv.className = 'scene-input-group';
+                    
+                    const sceneLabel = document.createElement('label');
+                    sceneLabel.className = 'scene-label';
+                    sceneLabel.textContent = sceneText;
+                    
+                    const textarea = document.createElement('textarea');
+                    textarea.className = 'text-input scene-textarea';
+                    textarea.name = `question_${question.id}_scene${index + 1}`;
+                    textarea.placeholder = lang === 'nl' ? 
+                        `Beschrijf scene ${index + 1}...` : 
+                        `Describe scene ${index + 1}...`;
+                    textarea.required = true;
+                    textarea.rows = 3;
+                    
+                    // Restore previous answer if exists
+                    const answerKey = `${question.id}_scene${index + 1}`;
+                    if (this.answers[answerKey] !== undefined) {
+                        textarea.value = this.answers[answerKey];
+                    }
+                    
+                    sceneDiv.appendChild(sceneLabel);
+                    sceneDiv.appendChild(textarea);
+                    scenesContainer.appendChild(sceneDiv);
+                });
+                
+                questionDiv.appendChild(scenesContainer);
+            } else {
+                // Regular text question (no scenes)
+                const placeholder = question.placeholder ? (question.placeholder[lang] || question.placeholder) : 
+                    (lang === 'nl' ? 'Vul je antwoord hier in...' : 'Enter your answer here...');
+                
+                const textarea = document.createElement('textarea');
+                textarea.className = 'text-input';
+                textarea.name = `question_${question.id}`;
+                textarea.placeholder = placeholder;
+                textarea.required = true;
 
-            // Restore previous answer if exists
-            if (this.answers[question.id] !== undefined) {
-                textarea.value = this.answers[question.id];
+                // Restore previous answer if exists
+                if (this.answers[question.id] !== undefined) {
+                    textarea.value = this.answers[question.id];
+                }
+
+                questionDiv.appendChild(textarea);
             }
-
-            questionDiv.appendChild(textarea);
         }
 
         // Add error message container
@@ -2343,8 +2460,8 @@ class MaskedEmployeeForm {
             console.log(`✅ Chapter ${this.currentChapter} saved to PocketBase successfully`);
             
             if (this.currentChapter === this.totalChapters) {
-                // Final submission - show completion page
-                this.showCompletionPage();
+                // Final submission - generate character and show completion
+                await this.submitAllAnswers();
             } else {
                 // Go to next chapter
                 this.currentChapter++;
@@ -2411,8 +2528,20 @@ class MaskedEmployeeForm {
                     this.answers[question.id] = parseInt(checkedRadio.value);
                 }
             } else if (question.type === 'text') {
-                const textarea = questionDiv.querySelector('textarea');
-                this.answers[question.id] = textarea.value.trim();
+                // Check if this question has scenes
+                const lang = this.currentLanguage;
+                if (question.scenes && Array.isArray(question.scenes[lang])) {
+                    // Save each scene separately
+                    const textareas = questionDiv.querySelectorAll('textarea');
+                    textareas.forEach((textarea, index) => {
+                        const answerKey = `${question.id}_scene${index + 1}`;
+                        this.answers[answerKey] = textarea.value.trim();
+                    });
+                } else {
+                    // Regular text question
+                    const textarea = questionDiv.querySelector('textarea');
+                    this.answers[question.id] = textarea.value.trim();
+                }
             }
         });
     }
@@ -2435,16 +2564,167 @@ class MaskedEmployeeForm {
                 totalQuestions: Object.keys(this.answers).length
             };
 
-            // Save to PocketBase
-            await this.saveToPocketBase(submissionData);
+            console.log('📤 Step 1: Generating character data...');
+            // Generate character data using OpenAI
+            const characterData = await this.generateCharacterData(submissionData);
+            console.log('✅ Character data generated:', characterData);
+
+            // Store character data for later use (email, image generation)
+            this.currentCharacterData = characterData;
+
+            console.log('📤 Step 2: Saving to PocketBase...');
+            // Save to PocketBase with character data
+            await this.saveToPocketBase(submissionData, characterData);
+            console.log('✅ Saved to PocketBase successfully');
             
-            // Show completion page
-            this.showCompletionPage();
+            // Show completion page with character data
+            this.showCompletionPage(characterData);
+            
+            // Note: Image generation will start after user provides email
+            // See acceptCharacterAndContinue() -> email modal -> generateAndUploadImage()
         } catch (error) {
-            console.error('Submission error:', error);
+            console.error('❌ Submission error:', error);
             this.showError('Er is een fout opgetreden bij het opslaan van je antwoorden. Probeer het opnieuw.');
         } finally {
             this.showLoading(false);
+        }
+    }
+
+    async generateAndUploadImage(characterData) {
+        try {
+            console.log('🎨 Step 1: Generating image via Freepik...');
+            
+            const imagePrompt = characterData.image_generation_prompt;
+            if (!imagePrompt) {
+                throw new Error('No image prompt available');
+            }
+            
+            // Store character data for email
+            this.characterName = characterData.character_name || 'Your Character';
+            this.characterDescription = characterData.ai_summary || '';
+            this.imagePrompt = imagePrompt;
+            
+            // Call Freepik API with timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 90000); // 90 second timeout
+            
+            const requestBody = {
+                playerName: this.playerName,
+                prompt: imagePrompt
+            };
+            
+            console.log('📤 Calling Freepik API...');
+            console.log('📝 Request body:', {
+                playerName: requestBody.playerName,
+                promptLength: requestBody.prompt.length,
+                promptPreview: requestBody.prompt.substring(0, 100) + '...'
+            });
+            
+            const response = await fetch('https://www.pinkmilk.eu/ME/generate-image-freepik.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody),
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            console.log('📥 Response received, status:', response.status);
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ Freepik API error response:', errorText);
+                throw new Error(`Image generation failed: ${response.status} - ${errorText.substring(0, 200)}`);
+            }
+            
+            console.log('📋 Parsing JSON response...');
+            const responseText = await response.text();
+            console.log('📄 Raw response (first 500 chars):', responseText.substring(0, 500));
+            
+            let result;
+            try {
+                result = JSON.parse(responseText);
+                console.log('📊 Result:', result);
+            } catch (e) {
+                console.error('❌ Failed to parse JSON response');
+                console.error('Full response:', responseText);
+                throw new Error('Invalid JSON response from Freepik API: ' + responseText.substring(0, 200));
+            }
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Image generation failed');
+            }
+            
+            console.log('✅ Image generated successfully');
+            
+            // Step 2: Upload to PocketBase
+            const imageData = result.image_data || result.image_binary;
+            if (imageData) {
+                const imageBlob = this.base64ToBlob(imageData, 'image/png');
+                await this.uploadImageToPocketBase(imageBlob);
+                console.log('✅ Image uploaded to PocketBase');
+            }
+            
+            // Step 3: Send email with image
+            await this.sendFinalEmailWithImage();
+            console.log('✅ Email sent with image');
+            
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.error('❌ Image generation timeout (90 seconds)');
+                throw new Error('Image generation timed out - Freepik API took too long');
+            }
+            console.error('❌ Error in image generation:', error);
+            console.error('Error details:', error.message);
+            throw error;
+        }
+    }
+
+    async generateCharacterData(submissionData) {
+        try {
+            console.log('🤖 Calling generate-character.php...');
+            const response = await fetch('generate-character.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    playerName: submissionData.playerName,
+                    answers: submissionData.answers,
+                    gameName: this.gameName
+                })
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('❌ Character generation failed:', errorText);
+                throw new Error(`Character generation failed: ${response.status}`);
+            }
+
+            const characterData = await response.json();
+            
+            if (!characterData.success) {
+                throw new Error(characterData.error || 'Character generation failed');
+            }
+
+            console.log('✅ Character generated:', characterData.character_name);
+            return characterData;
+        } catch (error) {
+            console.error('❌ Error generating character:', error);
+            // Return empty character data if generation fails (so form doesn't break)
+            return {
+                success: false,
+                character_name: '',
+                character_type: '',
+                personality_traits: '',
+                ai_summary: '',
+                story_prompt_level1: '',
+                story_prompt_level2: '',
+                story_prompt_level3: '',
+                image_generation_prompt: '',
+                error: error.message
+            };
         }
     }
 
@@ -2453,58 +2733,64 @@ class MaskedEmployeeForm {
     // ============================================
 
     async activateTestMode() {
-        console.log('🧪 TEST MODE ACTIVATED');
-        
-        // Get player name from input
-        const playerNameInput = document.getElementById('playerNameLang');
-        this.playerName = playerNameInput.value.trim() || 'Test User';
+        console.log('🧪 TEST MODE ACTIVATED - Loading last PocketBase record');
         
         try {
-            // Load test data
-            const response = await fetch('test-answers.json');
-            if (!response.ok) {
-                throw new Error('Failed to load test data');
+            // Connect to PocketBase
+            const pb = new PocketBase('https://pinkmilk.pockethost.io');
+            const credentials = 'biknu8-pyrnaB-mytvyx';
+            pb.authStore.save(credentials, { admin: true });
+            
+            console.log('🔌 Connected to PocketBase');
+            
+            // Get the last record from MEQuestions collection
+            const records = await pb.collection('MEQuestions').getList(1, 1, {
+                sort: '-created',
+                filter: `gamename = "${this.gameName}"`
+            });
+            
+            if (!records.items || records.items.length === 0) {
+                throw new Error('No records found in PocketBase');
             }
             
-            const data = await response.json();
-            this.testAnswers = data.testAnswers;
+            const lastRecord = records.items[0];
+            console.log('✅ Last record loaded:', lastRecord.nameplayer);
             
-            console.log('✅ Test data loaded');
+            // Extract answers from all chapters
+            this.answers = {};
             
-            // Apply all answers
-            this.answers = { ...this.testAnswers };
-            
-            console.log('✅ All 40 answers applied');
-            
-            // Save initial data to PocketBase
-            try {
-                await this.saveInitialPlayerData();
-                console.log('✅ Initial data saved');
-            } catch (error) {
-                console.warn('⚠️ Could not save to PocketBase, continuing anyway');
-            }
-            
-            // Save all chapter progress
-            for (let i = 0; i < this.totalChapters; i++) {
-                try {
-                    await this.saveProgressToPocketBase();
-                    console.log(`✅ Chapter ${i + 1} saved`);
-                } catch (error) {
-                    console.warn(`⚠️ Could not save chapter ${i + 1}`);
+            // Combine all chapter answers
+            for (let i = 1; i <= 9; i++) {
+                const chapterKey = `chapter${String(i).padStart(2, '0')}`;
+                const chapterData = lastRecord[chapterKey];
+                
+                if (chapterData && typeof chapterData === 'object') {
+                    Object.assign(this.answers, chapterData);
                 }
             }
+            
+            console.log('✅ Loaded answers:', Object.keys(this.answers).length, 'questions');
+            
+            // Set player name from record
+            this.playerName = lastRecord.nameplayer || 'Test User';
             
             // Hide language page
             document.getElementById('languageSelectionPage').style.display = 'none';
             
-            // Jump to preview page (2-step flow)
-            this.showCharacterPreviewPage();
+            // Jump to last chapter (chapter 9)
+            this.currentChapter = this.totalChapters;
+            this.displayChapter(this.currentChapter);
             
-            console.log('🎉 Test mode complete - jumped to preview page');
+            // Show chapter page
+            document.getElementById('chapterPage').style.display = 'block';
+            
+            console.log('🎉 Test mode complete - jumped to last chapter');
+            console.log('💡 Use Previous button to go back and edit answers');
+            console.log('💡 Click Voltooien to regenerate character');
             
         } catch (error) {
             console.error('❌ Error in test mode:', error);
-            alert('Error loading test data. Make sure test-answers.json is uploaded!');
+            alert('Error loading last record from PocketBase:\n' + error.message);
         }
     }
 }

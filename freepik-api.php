@@ -4,13 +4,16 @@
  * Handles image generation using Freepik AI API
  */
 
-define('MASKED_EMPLOYEE_APP', true);
+// Check if constant is already defined before defining it
+if (!defined('MASKED_EMPLOYEE_APP')) {
+    define('MASKED_EMPLOYEE_APP', true);
+}
 require_once __DIR__ . '/api-keys.php';
 
 // Define default Freepik settings if not set in api-keys.php
-if (!defined('FREEPIK_IMAGE_SIZE')) define('FREEPIK_IMAGE_SIZE', '1024x1024');
+if (!defined('FREEPIK_IMAGE_SIZE')) define('FREEPIK_IMAGE_SIZE', '1280x720');  // 16:9 aspect ratio
 if (!defined('FREEPIK_STYLE')) define('FREEPIK_STYLE', 'realistic');
-if (!defined('FREEPIK_AI_MODEL')) define('FREEPIK_AI_MODEL', 'flux');
+if (!defined('FREEPIK_AI_MODEL')) define('FREEPIK_AI_MODEL', 'flux-kontext-pro');  // Flux Kontext Pro
 if (!defined('FREEPIK_NUM_INFERENCE_STEPS')) define('FREEPIK_NUM_INFERENCE_STEPS', 50);
 if (!defined('FREEPIK_GUIDANCE_SCALE')) define('FREEPIK_GUIDANCE_SCALE', 7.5);
 if (!defined('LOG_API_CALLS')) define('LOG_API_CALLS', false);
@@ -38,12 +41,17 @@ class FreepikAPI {
         
         // Use ONLY the parameters Freepik accepts (simple version)
         // Complex parameters were causing "400: parameters didn't validate" error
+        
+        // Truncate prompt if too long (Freepik has character limits)
+        $maxLength = 1000;
+        if (strlen($prompt) > $maxLength) {
+            $this->log("Prompt too long (" . strlen($prompt) . " chars), truncating to $maxLength");
+            $prompt = substr($prompt, 0, $maxLength);
+        }
+        
         $data = array_merge([
             'prompt' => $prompt,
-            'num_images' => 1,
-            'image' => [
-                'size' => '1024x1024'
-            ]
+            'num_images' => 1
         ], $options);
         
         // Make API request
@@ -62,10 +70,11 @@ class FreepikAPI {
      * Generate character image with optimized settings
      */
     public function generateCharacterImage($prompt) {
-        $enhancedPrompt = $this->enhanceCharacterPrompt($prompt);
+        // Don't enhance - prompt from generate-character.php is already detailed
+        // $enhancedPrompt = $this->enhanceCharacterPrompt($prompt);
         
         // Use simple parameters - Freepik doesn't accept complex styling options
-        return $this->generateImage($enhancedPrompt);
+        return $this->generateImage($prompt);
     }
     
     /**
@@ -144,10 +153,19 @@ class FreepikAPI {
         
         // Check for API errors
         if ($httpCode !== 200) {
+            $errorMsg = 'HTTP ' . $httpCode . ': ' . ($result['message'] ?? 'Unknown error');
+            if (isset($result['detail'])) {
+                $errorMsg .= ' - ' . $result['detail'];
+            }
+            error_log("Freepik API Error: " . $errorMsg);
+            error_log("Full response: " . $response);
+            
             return [
                 'success' => false,
-                'error' => 'HTTP ' . $httpCode . ': ' . ($result['message'] ?? 'Unknown error'),
-                'image_url' => null
+                'error' => $errorMsg,
+                'image_url' => null,
+                'http_code' => $httpCode,
+                'full_response' => $result
             ];
         }
         
