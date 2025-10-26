@@ -183,52 +183,52 @@ function formatAnswersForAI($answers, $chapters) {
  * Generate realistic image prompt for Freepik/Flux
  */
 function generateImagePrompt($characterName, $aiSummary, $characterType) {
-    // Extract key details from summary
-    $prompt = "⚠️ CRITICAL: 16:9 WIDESCREEN ASPECT RATIO (1920x1080 or 1280x720) - MANDATORY\n\n";
-    $prompt .= "STUDIO QUALITY PHOTO, hyper-realistic: ";
-    
-    // Add character type context
-    $typeDescriptions = [
-        'animals' => 'anthropomorphic animal character (actual animal with clothes)',
-        'fruits_vegetables' => 'HUMANIZED fruit/vegetable character with EXPRESSIVE EYES, SMILING MOUTH, ARMS with HANDS, LEGS with FEET (Pixar-style, cartoon-like features on actual fruit/vegetable body)',
-        'fantasy_heroes' => 'fantasy hero character (elf, wizard, knight, etc)',
-        'pixar_disney' => 'Pixar-style 3D animated character',
-        'fairy_tales' => 'fairy tale character (from classic stories)'
-    ];
-    
-    $prompt .= $typeDescriptions[$characterType] ?? 'character';
-    $prompt .= " named '$characterName'. ";
-    
-    // Extract clothing and appearance from summary
-    if (preg_match('/draagt ([^.]+)/i', $aiSummary, $matches)) {
-        $prompt .= "Wearing " . trim($matches[1]) . ". ";
+    // Extract the KARAKTER section (most important details)
+    $karakterText = "";
+    if (preg_match('/1\.\s*KARAKTER[:\s]+(.+?)(?=2\.\s*OMGEVING|$)/is', $aiSummary, $matches)) {
+        $karakterText = trim($matches[1]);
+        // Remove line breaks and extra spaces
+        $karakterText = preg_replace('/\s+/', ' ', $karakterText);
+        // Limit to first 300 chars for character description
+        $karakterText = substr($karakterText, 0, 300);
     }
     
     // Extract environment from AI summary (OMGEVING section)
     $environmentText = "";
     if (preg_match('/2\.\s*OMGEVING[:\s]+(.+?)(?=3\.\s*PROPS|$)/is', $aiSummary, $matches)) {
         $environmentText = trim($matches[1]);
-        $environmentText = preg_replace('/\s+/', ' ', $environmentText); // Clean whitespace
+        $environmentText = preg_replace('/\s+/', ' ', $environmentText);
+        // Limit to first 200 chars for environment
+        $environmentText = substr($environmentText, 0, 200);
     }
     
-    $prompt .= "\n\n=== ENVIRONMENT & BACKGROUND ===";
+    // Build SHORT, focused prompt (Freepik works better with concise prompts)
+    $prompt = "16:9 widescreen horizontal image. ";
+    
+    // Add character type
+    $typeDescriptions = [
+        'animals' => 'Anthropomorphic animal',
+        'fruits_vegetables' => 'Humanized fruit/vegetable with cartoon eyes, mouth, arms and legs (Pixar style)',
+        'fantasy_heroes' => 'Fantasy character',
+        'pixar_disney' => 'Pixar 3D animated character',
+        'fairy_tales' => 'Fairy tale character'
+    ];
+    
+    $prompt .= $typeDescriptions[$characterType] ?? 'Character';
+    $prompt .= " named $characterName. ";
+    
+    // Add character description
+    if (!empty($karakterText)) {
+        $prompt .= $karakterText . " ";
+    }
+    
+    // Add environment
     if (!empty($environmentText)) {
-        $prompt .= "\nSETTING: " . $environmentText;
-    } else {
-        // Fallback if extraction fails
-        $prompt .= "\nSETTING: Professional TV gameshow studio with dramatic stage lighting";
+        $prompt .= "Setting: " . $environmentText . " ";
     }
-    $prompt .= "\nSTYLE: Cinematic, theatrical, vibrant and colorful";
-    $prompt .= "\nATMOSPHERE: Exciting gameshow environment with professional lighting";
     
-    $prompt .= "\n\n=== TECHNICAL SPECS ===";
-    $prompt .= "\nASPECT RATIO: 16:9 widescreen (1216x832) - MANDATORY";
-    $prompt .= "\nSTYLE: Hyper-realistic, professional studio photography";
-    $prompt .= "\nLIGHTING: Professional studio lighting, soft shadows, dramatic highlights";
-    $prompt .= "\nQUALITY: 8K resolution, sharp focus, photorealistic textures";
-    $prompt .= "\nCOMPOSITION: Cinematic widescreen, horizontal orientation";
-    $prompt .= "\nFRAMING: Full body or 3/4 body shot, centered in 16:9 frame with gameshow studio visible behind";
-    $prompt .= "\nIMPORTANT: NO MASK, NO human face - character IS the animal/fruit/fantasy being";
+    // Add essential technical requirements
+    $prompt .= "Professional photography, cinematic lighting, vibrant colors, full body shot, centered composition.";
     
     // Add special note for fruits/vegetables
     if ($characterType === 'fruits_vegetables') {
