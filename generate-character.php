@@ -202,33 +202,33 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $environmentText = substr($environmentText, 0, 200);
     }
     
-    // Build SHORT, focused prompt (Freepik works better with concise prompts)
-    $prompt = "16:9 widescreen horizontal image. ";
+    // Build focused prompt with technical quality specs first
+    $prompt = "Professional 4K photoshoot, 16:9 widescreen horizontal format, ultra high quality, sharp focus, studio lighting, photorealistic. ";
     
-    // Add character type
+    // Add character type with specific requirements
     $typeDescriptions = [
-        'animals' => 'Anthropomorphic animal',
-        'fruits_vegetables' => 'Humanized fruit/vegetable with cartoon eyes, mouth, arms and legs (Pixar style)',
-        'fantasy_heroes' => 'Fantasy character',
-        'pixar_disney' => 'Pixar 3D animated character',
-        'fairy_tales' => 'Fairy tale character'
+        'animals' => 'Anthropomorphic animal character with clothes and personality',
+        'fruits_vegetables' => 'Anthropomorphic fruit/vegetable character with expressive animated face (eyes, mouth), arms with hands, legs with feet, wearing unique clothing (Pixar style)',
+        'fantasy_heroes' => 'Fantasy character with detailed costume and personality',
+        'pixar_disney' => 'Pixar-style 3D animated character, charismatic and expressive',
+        'fairy_tales' => 'Modernized fairy tale character, photorealistic style'
     ];
     
     $prompt .= $typeDescriptions[$characterType] ?? 'Character';
     $prompt .= " named $characterName. ";
     
-    // Add character description
+    // Add character description (first 250 chars)
     if (!empty($karakterText)) {
-        $prompt .= $karakterText . " ";
+        $prompt .= substr($karakterText, 0, 250) . " ";
     }
     
-    // Add environment
+    // Add environment (first 150 chars)
     if (!empty($environmentText)) {
-        $prompt .= "Setting: " . $environmentText . " ";
+        $prompt .= "Environment: " . substr($environmentText, 0, 150) . " ";
     }
     
-    // Add essential technical requirements
-    $prompt .= "Professional photography, cinematic lighting, vibrant colors, full body shot, centered composition.";
+    // Add composition requirements
+    $prompt .= "Full body shot, centered composition, detailed background, professional photography quality.";
     
     // Add special note for fruits/vegetables
     if ($characterType === 'fruits_vegetables') {
