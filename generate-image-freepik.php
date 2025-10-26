@@ -42,14 +42,16 @@ if (empty($prompt)) {
 // DIRECT TEST: Call Freepik API directly without the class
 $ch = curl_init(FREEPIK_API_URL);
 
+// Prepend aspect ratio instruction to prompt
+$finalPrompt = "ASPECT RATIO: 16:9 WIDESCREEN HORIZONTAL (1920x1080 or 1216x832) - MANDATORY. " . $prompt;
+$finalPrompt = substr($finalPrompt, 0, 1000); // Truncate to 1000 chars
+
 curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
-        'prompt' => substr($prompt, 0, 1000), // Truncate to 1000 chars
+        'prompt' => $finalPrompt,
         'num_images' => 1,
-        'image' => [
-            'size' => '1216x832' // 16:9.75 ratio (closest to 16:9 that Freepik supports)
-        ]
+        'aspect_ratio' => '16:9' // Try aspect_ratio parameter
     ]),
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',

@@ -373,9 +373,21 @@ try {
     
     $aiSummary = callOpenAI($apiKey, $systemPrompt1, $userPrompt1, 600, $isRegenerate);
     
-    // Extract character name from the summary
-    preg_match("/'([^']+)'/", $aiSummary, $matches);
-    $characterName = $matches[1] ?? 'De Gemaskeerde Medewerker';
+    // Extract character name from the summary (try multiple patterns)
+    $characterName = 'De Gemaskeerde Medewerker'; // Default fallback
+    
+    // Pattern 1: Look for 'Name' in quotes
+    if (preg_match("/'([^']+)'/", $aiSummary, $matches)) {
+        $characterName = $matches[1];
+    }
+    // Pattern 2: Look for "genaamd Name" or "named Name"
+    elseif (preg_match('/genaamd\s+([A-Z][a-zA-Z]+)/i', $aiSummary, $matches)) {
+        $characterName = $matches[1];
+    }
+    // Pattern 3: Look for "De [Type] genaamd Name"
+    elseif (preg_match('/De\s+\w+\s+genaamd\s+([A-Z][a-zA-Z]+)/i', $aiSummary, $matches)) {
+        $characterName = $matches[1];
+    }
     
     // Use Chapter 9 answers directly (Questions 41-43 with 3 scenes each)
     // Story 1: Question 41 (3 scenes)
