@@ -46,7 +46,10 @@ curl_setopt_array($ch, [
     CURLOPT_POST => true,
     CURLOPT_POSTFIELDS => json_encode([
         'prompt' => substr($prompt, 0, 1000), // Truncate to 1000 chars
-        'num_images' => 1
+        'num_images' => 1,
+        'image' => [
+            'size' => '1216x832' // 16:9.75 ratio (closest to 16:9 that Freepik supports)
+        ]
     ]),
     CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',

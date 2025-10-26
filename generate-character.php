@@ -204,13 +204,30 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $prompt .= "Wearing " . trim($matches[1]) . ". ";
     }
     
+    // Extract environment from AI summary (OMGEVING section)
+    $environmentText = "";
+    if (preg_match('/2\.\s*OMGEVING[:\s]+(.+?)(?=3\.\s*PROPS|$)/is', $aiSummary, $matches)) {
+        $environmentText = trim($matches[1]);
+        $environmentText = preg_replace('/\s+/', ' ', $environmentText); // Clean whitespace
+    }
+    
+    $prompt .= "\n\n=== ENVIRONMENT & BACKGROUND ===";
+    if (!empty($environmentText)) {
+        $prompt .= "\nSETTING: " . $environmentText;
+    } else {
+        // Fallback if extraction fails
+        $prompt .= "\nSETTING: Professional TV gameshow studio with dramatic stage lighting";
+    }
+    $prompt .= "\nSTYLE: Cinematic, theatrical, vibrant and colorful";
+    $prompt .= "\nATMOSPHERE: Exciting gameshow environment with professional lighting";
+    
     $prompt .= "\n\n=== TECHNICAL SPECS ===";
-    $prompt .= "\nASPECT RATIO: 16:9 widescreen (1920x1080 or 1280x720) - MANDATORY";
+    $prompt .= "\nASPECT RATIO: 16:9 widescreen (1216x832) - MANDATORY";
     $prompt .= "\nSTYLE: Hyper-realistic, professional studio photography";
     $prompt .= "\nLIGHTING: Professional studio lighting, soft shadows, dramatic highlights";
     $prompt .= "\nQUALITY: 8K resolution, sharp focus, photorealistic textures";
     $prompt .= "\nCOMPOSITION: Cinematic widescreen, horizontal orientation";
-    $prompt .= "\nFRAMING: Full body or 3/4 body shot, centered in 16:9 frame";
+    $prompt .= "\nFRAMING: Full body or 3/4 body shot, centered in 16:9 frame with gameshow studio visible behind";
     $prompt .= "\nIMPORTANT: NO MASK, NO human face - character IS the animal/fruit/fantasy being";
     
     // Add special note for fruits/vegetables
