@@ -1,0 +1,873 @@
+{
+  "gameshow": {
+    "id": "masked_employee_2025",
+    "name": {
+      "nl": "The Masked Employee",
+      "en": "The Masked Employee"
+    },
+    "title": {
+      "nl": "🎭 THE MASKED EMPLOYEE 🎭",
+      "en": "🎭 THE MASKED EMPLOYEE 🎭"
+    },
+    "welcome_title": {
+      "nl": "ONTDEK DE MYSTERIEUZE HELD IN JEZELF!",
+      "en": "DISCOVER THE MYSTERIOUS SUPERHERO IN YOURSELF!"
+    },
+    "congratulations": {
+      "nl": "Gefeliciteerd! Je bent uitgekozen om deel te nemen aan ons spectaculaire bedrijfsevenement: The Masked Employee. Dit wordt een onvergetelijke ervaring waarbij verborgen talenten worden onthuld en teamcultuur wordt versterkt op een compleet nieuwe manier.",
+      "en": "Congratulations! You've been selected to participate in our spectacular company event: The Masked Employee. This will be an unforgettable experience where hidden talents are revealed and team culture is strengthened in a completely new way."
+    },
+    "confidentiality_title": {
+      "nl": "⚠️ ABSOLUTE GEHEIMHOUDING VERPLICHT ⚠️",
+      "en": "⚠️ ABSOLUTE CONFIDENTIALITY REQUIRED ⚠️"
+    },
+    "confidentiality_warning": {
+      "nl": "LET OP: Door deel te nemen aan deze vragenlijst ga je akkoord met de volgende geheimhoudingsregels:",
+      "en": "WARNING: By participating in this questionnaire you agree to the following confidentiality rules:"
+    },
+    "forbidden_rules": {
+      "nl": [
+        "Het bespreken van deze vragenlijst met collega's",
+        "Het delen van je antwoorden met anderen",
+        "Het onthullen wie er deelneemt aan de show",
+        "Het bespreken van welke talenten of eigenschappen je hebt prijsgegeven",
+        "Het geven van hints over je identiteit tijdens de show"
+      ],
+      "en": [
+        "Discussing this questionnaire with colleagues",
+        "Sharing your answers with others",
+        "Revealing who is participating in the show",
+        "Discussing what talents or qualities you have revealed",
+        "Giving hints about your identity during the show"
+      ]
+    },
+    "penalty_clause": {
+      "nl": "💰 BOETECLAUSULE: Bij overtreding van de geheimhoudingsplicht wordt een boete van €9.750 in rekening gebracht. Deze regel geldt voor alle deelnemers en medewerkers die kennis hebben van de deelnemerslijst.",
+      "en": "💰 PENALTY CLAUSE: In case of violation of the confidentiality obligation, a fine of €9,750 will be charged. This rule applies to all participants and employees who have knowledge of the participants list."
+    },
+    "how_it_works_title": {
+      "nl": "🎯 HOE HET WERKT:",
+      "en": "🎯 HOW IT WORKS:"
+    },
+    "how_it_works": {
+      "nl": [
+        "Vul de vragenlijst volledig en eerlijk in",
+        "Jouw antwoorden worden gebruikt door AI om een uniek karakter van jou te maken",
+        "Tijdens de show raden teams wie er achter elk masker schuilgaat",
+        "Alleen aan het einde wordt hun ware identiteit onthuld!"
+      ],
+      "en": [
+        "Complete the questionnaire below fully and honestly",
+        "Your answers will be used by AI to generate generated your unique character",
+        "During the show, teams guess who is behind each mask",
+        "Only at the end will your true identity be revealed!"
+      ]
+    },
+    "final_message": {
+      "nl": "Onthoud: Het succes van deze show hangt volledig af van absolute geheimhouding. Vertrouw erop dat iedereen zich aan deze regels houdt voor een magische ervaring!",
+      "en": "Remember: The success of this show depends entirely on absolute confidentiality. Trust that everyone will adhere to these rules for a magical experience!"
+    }
+  },
+  "chapters": [
+    {
+      "id": 1,
+      "title": {
+        "nl": "Basis Informatie",
+        "en": "Basic Information"
+      },
+      "description": {
+        "nl": "Laten we beginnen met wat basis informatie",
+        "en": "Let's start with some basic information"
+      },
+      "questions": [
+        {
+          "id": 1,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Wat zou je willen worden?",
+            "en": "What would you like to be?"
+          },
+          "options": {
+            "nl": [
+              "Man",
+              "Vrouw",
+              "Non-binair",
+              "Weet ik nog niet"
+            ],
+            "en": [
+              "Man",
+              "Woman",
+              "Non-binary",
+              "I don't know yet"
+            ]
+          }
+        },
+        {
+          "id": 2,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Ben je getrouwd, in een relatie, of single?",
+            "en": "Are you married, in a relationship, or single?"
+          },
+          "options": {
+            "nl": [
+              "Getrouwd",
+              "In een relatie",
+              "Single",
+              "Het is ingewikkeld"
+            ],
+            "en": [
+              "Married",
+              "In a relationship",
+              "Single",
+              "It's complicated"
+            ]
+          }
+        },
+        {
+          "id": 3,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Hoeveel fantasie heb je",
+            "en": "How much imagination do you have"
+          },
+          "options": {
+            "nl": [
+              "geen",
+              "best wel een beetje",
+              "heel veel",
+              "out of this world"
+            ],
+            "en": [
+              "none",
+              "quite a bit",
+              "a lot",
+              "out of this world"
+            ]
+          }
+        },
+        {
+          "id": 4,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "In welke leeftijdscategorie valt jouw karakter?",
+            "en": "In which age category does your character fall?"
+          },
+          "options": {
+            "nl": [
+              "10-20 jaar",
+              "20-40 jaar",
+              "40-50 jaar",
+              "50+ jaar"
+            ],
+            "en": [
+              "10-20 years",
+              "20-40 years",
+              "40-50 years",
+              "50+ years"
+            ]
+          }
+        },
+        {
+          "id": 5,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Hoe lang werk je bij dit bedrijf?",
+            "en": "How long have you been working at this company?"
+          },
+          "options": {
+            "nl": [
+              "Minder dan 1 jaar",
+              "1-3 jaar",
+              "3-5 jaar",
+              "Heel weing"
+            ],
+            "en": [
+              "Less than 1 year",
+              "1-3 years",
+              "3-5 years",
+              "Very little"
+            ]
+          }
+        },
+        {
+          "id": 6,
+          "type": "text",
+          "question": {
+            "nl": "Op welke afdeling werk je?",
+            "en": "Which department do you work in?"
+          },
+          "placeholder": {
+            "nl": "Bijvoorbeeld: Marketing, IT, HR, Sales...",
+            "en": "For example: Marketing, IT, HR, Sales..."
+          }
+        },
+        {
+          "id": 7,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Hoe zou je jouw favoriete karakter omschrijven? Als een...",
+            "en": "How would you describe your favorite character? As a..."
+          },
+          "options": {
+            "nl": [
+              "🐾 Dier (bijvoorbeeld: vos, leeuw, pinguïn)",
+              "🍅 Groente of Fruit (bijvoorbeeld: tomaat, banaan, wortel)",
+              "⚔️ Fantasy Held (bijvoorbeeld: tovenaar, elf, ridder)",
+              "🎬 Pixar of Disney Figuur (bijvoorbeeld: uitvinder, avonturier)",
+              "📚 Sprookjesfiguur (bijvoorbeeld: prins, prinses, heks)"
+            ],
+            "en": [
+              "🐾 Animal (for example: fox, lion, penguin)",
+              "🍅 Fruit or Vegetable (for example: tomato, banana, carrot)",
+              "⚔️ Fantasy Hero (for example: wizard, elf, knight)",
+              "🎬 Pixar or Disney Character (for example: inventor, adventurer)",
+              "📚 Fairy Tale Character (for example: prince, princess, witch)"
+            ]
+          },
+          "characterTypeMapping": {
+            "🐾 Dier (bijvoorbeeld: vos, leeuw, pinguïn)": "animals",
+            "🍅 Groente of Fruit (bijvoorbeeld: tomaat, banaan, wortel)": "fruits_vegetables",
+            "⚔️ Fantasy Held (bijvoorbeeld: tovenaar, elf, ridder)": "fantasy_heroes",
+            "🎬 Pixar of Disney Figuur (bijvoorbeeld: uitvinder, avonturier)": "pixar_disney",
+            "📚 Sprookjesfiguur (bijvoorbeeld: prins, prinses, heks)": "fairy_tales",
+            "🐾 Animal (for example: fox, lion, penguin)": "animals",
+            "🍅 Fruit or Vegetable (for example: tomato, banana, carrot)": "fruits_vegetables",
+            "⚔️ Fantasy Hero (for example: wizard, elf, knight)": "fantasy_heroes",
+            "🎬 Pixar or Disney Character (for example: inventor, adventurer)": "pixar_disney",
+            "📚 Fairy Tale Character (for example: prince, princess, witch)": "fairy_tales"
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": {
+        "nl": "Vragen over jouw Masked Identity",
+        "en": "Questions about your Masked Identity"
+      },
+      "description": {
+        "nl": "Laten we jouw mysterieuze kant ontdekken",
+        "en": "Let's discover your mysterious side"
+      },
+      "questions": [
+        {
+          "id": 6,
+          "type": "text",
+          "question": {
+            "nl": "Wat omschrijft jouw persoonlijkheid het beste ?",
+            "en": "What best reflects your personality?"
+          },
+          "placeholder": {
+            "nl": "Bijvoorbeeld: een leeuw, omdat ik leidinggevend ben / agent want ik ben streng / tomaat, dromer etc",
+            "en": "For example: a lion, because I'm a leader / policeman cause im strict / tomato cause im juicy, a dreamer etc"
+          }
+        },
+        {
+          "id": 7,
+          "type": "text",
+          "question": {
+            "nl": "Welke kleur kostuum zou het beste bij jouw karakter passen en waarom?",
+            "en": "Which color costume would best suit your character and why?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf de kleur en gebruik je fantasie maar leg vooral uit waarom...",
+            "en": "Describe the color and use your fantasy but especially explain why..."
+          }
+        },
+        {
+          "id": 8,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Welk element uit de natuur representeert jou het beste?",
+            "en": "Which element from nature represents you best?"
+          },
+          "options": {
+            "nl": [
+              "Vuur - passievol en energiek",
+              "Water - kalm en aanpassingsvermogen",
+              "Aarde - stabiel en betrouwbaar",
+              "Lucht - vrij en creatief"
+            ],
+            "en": [
+              "Fire - passionate and energetic",
+              "Water - calm and adaptable",
+              "Earth - stable and reliable",
+              "Air - free and creative"
+            ]
+          }
+        },
+        {
+          "id": 9,
+          "type": "text",
+          "question": {
+            "nl": "Welk thema of symbool zou jou het beste weergeven?",
+            "en": "What theme or symbol would be describing you the best"
+          },
+          "placeholder": {
+            "nl": "Beschrijf je icoon of symbool in detail...",
+            "en": "Describe the design of your icon or symbol in detail..."
+          }
+        },
+        {
+          "id": 10,
+          "type": "text",
+          "question": {
+            "nl": "Welke muziekstijl zou het beste bij jouw persoonlijkheid passen? En vertel waarom.",
+            "en": "Which music style would best suit your personality? And describe why."
+          },
+          "placeholder": {
+            "nl": "Bijvoorbeeld: rock, klassiek, jazz, pop...",
+            "en": "For example: rock, classical, jazz, pop..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": {
+        "nl": "Persoonlijke Eigenschappen & Karakter",
+        "en": "Personal Traits & Character"
+      },
+      "description": {
+        "nl": "Vertel ons meer over wie je werkelijk bent",
+        "en": "Tell us more about who you really are"
+      },
+      "questions": [
+        {
+          "id": 11,
+          "type": "text",
+          "question": {
+            "nl": "Als je een superkracht zou kunnen kiezen, welke zou dat zijn en waarom?",
+            "en": "If you could choose a superpower, what would it be and why?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf je superkracht en waarom je deze zou kiezen...",
+            "en": "Describe your superpower and why you would choose it..."
+          }
+        },
+        {
+          "id": 12,
+          "type": "text",
+          "question": {
+            "nl": "Wat is je meest bizarre angst waar niemand van weet?",
+            "en": "What is your most bizarre fear that nobody knows about?"
+          },
+          "placeholder": {
+            "nl": "Vertel over je meest ongewone angst...",
+            "en": "Tell about your most unusual fear..."
+          }
+        },
+        {
+          "id": 13,
+          "type": "text",
+          "question": {
+            "nl": "Welke beroemde persoon zou jouw perfecte diner-gast zijn?",
+            "en": "Which famous person would be your perfect dinner guest?"
+          },
+          "placeholder": {
+            "nl": "Noem de persoon en leg uit waarom...",
+            "en": "Name the person and explain why..."
+          }
+        },
+        {
+          "id": 14,
+          "type": "text",
+          "question": {
+            "nl": "Over welk onderwerp zou je het liefst praten tijdens dat diner?",
+            "en": "What topic would you most like to talk about during that dinner?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf twee verschillende gespreksonderwerpen...",
+            "en": "Describe two different conversation topics..."
+          }
+        },
+        {
+          "id": 15,
+          "type": "text",
+          "question": {
+            "nl": "Als je leven een Netflix-serie zou zijn, wat zou de titel zijn?",
+            "en": "If your life were a Netflix series, what would the title be?"
+          },
+          "placeholder": {
+            "nl": "Verzin een creatieve titel voor je levensserie, plus een pay-off",
+            "en": "Come up with a creative title for your life series, plus a tagline"
+          }
+        },
+        {
+          "id": 16,
+          "type": "text",
+          "question": {
+            "nl": "Wat is het meest krankzinnigste dat je ooit hebt gedaan?",
+            "en": "What is the craziest thing you've ever done?"
+          },
+          "placeholder": {
+            "nl": "Vertel over je meest krankzinnigste moment...",
+            "en": "Tell about your craziest moment..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": {
+        "nl": "Verborgen Talenten & Hobby's",
+        "en": "Hidden Talents & Hobbies"
+      },
+      "description": {
+        "nl": "Onthul je geheime vaardigheden en passies",
+        "en": "Reveal your secret skills and passions"
+      },
+      "questions": [
+        {
+          "id": 17,
+          "type": "text",
+          "question": {
+            "nl": "Welk geheim talent heb je waar je collega's versteld van zouden staan?",
+            "en": "What secret talent do you have that would amaze your colleagues?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf twee of meer verborgen talenten...",
+            "en": "Describe two or more hidden talents..."
+          }
+        },
+        {
+          "id": 18,
+          "type": "text",
+          "question": {
+            "nl": "Wat is je meest ongewone hobby of verzameling waarvan niemand af weet?",
+            "en": "What is your most unusual hobby or collection that nobody knows about?"
+          },
+          "placeholder": {
+            "nl": "Vertel over deze bijzondere hobby in detail...",
+            "en": "Tell about this special hobby in detail..."
+          }
+        },
+        {
+          "id": 19,
+          "type": "text",
+          "question": {
+            "nl": "Kan je [of zou je willen kunnen ] een instrument bespelen dat niemand op het werk van je verwacht?",
+            "en": "Can you [or would you like to be able to] play an instrument that no one at work would expect from you?"
+          },
+          "placeholder": {
+            "nl": "Welk instrument is datt en waarom is het zo onverwacht...",
+            "en": "Which instrument is it and why is it so unexpected..."
+          }
+        },
+        {
+          "id": 20,
+          "type": "text",
+          "question": {
+            "nl": "Welke sport of activiteit heb je vroeger beoefend die totaal niet bij je huidige imago past?",
+            "en": "Which sport or activity did you practice in the past that doesn't fit your current image at all?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf de sport en waarom het niet past bij je imago...",
+            "en": "Describe the sport and why it doesn't fit your image..."
+          }
+        },
+        {
+          "id": 21,
+          "type": "text",
+          "question": {
+            "nl": "Wat is je meest creatieve uitlaatklep buiten je werk om?",
+            "en": "What is your most creative outlet outside of work?"
+          },
+          "placeholder": {
+            "nl": "Vertel uitvoerig over je creatieve uitlaadklep[pen]...",
+            "en": "Tell extensively about your creative outlet(s)..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": {
+        "nl": "Jeugd & Verleden",
+        "en": "Youth & Past"
+      },
+      "description": {
+        "nl": "Een blik in je verleden geeft inzicht in de toekomst",
+        "en": "A look into your past provides insight into the future"
+      },
+      "questions": [
+        {
+          "id": 22,
+          "type": "text",
+          "question": {
+            "nl": "Wat wilde je worden toen je 8 jaar oud was?",
+            "en": "What did you want to be when you were 8 years old?"
+          },
+          "placeholder": {
+            "nl": "Vertel over je kinderdroom...",
+            "en": "Tell about your childhood dream..."
+          }
+        },
+        {
+          "id": 23,
+          "type": "text",
+          "question": {
+            "nl": "Welke schoolvakken waren vroeger je absolute favorieten en waarom?",
+            "en": "Which school subjects were your absolute favorites and why?"
+          },
+          "placeholder": {
+            "nl": "Noem jouw favoriete vakken en leg uit waarom...",
+            "en": "Name your favorite subjects and explain why..."
+          }
+        },
+        {
+          "id": 24,
+          "type": "text",
+          "question": {
+            "nl": "Wat is je meest gênante jeugdherinnering die nu eigenlijk best grappig is?",
+            "en": "What is your most embarrassing childhood memory that is actually quite funny now?"
+          },
+          "placeholder": {
+            "nl": "Mijn gênante maar grappige herinnering...",
+            "en": "My embarrassing but funny memory..."
+          }
+        },
+        {
+          "id": 25,
+          "type": "text",
+          "question": {
+            "nl": "Welke trend uit je jeugd mis je het meest?",
+            "en": "Which trend from your early years do you miss the most?"
+          },
+          "placeholder": {
+            "nl": "Deze trend mis ik nog elke dag...",
+            "en": "I still miss this trend every day..."
+          }
+        },
+        {
+          "id": 26,
+          "type": "text",
+          "question": {
+            "nl": "Jij bent op jouw 16e verjaardag als gast, welk advies zou je jezelf geven?",
+            "en": "You are a guest on your 16th birthday, what advice would you give yourself?"
+          },
+          "placeholder": {
+            "nl": "Mijn advies aan mijzelf..",
+            "en": "My advice to myself..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": {
+        "nl": "Fantasie & Dromen",
+        "en": "Fantasy & Dreams"
+      },
+      "description": {
+        "nl": "Vertel ons over je dromen en fantasieën",
+        "en": "Tell us about your dreams and fantasies"
+      },
+      "questions": [
+        {
+          "id": 27,
+          "type": "text",
+          "question": {
+            "nl": "In welke film- of boekenwereld zou je een maand willen leven?",
+            "en": "In which movie or book world would you like to live for a month?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf de wereld uitvoerig en waarom je daar zou willen zijn...",
+            "en": "Describe the world extensively and why you would want to be there..."
+          }
+        },
+        {
+          "id": 28,
+          "type": "text",
+          "question": {
+            "nl": "Je wordt wakker werd met al het geld van Elon Musk, wat zou je daarmee dan gelijk kopen?",
+            "en": "You wake up with all of Elon Musk's money, what would you buy right away?"
+          },
+          "placeholder": {
+            "nl": "Wat zou je allereerste aankoop zijn...",
+            "en": "What would be your very first purchase..."
+          }
+        },
+        {
+          "id": 29,
+          "type": "text",
+          "question": {
+            "nl": "Welke periode fascineert je het meest en waarom?",
+            "en": "Which period fascinates you the most and why?"
+          },
+          "placeholder": {
+            "nl": "Noem de periode en leg uit wat je fascineert...",
+            "en": "Name the period and explain what fascinates you..."
+          }
+        },
+        {
+          "id": 30,
+          "type": "text",
+          "question": {
+            "nl": "Je mag een restaurant openen, welke keuken zou je serveren en hoe zou het heten?",
+            "en": "You can open a restaurant, what cuisine would you serve and what would it be called?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf je restaurant concept...",
+            "en": "Describe your restaurant concept..."
+          }
+        },
+        {
+          "id": 31,
+          "type": "text",
+          "question": {
+            "nl": "Welke plek op aarde [ mag fictie zijn] staat bovenaan je bucketlist en wat trekt je daar naartoe?",
+            "en": "Which place on earth [can be fictional] is at the top of your bucket list and what draws you there?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf deze plek en waarom je er naartoe wilt...",
+            "en": "Describe this place and why you want to go there..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": {
+        "nl": "Eigenaardigheden & Gewoontes",
+        "en": "Quirks & Habits"
+      },
+      "description": {
+        "nl": "Jouw gekke gewoontes en excentrieke eigenaardigheden",
+        "en": "Your crazy habits and eccentric quirks"
+      },
+      "questions": [
+        {
+          "id": 32,
+          "type": "text",
+          "question": {
+            "nl": "Welke vreemde gewoonte heb je waar je familie altijd om lacht?",
+            "en": "What strange habit do you have that your family always laughs about?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf jouw vreemde gewoonte...",
+            "en": "Describe your strange habit..."
+          }
+        },
+        {
+          "id": 33,
+          "type": "text",
+          "question": {
+            "nl": "Wat is je meest onlogische bijgeloof of ritueel?",
+            "en": "What is your most illogical superstition or ritual?"
+          },
+          "placeholder": {
+            "nl": "Vertel er maar eens uitgebreid over",
+            "en": "Tell us about it in detail"
+          }
+        },
+        {
+          "id": 34,
+          "type": "text",
+          "question": {
+            "nl": "Welke smaakcombinatie eet je graag die anderen vies vinden?",
+            "en": "What flavor combination do you enjoy eating that others find disgusting?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf deze vreemde smaakcombinatie...",
+            "en": "Describe this strange flavor combination..."
+          }
+        },
+        {
+          "id": 35,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Op welk moment van de dag ben je het meest productief?",
+            "en": "At what time of day are you most productive?"
+          },
+          "options": {
+            "nl": [
+              "Vroeg in de ochtend (5-8 uur)",
+              "Ochtend (8-12 uur)",
+              "Middag (12-17 uur)",
+              "Avond (17-24  uur)",
+              "Nacht (00+ uur)"
+            ],
+            "en": [
+              "Early morning (5-8 AM)",
+              "Morning (8 AM-12 PM)",
+              "Afternoon (12-5 PM)",
+              "Evening(5-11 PM )",
+              "Night (11 PM+)"
+            ]
+          }
+        },
+        {
+          "id": 36,
+          "type": "text",
+          "question": {
+            "nl": "Wat is jouw meest ongewone manier om stress af te reageren?",
+            "en": "What is your most unusual way to relieve stress?"
+          },
+          "placeholder": {
+            "nl": "Je bent super stressed - Wat is jouw unieke manier om stress af te reageren ",
+            "en": "Your Super stressed - Describe how you relieve stress in a unique way..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": {
+        "nl": "Onverwachte Voorkeuren",
+        "en": "Unexpected Preferences"
+      },
+      "description": {
+        "nl": "Verras ons met je nogal onverwachte kanten",
+        "en": "Surprise us with your rather unexpected sides"
+      },
+      "questions": [
+        {
+          "id": 37,
+          "type": "text",
+          "question": {
+            "nl": "Waar luister je stiekem graag naar - iets dat niemand van je zou verwachten?",
+            "en": "What music genre do you secretly enjoy listening to - something that no one would expect from you?"
+          },
+          "placeholder": {
+            "nl": "Vertel over je guilty pleasures",
+            "en": "Tell about your guilty pleasures"
+          }
+        },
+        {
+          "id": 38,
+          "type": "text",
+          "question": {
+            "nl": "Welk type TV-programma is je guilty pleasure?",
+            "en": "What type of TV program is your guilty pleasure?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf je foutste TV-programma...",
+            "en": "Describe your worst TV program..."
+          }
+        },
+        {
+          "id": 39,
+          "type": "text",
+          "question": {
+            "nl": "Als je een [ nog een ] tattoo zou nemen, wat zou het zijn en waar zou je het laten zetten?",
+            "en": "If you were to get [ another ] tattoo, what would it be and where would you get it?"
+          },
+          "placeholder": {
+            "nl": "Beschrijf je hypothetische tattoo...",
+            "en": "Describe your hypothetical tattoo..."
+          }
+        },
+        {
+          "id": 40,
+          "type": "text",
+          "question": {
+            "nl": "Welke kleur beschrijft jouw persoonlijkheid het beste en waarom?",
+            "en": "Which color best describes your personality and why?"
+          },
+          "placeholder": {
+            "nl": "Noem de kleur en leg uit waarom...",
+            "en": "Name the color and explain why..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": {
+        "nl": "Film Maken",
+        "en": "Movie Making"
+      },
+      "description": {
+        "nl": "Beschrijf de 3 mysterieuze filmpjes die jouw verhaal vertellen",
+        "en": "Describe the 3 mysterious videos that tell your story"
+      },
+      "questions": [
+        {
+          "id": 41,
+          "type": "text",
+          "question": {
+            "nl": "Omschrijf het eerste filmpje en meest vage filmpje dat je zou willen maken in 3 scenes: Een begin / een midden / en een spannend eind Dit moet een geheime kant van jou vertellen maar nog niet al te veel prijsgeven.",
+            "en": "Describe the first video and most vague one you would like to make in 3 scenes: a beginning / a middle / and an exiting end. This should reveal a secret side of you but not give away too much yet."
+          },
+          "placeholder": {
+            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
+            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+          },
+          "scenes": {
+            "nl": [
+              "Scene 1",
+              "Scene 2",
+              "Scene 3"
+            ],
+            "en": [
+              "Scene 1",
+              "Scene 2",
+              "Scene 3"
+            ]
+          }
+        },
+        {
+          "id": 42,
+          "type": "text",
+          "question": {
+            "nl": "Omschrijf het middelste filmpje, met iets meer hints dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag al iets meer prijsgeven.",
+            "en": "Describe the middle video, the one a more revealing you would like to make in 3 scenes. a beginning / a middle / and an exiting end. This should reveal a secret side of you and may give away a bit more."
+          },
+          "placeholder": {
+            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
+            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+          },
+          "scenes": {
+            "nl": [
+              "Scene 1",
+              "Scene 2",
+              "Scene 3"
+            ],
+            "en": [
+              "Scene 1",
+              "Scene 2",
+              "Scene 3"
+            ]
+          }
+        },
+        {
+          "id": 43,
+          "type": "text",
+          "question": {
+            "nl": "Omschrijf het laatste filmpje dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag het laatste beetje prijsgeven.",
+            "en": "Describe the final video you would like to make in 3 scenes. a beginning / a middle / and an exiting end. This should reveal a secret side of you and may give away the final clues."
+          },
+          "placeholder": {
+            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
+            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+          },
+          "scenes": {
+            "nl": [
+              "Scene 1",
+              "Scene 2",
+              "Scene 3"
+            ],
+            "en": [
+              "Scene 1",
+              "Scene 2",
+              "Scene 3"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "version": "2.0",
+    "created": "2025-10-08",
+    "total_questions": 43,
+    "total_chapters": 9,
+    "languages": [
+      "nl",
+      "en"
+    ],
+    "estimated_time_minutes": 35
+  }
+}
