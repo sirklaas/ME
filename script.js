@@ -1082,8 +1082,8 @@ class MaskedEmployeeForm {
                 setTimeout(() => reject(new Error('Image generation timeout')), 60000)
             );
             
-            // Call Freepik API via PHP wrapper
-            const fetchPromise = fetch('https://www.pinkmilk.eu/ME/generate-image-freepik.php', {
+            // Call Leonardo.ai API via PHP wrapper
+            const fetchPromise = fetch('https://www.pinkmilk.eu/ME/generate-image-leonardo.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -2613,14 +2613,14 @@ class MaskedEmployeeForm {
                 prompt: imagePrompt
             };
             
-            console.log('📤 Calling Freepik API...');
+            console.log('📤 Calling Leonardo.ai API...');
             console.log('📝 Request body:', {
                 playerName: requestBody.playerName,
                 promptLength: requestBody.prompt.length,
                 promptPreview: requestBody.prompt.substring(0, 100) + '...'
             });
             
-            const response = await fetch('https://www.pinkmilk.eu/ME/generate-image-freepik.php', {
+            const response = await fetch('https://www.pinkmilk.eu/ME/generate-image-leonardo.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
