@@ -27,13 +27,13 @@ class LeonardoAPI {
         // Default settings optimized for character generation
         $defaults = [
             'prompt' => $prompt,
-            'negative_prompt' => 'blurry, low quality, pixelated, distorted, amateur, poorly lit, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, long neck, duplicate, mutated, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, bad proportions, gross proportions, watermark, signature, text, logo',
-            'modelId' => 'b24e16ff-06e3-43eb-8d33-4416c2d75876', // Leonardo Phoenix (best for photorealistic)
+            'negative_prompt' => 'blurry, low quality, pixelated, distorted, amateur, poorly lit, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, long neck, duplicate, mutated, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, bad proportions, gross proportions, watermark, signature, text, logo, no character, empty scene, landscape only',
+            'modelId' => 'aa77f04e-3eec-4034-9c07-d0f619684628', // Leonardo Kino XL (best for photorealistic characters)
             'width' => 1472, // 16:9 ratio (1472x832 is supported)
             'height' => 832,
             'num_images' => 1,
             'guidance_scale' => 7,
-            'num_inference_steps' => 30,
+            'num_inference_steps' => 40,
             'presetStyle' => 'CINEMATIC'
         ];
         

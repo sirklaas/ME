@@ -202,20 +202,20 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $environmentText = substr($environmentText, 0, 200);
     }
     
-    // Build focused prompt with technical quality specs first
-    $prompt = "Professional 4K photoshoot, 16:9 widescreen horizontal format, ultra high quality, sharp focus, studio lighting, photorealistic. ";
+    // Build focused prompt - CHARACTER FIRST (most important)
+    $prompt = "Full body portrait of ";
     
     // Add character type with specific requirements
     $typeDescriptions = [
-        'animals' => 'Anthropomorphic animal character with clothes and personality',
-        'fruits_vegetables' => 'Anthropomorphic fruit/vegetable character with expressive animated face (eyes, mouth), arms with hands, legs with feet, wearing unique clothing (Pixar style)',
-        'fantasy_heroes' => 'Fantasy character with detailed costume and personality',
+        'animals' => 'anthropomorphic animal character with clothes and personality',
+        'fruits_vegetables' => 'anthropomorphic fruit/vegetable character with expressive animated face (eyes, mouth), arms with hands, legs with feet, wearing unique clothing (Pixar style)',
+        'fantasy_heroes' => 'fantasy character with detailed costume and personality',
         'pixar_disney' => 'Pixar-style 3D animated character, charismatic and expressive',
-        'fairy_tales' => 'Modernized fairy tale character, photorealistic style'
+        'fairy_tales' => 'modernized fairy tale character, photorealistic style'
     ];
     
-    $prompt .= $typeDescriptions[$characterType] ?? 'Character';
-    $prompt .= " named $characterName. ";
+    $prompt .= $typeDescriptions[$characterType] ?? 'character';
+    $prompt .= " named $characterName. CHARACTER MUST BE VISIBLE AND CENTERED. ";
     
     // Add character description (first 250 chars)
     if (!empty($karakterText)) {
@@ -227,8 +227,8 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $prompt .= "Environment: " . substr($environmentText, 0, 150) . " ";
     }
     
-    // Add composition requirements
-    $prompt .= "Full body shot, centered composition, detailed background, professional photography quality.";
+    // Add technical requirements at the end
+    $prompt .= "Professional 4K photoshoot, 16:9 widescreen horizontal format, ultra high quality, sharp focus, studio lighting, photorealistic, full body shot, character centered in frame.";
     
     // Add special note for fruits/vegetables
     if ($characterType === 'fruits_vegetables') {
@@ -363,8 +363,8 @@ try {
         "- Waar hangt dit karakter rond?\n" .
         "- Hoe ziet het er daar uit?\n" .
         "- Houd het simpel en visueel\n\n" .
-        "3. PROPS (3-5 items):\n" .
-        "- Lijst 3-5 objecten die dit karakter altijd bij zich heeft\n" .
+        "3. PROPS (EXACT 3 items):\n" .
+        "- Lijst PRECIES 3 objecten die dit karakter altijd bij zich heeft\n" .
         "- Formaat: '- Item naam: waarom het belangrijk is'\n\n" .
         "⚠️ NOGMAALS: Kies EEN specifiek item uit de lijst hierboven. GEEN gemaskeerde personen!\n" .
         "⚠️ VERBODEN WOORDEN: Gebruik NOOIT de woorden 'masker', 'mask', 'gemaskeerd', 'masked' in je beschrijving!\n\n" .
@@ -376,17 +376,17 @@ try {
     // Extract character name from the summary (try multiple patterns)
     $characterName = 'De Gemaskeerde Medewerker'; // Default fallback
     
-    // Pattern 1: Look for 'Name' in quotes
-    if (preg_match("/'([^']+)'/", $aiSummary, $matches)) {
-        $characterName = $matches[1];
+    // Pattern 1: Look for "genaamd Name" (handles multi-word names like "Paarse Nebula")
+    if (preg_match('/genaamd\s+([A-Z][a-zA-Z\s]+?)(?:\s+is|\s+draagt|\s+heeft|\.|,)/i', $aiSummary, $matches)) {
+        $characterName = trim($matches[1]);
     }
-    // Pattern 2: Look for "genaamd Name" or "named Name"
-    elseif (preg_match('/genaamd\s+([A-Z][a-zA-Z]+)/i', $aiSummary, $matches)) {
+    // Pattern 2: Look for 'Name' in quotes
+    elseif (preg_match("/'([^']+)'/", $aiSummary, $matches)) {
         $characterName = $matches[1];
     }
     // Pattern 3: Look for "De [Type] genaamd Name"
-    elseif (preg_match('/De\s+\w+\s+genaamd\s+([A-Z][a-zA-Z]+)/i', $aiSummary, $matches)) {
-        $characterName = $matches[1];
+    elseif (preg_match('/De\s+\w+\s+genaamd\s+([A-Z][a-zA-Z\s]+)/i', $aiSummary, $matches)) {
+        $characterName = trim($matches[1]);
     }
     
     // Use Chapter 9 answers directly (Questions 41-43 with 3 scenes each)
