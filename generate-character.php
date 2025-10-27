@@ -203,28 +203,30 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
     }
     
     // Build focused prompt - CHARACTER FIRST (most important)
-    $prompt = "Full body portrait of ";
+    $prompt = "FULL BODY SHOT (head to toe) of ";
     
     // Add character type with specific requirements
     $typeDescriptions = [
         'animals' => 'anthropomorphic animal character with clothes and personality',
-        'fruits_vegetables' => 'anthropomorphic fruit/vegetable character with expressive animated face (eyes, mouth), arms with hands, legs with feet, wearing unique clothing (Pixar style)',
+        'fruits_vegetables' => 'ACTUAL FRUIT/VEGETABLE CHARACTER (NOT HUMAN): anthropomorphic tomato/fruit/vegetable with cartoon face (big eyes, smiling mouth), stick arms with hands, stick legs with feet, wearing clothes. Body is the actual fruit/vegetable shape. Pixar/Disney animation style, NOT realistic human',
         'fantasy_heroes' => 'fantasy character with detailed costume and personality',
         'pixar_disney' => 'Pixar-style 3D animated character, charismatic and expressive',
         'fairy_tales' => 'modernized fairy tale character, photorealistic style'
     ];
     
     $prompt .= $typeDescriptions[$characterType] ?? 'character';
-    $prompt .= " named $characterName. CHARACTER MUST BE VISIBLE. ";
+    $prompt .= " named $characterName. IMPORTANT: Show entire body from head to feet, NOT close-up. ";
     
     // Add character description (first 250 chars)
     if (!empty($karakterText)) {
         $prompt .= substr($karakterText, 0, 250) . " ";
     }
     
-    // Add environment (first 150 chars)
+    // Add environment (first 100 chars - keep it simple)
     if (!empty($environmentText)) {
-        $prompt .= "Environment: " . substr($environmentText, 0, 150) . " ";
+        // Take only first sentence or 100 chars to keep environment simple
+        $simpleEnvironment = substr($environmentText, 0, 100);
+        $prompt .= "Simple background setting: " . $simpleEnvironment . " ";
     }
     
     // Add technical requirements at the end
@@ -297,9 +299,19 @@ try {
     // Check if this is a regeneration request
     $isRegenerate = isset($data['regenerate']) && $data['regenerate'] === true;
     
-    // Analyze personality and determine character type
+    // Get user-selected character type (from Question 7) or fallback to AI determination
+    if (isset($data['characterType']) && !empty($data['characterType'])) {
+        $characterType = $data['characterType'];
+        error_log("✅ Using user-selected character type: $characterType");
+    } else {
+        // Fallback: Analyze personality and determine character type (old method)
+        $personalityTraits = analyzePersonality($data['answers']);
+        $characterType = determineCharacterType($personalityTraits);
+        error_log("⚠️ No character type selected, using AI determination: $characterType");
+    }
+    
+    // Still analyze personality for character traits
     $personalityTraits = analyzePersonality($data['answers']);
-    $characterType = determineCharacterType($personalityTraits);
     
     // Format answers for AI
     $formattedAnswers = formatAnswersForAI($data['answers'], $data['chapters'] ?? []);
@@ -359,10 +371,10 @@ try {
         "- Beschrijf hun kleding (ze dragen altijd kleding!)\n" .
         "- Beschrijf hun persoonlijkheid\n" .
         "- Maak het levendig en visueel\n\n" .
-        "2. OMGEVING (50-75 woorden):\n" .
+        "2. OMGEVING (30-50 woorden):\n" .
         "- Waar hangt dit karakter rond?\n" .
-        "- Hoe ziet het er daar uit?\n" .
-        "- Houd het simpel en visueel\n\n" .
+        "- Beschrijf EEN SPECIFIEKE LOCATIE (bijv: 'een zonnige tuin', 'een moderne keuken', 'een druk marktplein')\n" .
+        "- HOUD HET SIMPEL EN CONCREET - geen abstracte concepten\n\n" .
         "3. PROPS (EXACT 3 items):\n" .
         "- Lijst PRECIES 3 objecten die dit karakter altijd bij zich heeft\n" .
         "- Formaat: '- Item naam: waarom het belangrijk is'\n\n" .

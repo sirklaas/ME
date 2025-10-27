@@ -118,6 +118,54 @@
           "Very little"
         ]
       }
+    },
+    {
+      "id": 6,
+      "type": "text",
+      "question": {
+        "nl": "Op welke afdeling werk je?",
+        "en": "Which department do you work in?"
+      },
+      "placeholder": {
+        "nl": "Bijvoorbeeld: Marketing, IT, HR, Sales...",
+        "en": "For example: Marketing, IT, HR, Sales..."
+      }
+    },
+    {
+      "id": 7,
+      "type": "multiple-choice",
+      "question": {
+        "nl": "Hoe zou je jouw favoriete karakter omschrijven? Als een...",
+        "en": "How would you describe your favorite character? As a..."
+      },
+      "options": {
+        "nl": [
+          "🐾 Dier (bijvoorbeeld: vos, leeuw, pinguïn)",
+          "🍅 Groente of Fruit (bijvoorbeeld: tomaat, banaan, wortel)",
+          "⚔️ Fantasy Held (bijvoorbeeld: tovenaar, elf, ridder)",
+          "🎬 Pixar of Disney Figuur (bijvoorbeeld: uitvinder, avonturier)",
+          "📚 Sprookjesfiguur (bijvoorbeeld: prins, prinses, heks)"
+        ],
+        "en": [
+          "🐾 Animal (for example: fox, lion, penguin)",
+          "🍅 Fruit or Vegetable (for example: tomato, banana, carrot)",
+          "⚔️ Fantasy Hero (for example: wizard, elf, knight)",
+          "🎬 Pixar or Disney Character (for example: inventor, adventurer)",
+          "📚 Fairy Tale Character (for example: prince, princess, witch)"
+        ]
+      },
+      "characterTypeMapping": {
+        "🐾 Dier (bijvoorbeeld: vos, leeuw, pinguïn)": "animals",
+        "🍅 Groente of Fruit (bijvoorbeeld: tomaat, banaan, wortel)": "fruits_vegetables",
+        "⚔️ Fantasy Held (bijvoorbeeld: tovenaar, elf, ridder)": "fantasy_heroes",
+        "🎬 Pixar of Disney Figuur (bijvoorbeeld: uitvinder, avonturier)": "pixar_disney",
+        "📚 Sprookjesfiguur (bijvoorbeeld: prins, prinses, heks)": "fairy_tales",
+        "🐾 Animal (for example: fox, lion, penguin)": "animals",
+        "🍅 Fruit or Vegetable (for example: tomato, banana, carrot)": "fruits_vegetables",
+        "⚔️ Fantasy Hero (for example: wizard, elf, knight)": "fantasy_heroes",
+        "🎬 Pixar or Disney Character (for example: inventor, adventurer)": "pixar_disney",
+        "📚 Fairy Tale Character (for example: prince, princess, witch)": "fairy_tales"
+      }
     }
   ]
 }

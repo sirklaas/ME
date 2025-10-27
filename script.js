@@ -17,6 +17,8 @@ class MaskedEmployeeForm {
         this.characterName = ''; // Extracted character name
         this.imagePrompt = ''; // AI image prompt
         this.imageUrl = ''; // Generated image URL
+        this.characterType = ''; // User-selected character type (from Question 7)
+        this.department = ''; // User's department (from Question 6)
         this.translations = this.initTranslations();
         this.testAnswers = null; // Test data
         
@@ -2526,6 +2528,13 @@ class MaskedEmployeeForm {
                 const checkedRadio = questionDiv.querySelector('input[type="radio"]:checked');
                 if (checkedRadio) {
                     this.answers[question.id] = parseInt(checkedRadio.value);
+                    
+                    // Special handling for Question 7 (Character Type Selection)
+                    if (question.id === 7 && question.characterTypeMapping) {
+                        const selectedOption = question.options[this.currentLanguage][parseInt(checkedRadio.value)];
+                        this.characterType = question.characterTypeMapping[selectedOption];
+                        console.log('✅ Character type selected:', this.characterType);
+                    }
                 }
             } else if (question.type === 'text') {
                 // Check if this question has scenes
@@ -2541,6 +2550,12 @@ class MaskedEmployeeForm {
                     // Regular text question
                     const textarea = questionDiv.querySelector('textarea');
                     this.answers[question.id] = textarea.value.trim();
+                    
+                    // Special handling for Question 6 (Department)
+                    if (question.id === 6) {
+                        this.department = textarea.value.trim();
+                        console.log('✅ Department saved:', this.department);
+                    }
                 }
             }
         });
@@ -2684,6 +2699,9 @@ class MaskedEmployeeForm {
     async generateCharacterData(submissionData) {
         try {
             console.log('🤖 Calling generate-character.php...');
+            console.log('📋 Character Type:', this.characterType);
+            console.log('🏢 Department:', this.department);
+            
             const response = await fetch('generate-character.php', {
                 method: 'POST',
                 headers: {
@@ -2692,7 +2710,9 @@ class MaskedEmployeeForm {
                 body: JSON.stringify({
                     playerName: submissionData.playerName,
                     answers: submissionData.answers,
-                    gameName: this.gameName
+                    gameName: this.gameName,
+                    characterType: this.characterType, // User-selected character type
+                    department: this.department // User's department
                 })
             });
 
