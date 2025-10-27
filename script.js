@@ -2753,7 +2753,95 @@ class MaskedEmployeeForm {
     // ============================================
 
     async activateTestMode() {
-        console.log('🧪 TEST MODE ACTIVATED - Loading last PocketBase record');
+        console.log('🧪 TEST MODE ACTIVATED - Show character type selector');
+        
+        // Show character type selector popup
+        this.showCharacterTypeSelector();
+    }
+    
+    showCharacterTypeSelector() {
+        // Create popup overlay
+        const overlay = document.createElement('div');
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+        `;
+        
+        // Create popup
+        const popup = document.createElement('div');
+        popup.style.cssText = `
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        `;
+        
+        popup.innerHTML = `
+            <h2 style="margin-top: 0; color: #6B46C1; text-align: center;">🧪 Test Mode - Select Character Type</h2>
+            <p style="text-align: center; color: #666; margin-bottom: 25px;">Choose which character type to test:</p>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <button class="char-type-btn" data-type="animals" style="padding: 15px; font-size: 16px; border: 2px solid #6B46C1; background: white; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                    🐾 Dieren (Animals)
+                </button>
+                <button class="char-type-btn" data-type="fruits_vegetables" style="padding: 15px; font-size: 16px; border: 2px solid #6B46C1; background: white; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                    🍅 Groente & Fruit (Fruits & Vegetables)
+                </button>
+                <button class="char-type-btn" data-type="fantasy_heroes" style="padding: 15px; font-size: 16px; border: 2px solid #6B46C1; background: white; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                    ⚔️ Fantasy Helden (Fantasy Heroes)
+                </button>
+                <button class="char-type-btn" data-type="pixar_disney" style="padding: 15px; font-size: 16px; border: 2px solid #6B46C1; background: white; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                    🎬 Pixar/Disney Figuren
+                </button>
+                <button class="char-type-btn" data-type="fairy_tales" style="padding: 15px; font-size: 16px; border: 2px solid #6B46C1; background: white; border-radius: 8px; cursor: pointer; transition: all 0.3s;">
+                    📚 Sprookjesfiguren (Fairy Tales)
+                </button>
+            </div>
+            <button id="cancelTestMode" style="margin-top: 20px; padding: 10px; width: 100%; background: #ccc; border: none; border-radius: 8px; cursor: pointer;">
+                Cancel
+            </button>
+        `;
+        
+        overlay.appendChild(popup);
+        document.body.appendChild(overlay);
+        
+        // Add hover effects
+        const buttons = popup.querySelectorAll('.char-type-btn');
+        buttons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                btn.style.background = '#6B46C1';
+                btn.style.color = 'white';
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.background = 'white';
+                btn.style.color = 'black';
+            });
+            btn.addEventListener('click', () => {
+                const characterType = btn.dataset.type;
+                console.log('✅ Selected character type:', characterType);
+                this.characterType = characterType;
+                document.body.removeChild(overlay);
+                this.loadTestModeData();
+            });
+        });
+        
+        // Cancel button
+        document.getElementById('cancelTestMode').addEventListener('click', () => {
+            document.body.removeChild(overlay);
+        });
+    }
+    
+    async loadTestModeData() {
+        console.log('🧪 Loading last PocketBase record with character type:', this.characterType);
         
         try {
             // Connect to PocketBase
@@ -2805,6 +2893,7 @@ class MaskedEmployeeForm {
             document.getElementById('chapterPage').style.display = 'block';
             
             console.log('🎉 Test mode complete - jumped to last chapter');
+            console.log('🎭 Character type set to:', this.characterType);
             console.log('💡 Use Previous button to go back and edit answers');
             console.log('💡 Click Voltooien to regenerate character');
             
