@@ -215,7 +215,7 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
     ];
     
     $prompt .= $typeDescriptions[$characterType] ?? 'character';
-    $prompt .= " named $characterName. CHARACTER MUST BE VISIBLE AND CENTERED. ";
+    $prompt .= " named $characterName. CHARACTER MUST BE VISIBLE. ";
     
     // Add character description (first 250 chars)
     if (!empty($karakterText)) {
@@ -228,7 +228,7 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
     }
     
     // Add technical requirements at the end
-    $prompt .= "Professional 4K photoshoot, 16:9 widescreen horizontal format, ultra high quality, sharp focus, studio lighting, photorealistic, full body shot, character centered in frame.";
+    $prompt .= "Professional 4K photoshoot, 16:9 widescreen horizontal format, ultra high quality, sharp focus, cinematic lighting, photorealistic, full body shot, rule of thirds composition.";
     
     // Add special note for fruits/vegetables
     if ($characterType === 'fruits_vegetables') {
