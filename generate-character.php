@@ -180,7 +180,7 @@ function formatAnswersForAI($answers, $chapters) {
 }
 
 /**
- * Generate realistic image prompt for Freepik/Flux
+ * Generate realistic image prompt for Leonardo.ai
  */
 function generateImagePrompt($characterName, $aiSummary, $characterType) {
     // Extract the KARAKTER section (most important details)
@@ -189,62 +189,49 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $karakterText = trim($matches[1]);
         // Remove line breaks and extra spaces
         $karakterText = preg_replace('/\s+/', ' ', $karakterText);
-        // Limit to first 300 chars for character description
-        $karakterText = substr($karakterText, 0, 300);
+        // Limit to first 150 chars for character description (reduced from 300)
+        $karakterText = substr($karakterText, 0, 150);
     }
     
     // Extract environment from AI summary (OMGEVING section)
     $environmentText = "";
-    if (preg_match('/2\.\s*OMGEVING[:\s]+(.+?)(?=3\.\s*PROPS|$)/is', $aiSummary, $matches)) {
+    if (preg_match('/2\.\s*OMGEVING[:\s]+(.+?)$/is', $aiSummary, $matches)) {
         $environmentText = trim($matches[1]);
         $environmentText = preg_replace('/\s+/', ' ', $environmentText);
-        // Limit to first 200 chars for environment
-        $environmentText = substr($environmentText, 0, 200);
+        // Limit to first 80 chars for environment (reduced from 200)
+        $environmentText = substr($environmentText, 0, 80);
     }
     
-    // Build focused prompt - CHARACTER FIRST (most important)
-    $prompt = "FULL BODY SHOT (head to toe) of ";
+    // Build SHORT focused prompt - CHARACTER FIRST (most important)
+    $prompt = "Full body portrait of ";
     
-    // Add character type with specific requirements
+    // Add character type with SHORTER descriptions
     $typeDescriptions = [
-        'animals' => 'anthropomorphic animal character with clothes and personality',
-        'fruits_vegetables' => 'ACTUAL FRUIT/VEGETABLE CHARACTER (NOT HUMAN): anthropomorphic tomato/fruit/vegetable with cartoon face (big eyes, smiling mouth), stick arms with hands, stick legs with feet, wearing clothes. Body is the actual fruit/vegetable shape. Pixar/Disney animation style, NOT realistic human',
-        'fantasy_heroes' => 'fantasy character with detailed costume and personality',
-        'pixar_disney' => 'Pixar-style 3D animated character, charismatic and expressive',
-        'fairy_tales' => 'modernized fairy tale character, photorealistic style'
+        'animals' => 'anthropomorphic animal with clothes',
+        'fruits_vegetables' => 'anthropomorphic fruit/vegetable with cartoon face, eyes, mouth, arms, legs, wearing clothes. Pixar style, NOT human',
+        'fantasy_heroes' => 'fantasy character with costume',
+        'pixar_disney' => 'Pixar 3D animated character',
+        'fairy_tales' => 'fairy tale character'
     ];
     
     $prompt .= $typeDescriptions[$characterType] ?? 'character';
-    $prompt .= " named $characterName. IMPORTANT: Show entire body from head to feet, NOT close-up. ";
+    $prompt .= " named $characterName. ";
     
-    // Add character description (first 250 chars)
+    // Add character description (shortened)
     if (!empty($karakterText)) {
-        $prompt .= substr($karakterText, 0, 250) . " ";
+        $prompt .= $karakterText . " ";
     }
     
-    // Add environment (first 100 chars - keep it simple)
+    // Add environment (shortened)
     if (!empty($environmentText)) {
-        // Take only first sentence or 100 chars to keep environment simple
-        $simpleEnvironment = substr($environmentText, 0, 100);
-        $prompt .= "Simple background setting: " . $simpleEnvironment . " ";
+        $prompt .= "Setting: " . $environmentText . " ";
     }
     
-    // Add technical requirements at the end
-    $prompt .= "Professional 4K photoshoot, 16:9 widescreen horizontal format, ultra high quality, sharp focus, cinematic lighting, photorealistic, full body shot, rule of thirds composition.";
+    // Add SHORT technical requirements
+    $prompt .= "16:9 widescreen, 4K, cinematic lighting, full body, rule of thirds.";
     
-    // Add special note for fruits/vegetables
-    if ($characterType === 'fruits_vegetables') {
-        $prompt .= "\n\n🥕 CRITICAL FOR FRUIT/VEGETABLE:";
-        $prompt .= "\n- MUST show cartoon-style EYES (big, expressive, with pupils and emotion)";
-        $prompt .= "\n- MUST show MOUTH (smiling, talking, or showing emotion)";
-        $prompt .= "\n- MUST show ARMS (thin limbs with hands/gloves that can hold things)";
-        $prompt .= "\n- MUST show LEGS (thin limbs with feet/shoes for standing/walking)";
-        $prompt .= "\n- Think: Pixar vegetables/fruits like from 'Veggie Tales' or animated produce";
-        $prompt .= "\n- Body is the actual fruit/vegetable, but with added cartoon facial features and limbs";
-    }
-    
-    $prompt .= "\nCamera: Professional DSLR, 85mm lens, f/2.8, studio lighting setup";
-    $prompt .= "\n\n⚠️ VERIFY: Image MUST be 16:9 widescreen format (horizontal rectangle, NOT square or vertical)";
+    // Log prompt length for debugging
+    error_log("Image prompt length: " . strlen($prompt) . " characters");
     
     return $prompt;
 }
@@ -375,9 +362,6 @@ try {
         "- Waar hangt dit karakter rond?\n" .
         "- Beschrijf EEN SPECIFIEKE LOCATIE (bijv: 'een zonnige tuin', 'een moderne keuken', 'een druk marktplein')\n" .
         "- HOUD HET SIMPEL EN CONCREET - geen abstracte concepten\n\n" .
-        "3. PROPS (EXACT 3 items):\n" .
-        "- Lijst PRECIES 3 objecten die dit karakter altijd bij zich heeft\n" .
-        "- Formaat: '- Item naam: waarom het belangrijk is'\n\n" .
         "⚠️ NOGMAALS: Kies EEN specifiek item uit de lijst hierboven. GEEN gemaskeerde personen!\n" .
         "⚠️ VERBODEN WOORDEN: Gebruik NOOIT de woorden 'masker', 'mask', 'gemaskeerd', 'masked' in je beschrijving!\n\n" .
         "Antwoorden van de speler:\n" .

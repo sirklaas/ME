@@ -1067,7 +1067,7 @@ class MaskedEmployeeForm {
 
     async generateCharacterImage() {
         try {
-            console.log('🎨 Generating character image via Freepik...');
+            console.log('🎨 Generating character image via Leonardo.ai...');
             
             // Use the image_generation_prompt from character data
             const characterData = this.currentCharacterData || {};
@@ -2607,7 +2607,7 @@ class MaskedEmployeeForm {
 
     async generateAndUploadImage(characterData) {
         try {
-            console.log('🎨 Step 1: Generating image via Freepik...');
+            console.log('🎨 Step 1: Generating image via Leonardo.ai...');
             
             const imagePrompt = characterData.image_generation_prompt;
             if (!imagePrompt) {
@@ -2619,7 +2619,7 @@ class MaskedEmployeeForm {
             this.characterDescription = characterData.ai_summary || '';
             this.imagePrompt = imagePrompt;
             
-            // Call Freepik API with timeout
+            // Call Leonardo.ai API with timeout
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 90000); // 90 second timeout
             
@@ -2649,7 +2649,7 @@ class MaskedEmployeeForm {
             
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('❌ Freepik API error response:', errorText);
+                console.error('❌ Leonardo.ai API error response:', errorText);
                 throw new Error(`Image generation failed: ${response.status} - ${errorText.substring(0, 200)}`);
             }
             
@@ -2664,7 +2664,7 @@ class MaskedEmployeeForm {
             } catch (e) {
                 console.error('❌ Failed to parse JSON response');
                 console.error('Full response:', responseText);
-                throw new Error('Invalid JSON response from Freepik API: ' + responseText.substring(0, 200));
+                throw new Error('Invalid JSON response from Leonardo.ai API: ' + responseText.substring(0, 200));
             }
             
             if (!result.success) {
@@ -2688,7 +2688,7 @@ class MaskedEmployeeForm {
         } catch (error) {
             if (error.name === 'AbortError') {
                 console.error('❌ Image generation timeout (90 seconds)');
-                throw new Error('Image generation timed out - Freepik API took too long');
+                throw new Error('Image generation timed out - Leonardo.ai API took too long');
             }
             console.error('❌ Error in image generation:', error);
             console.error('Error details:', error.message);
