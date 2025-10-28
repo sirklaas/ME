@@ -19,6 +19,9 @@ class MaskedEmployeeForm {
         this.imageUrl = ''; // Generated image URL
         this.characterType = ''; // User-selected character type (from Question 7)
         this.department = ''; // User's department (from Question 6)
+        this.regenerationCount = 0; // Track number of regenerations
+        this.maxRegenerations = 3; // Maximum allowed regenerations
+        this.usedCharacters = []; // Track used characters to avoid duplicates
         this.translations = this.initTranslations();
         this.testAnswers = null; // Test data
         
@@ -1623,6 +1626,35 @@ class MaskedEmployeeForm {
     async regenerateCharacter() {
         console.log('🔄 Regenerating character with variation...');
         
+        // Check regeneration limit
+        if (this.regenerationCount >= this.maxRegenerations) {
+            alert(this.currentLanguage === 'nl' ? 
+                `Je hebt het maximum aantal regeneraties bereikt (${this.maxRegenerations}). Kies dit karakter of begin opnieuw.` : 
+                `You've reached the maximum number of regenerations (${this.maxRegenerations}). Please accept this character or start over.`);
+            return;
+        }
+        
+        // Increment regeneration count
+        this.regenerationCount++;
+        console.log(`🔢 Regeneration ${this.regenerationCount}/${this.maxRegenerations}`);
+        
+        // Update button text to show remaining regenerations
+        const regenerateBtn = document.getElementById('regenerateButton');
+        const remainingRegens = this.maxRegenerations - this.regenerationCount;
+        if (regenerateBtn) {
+            const btnText = this.currentLanguage === 'nl' ? 
+                `🔄 Genereer opnieuw (${remainingRegens} keer over)` : 
+                `🔄 Regenerate (${remainingRegens} left)`;
+            regenerateBtn.querySelector('span').textContent = btnText;
+            
+            // Disable button if no regenerations left
+            if (remainingRegens === 0) {
+                regenerateBtn.disabled = true;
+                regenerateBtn.style.opacity = '0.5';
+                regenerateBtn.style.cursor = 'not-allowed';
+            }
+        }
+        
         // Reset and show loading
         document.querySelector('.loading-preview').style.display = 'block';
         document.getElementById('previewContent').style.display = 'none';
@@ -1630,13 +1662,17 @@ class MaskedEmployeeForm {
         window.scrollTo({ top: 0, behavior: 'smooth' });
         
         try {
-            // Prepare submission data
+            // Prepare submission data with used characters list
             const submissionData = {
                 timestamp: new Date().toISOString(),
                 playerName: this.playerName,
                 answers: this.answers,
                 totalQuestions: Object.keys(this.answers).length,
-                regenerate: true  // Flag to add variation
+                regenerate: true,  // Flag to add variation
+                usedCharacters: this.usedCharacters,  // Send list of used characters
+                gameName: this.gameName,
+                characterType: this.characterType,
+                department: this.department
             };
             
             // Generate new character with variation
@@ -1645,6 +1681,17 @@ class MaskedEmployeeForm {
             
             // Display the new character
             if (characterData && characterData.success) {
+                // Track this character to avoid duplicates
+                if (characterData.character_name) {
+                    this.usedCharacters.push(characterData.character_name);
+                    console.log('📝 Used characters:', this.usedCharacters);
+                }
+                
+                // Update stored character data for image generation
+                this.characterName = characterData.character_name;
+                this.imagePrompt = characterData.image_prompt;
+                this.aiSummary = characterData.ai_summary;
+                
                 this.displayCharacterData(characterData);
             } else {
                 throw new Error('Character generation failed');

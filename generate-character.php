@@ -355,9 +355,21 @@ try {
     }
     $formattedAnswers .= "\nSUGGESTED CHARACTER TYPE: $characterType\n\n";
     
+    // Get list of used characters to avoid duplicates
+    $usedCharacters = isset($data['usedCharacters']) ? $data['usedCharacters'] : [];
+    
     // Add regeneration note if applicable
     if ($isRegenerate) {
         $formattedAnswers .= "\n⚠️ REGENERATION REQUEST: Create a DIFFERENT character than before. Use different name, different specific animal/fruit/hero from the list, different clothing style, different personality emphasis. Be creative and varied!\n\n";
+        
+        // Add list of used characters to avoid
+        if (!empty($usedCharacters)) {
+            $formattedAnswers .= "⚠️ DO NOT USE THESE CHARACTERS (already used):\n";
+            foreach ($usedCharacters as $usedChar) {
+                $formattedAnswers .= "- $usedChar\n";
+            }
+            $formattedAnswers .= "\nPick a COMPLETELY DIFFERENT character from the list!\n\n";
+        }
     }
     
     // CALL 1: Generate combined character summary (character + environment + props)
