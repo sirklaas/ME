@@ -2633,6 +2633,12 @@ class MaskedEmployeeForm {
 
             // Store character data for later use (email, image generation)
             this.currentCharacterData = characterData;
+            
+            // Track first character to avoid duplicates in regeneration
+            if (characterData.success && characterData.character_name) {
+                this.usedCharacters = [characterData.character_name];
+                console.log('📝 Initial character tracked:', this.usedCharacters);
+            }
 
             console.log('📤 Step 2: Saving to PocketBase...');
             // Save to PocketBase with character data
@@ -2759,7 +2765,9 @@ class MaskedEmployeeForm {
                     answers: submissionData.answers,
                     gameName: this.gameName,
                     characterType: this.characterType, // User-selected character type
-                    department: this.department // User's department
+                    department: this.department, // User's department
+                    regenerate: submissionData.regenerate || false, // Pass regenerate flag
+                    usedCharacters: submissionData.usedCharacters || [] // Pass used characters list
                 })
             });
 
