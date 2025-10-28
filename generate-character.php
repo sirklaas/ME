@@ -311,8 +311,16 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
 function callClaudeHaiku($apiKey, $systemPrompt, $userPrompt, $maxTokens = 1024, $isRegenerate = false) {
     $ch = curl_init('https://api.anthropic.com/v1/messages');
     
-    // Increase temperature for regeneration to get more variation
+    // Higher temperature for regeneration to get more variety
     $temperature = $isRegenerate ? 1.0 : 0.8;
+    
+    // Add random variation to user prompt for regeneration to prevent identical outputs
+    $promptVariation = "";
+    if ($isRegenerate) {
+        $randomWords = ['unique', 'creative', 'original', 'distinctive', 'unusual', 'fresh', 'innovative'];
+        $randomWord = $randomWords[array_rand($randomWords)];
+        $promptVariation = "\n🎲 Make this character extra $randomWord and different! Random seed: " . mt_rand(1000, 9999) . "\n";
+    }
     
     $payload = [
         'model' => 'claude-3-haiku-20240307',
@@ -322,7 +330,7 @@ function callClaudeHaiku($apiKey, $systemPrompt, $userPrompt, $maxTokens = 1024,
         'messages' => [
             [
                 'role' => 'user',
-                'content' => $userPrompt
+                'content' => $userPrompt . $promptVariation
             ]
         ]
     ];
@@ -401,7 +409,10 @@ try {
     
     // Add regeneration note if applicable
     if ($isRegenerate) {
-        $formattedAnswers .= "\n⚠️ REGENERATION REQUEST: Create a DIFFERENT character than before. Use different name, different specific animal/fruit/hero from the list, different clothing style, different personality emphasis. Be creative and varied!\n\n";
+        $formattedAnswers .= "\n🔄 REGENERATION REQUEST #" . (count($usedCharacters) + 1) . ": Create a COMPLETELY DIFFERENT character than before!\n";
+        $formattedAnswers .= "⚠️ CRITICAL: Pick a character from the BEGINNING or MIDDLE of the list above - NOT the same one!\n";
+        $formattedAnswers .= "⚠️ Use a different species/type, different name, different clothing style, different personality traits.\n";
+        $formattedAnswers .= "⚠️ Be CREATIVE and VARIED - surprise us with something unexpected!\n\n";
         
         // Add list of used characters to avoid
         if (!empty($usedCharacters)) {
@@ -419,12 +430,25 @@ try {
     // Load 80 options per character type
     $characterOptions = json_decode(file_get_contents('character-options-80.json'), true);
     
+    // RANDOMIZE the order to get more variety (especially important for regeneration)
+    $animals = $characterOptions['animals_80'];
+    $fruitsVeggies = $characterOptions['fruits_vegetables_80'];
+    $fantasyHeroes = $characterOptions['fantasy_heroes_80'];
+    $pixarDisney = $characterOptions['pixar_disney_80'];
+    $fairyTales = $characterOptions['fairy_tales_80'];
+    
+    shuffle($animals);
+    shuffle($fruitsVeggies);
+    shuffle($fantasyHeroes);
+    shuffle($pixarDisney);
+    shuffle($fairyTales);
+    
     $characterTypeExamples = [
-        'animals' => "VERPLICHT: Kies EEN dier uit deze lijst:\n" . implode(', ', $characterOptions['animals_80']),
-        'fruits_vegetables' => "VERPLICHT: Kies EEN groente/fruit uit deze lijst:\n" . implode(', ', $characterOptions['fruits_vegetables_80']),
-        'fantasy_heroes' => "VERPLICHT: Kies EEN fantasy karakter uit deze lijst:\n" . implode(', ', $characterOptions['fantasy_heroes_80']),
-        'pixar_disney' => "VERPLICHT: Kies EEN Pixar/Disney karakter uit deze lijst:\n" . implode(', ', $characterOptions['pixar_disney_80']),
-        'fairy_tales' => "VERPLICHT: Kies EEN sprookjesfiguur uit deze lijst:\n" . implode(', ', $characterOptions['fairy_tales_80'])
+        'animals' => "VERPLICHT: Kies EEN dier uit deze lijst:\n" . implode(', ', $animals),
+        'fruits_vegetables' => "VERPLICHT: Kies EEN groente/fruit uit deze lijst:\n" . implode(', ', $fruitsVeggies),
+        'fantasy_heroes' => "VERPLICHT: Kies EEN fantasy karakter uit deze lijst:\n" . implode(', ', $fantasyHeroes),
+        'pixar_disney' => "VERPLICHT: Kies EEN Pixar/Disney karakter uit deze lijst:\n" . implode(', ', $pixarDisney),
+        'fairy_tales' => "VERPLICHT: Kies EEN sprookjesfiguur uit deze lijst:\n" . implode(', ', $fairyTales)
     ];
     
     $typeExample = $characterTypeExamples[$characterType] ?? $characterTypeExamples['animals'];
