@@ -186,19 +186,93 @@ function extractSpecificCharacter($aiSummary, $characterType) {
     // Try to extract the specific animal/fruit/character
     // Pattern: "De [SPECIFIC] genaamd"
     if (preg_match('/De\s+([A-Z][a-zëéèêïöü]+)\s+genaamd/i', $aiSummary, $matches)) {
-        return $matches[1]; // e.g., "Kameleon", "Tomaat", "Vos"
+        $dutchCharacter = $matches[1]; // e.g., "Kameleon", "Tomaat", "Vos", "Tovenaar"
+        
+        // Translate to English for Leonardo.ai (it understands English better)
+        $englishCharacter = translateCharacterToEnglish($dutchCharacter);
+        error_log("🌍 Translated '$dutchCharacter' to '$englishCharacter' for Leonardo.ai");
+        
+        return $englishCharacter;
     }
     
-    // Fallback: return generic type
+    // Fallback: return generic type in English
     $fallbacks = [
-        'animals' => 'dier',
-        'fruits_vegetables' => 'groente',
-        'fantasy_heroes' => 'held',
-        'pixar_disney' => 'figuur',
-        'fairy_tales' => 'sprookjesfiguur'
+        'animals' => 'animal',
+        'fruits_vegetables' => 'fruit or vegetable',
+        'fantasy_heroes' => 'fantasy hero',
+        'pixar_disney' => 'Pixar character',
+        'fairy_tales' => 'fairy tale character'
     ];
     
-    return $fallbacks[$characterType] ?? 'karakter';
+    return $fallbacks[$characterType] ?? 'character';
+}
+
+/**
+ * Translate Dutch character names to English for Leonardo.ai
+ */
+function translateCharacterToEnglish($dutchName) {
+    // Common translations
+    $translations = [
+        // Animals
+        'Vos' => 'Fox',
+        'Wolf' => 'Wolf',
+        'Beer' => 'Bear',
+        'Leeuw' => 'Lion',
+        'Tijger' => 'Tiger',
+        'Olifant' => 'Elephant',
+        'Kameleon' => 'Chameleon',
+        'Pinguïn' => 'Penguin',
+        'Uil' => 'Owl',
+        'Adelaar' => 'Eagle',
+        'Konijn' => 'Rabbit',
+        'Hert' => 'Deer',
+        'Panda' => 'Panda',
+        'Zebra' => 'Zebra',
+        'Giraffe' => 'Giraffe',
+        
+        // Fruits & Vegetables
+        'Tomaat' => 'Tomato',
+        'Banaan' => 'Banana',
+        'Appel' => 'Apple',
+        'Peer' => 'Pear',
+        'Sinaasappel' => 'Orange',
+        'Citroen' => 'Lemon',
+        'Aardbei' => 'Strawberry',
+        'Wortel' => 'Carrot',
+        'Aubergine' => 'Eggplant',
+        'Paprika' => 'Bell Pepper',
+        'Komkommer' => 'Cucumber',
+        'Broccoli' => 'Broccoli',
+        'Ananas' => 'Pineapple',
+        'Watermeloen' => 'Watermelon',
+        'Druif' => 'Grape',
+        'Kers' => 'Cherry',
+        
+        // Fantasy Heroes
+        'Tovenaar' => 'Wizard',
+        'Ridder' => 'Knight',
+        'Elf' => 'Elf',
+        'Dwerg' => 'Dwarf',
+        'Krijger' => 'Warrior',
+        'Magiër' => 'Mage',
+        'Boogschutter' => 'Archer',
+        'Paladin' => 'Paladin',
+        'Druïde' => 'Druid',
+        'Tovenares' => 'Sorceress',
+        
+        // Fairy Tales
+        'Prins' => 'Prince',
+        'Prinses' => 'Princess',
+        'Heks' => 'Witch',
+        'Fee' => 'Fairy',
+        'Trol' => 'Troll',
+        'Reus' => 'Giant',
+        'Kabouter' => 'Gnome',
+        'Draak' => 'Dragon'
+    ];
+    
+    // Return translation if exists, otherwise return original (might be English already)
+    return $translations[$dutchName] ?? $dutchName;
 }
 
 /**
