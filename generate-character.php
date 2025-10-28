@@ -185,11 +185,11 @@ function formatAnswersForAI($answers, $chapters) {
 function extractSpecificCharacter($aiSummary, $characterType) {
     // Try to extract the specific animal/fruit/character
     // Pattern: "De [SPECIFIC] genaamd"
-    if (preg_match('/De\s+([A-Z][a-zëéèêïöü]+)\s+genaamd/i', $aiSummary, $matches)) {
-        $dutchCharacter = $matches[1]; // e.g., "Kameleon", "Tomaat", "Vos", "Tovenaar"
+    if (preg_match('/De\s+([A-Z][a-zëéèêïöü\s]+?)\s+genaamd/i', $aiSummary, $matches)) {
+        $dutchCharacter = trim($matches[1]); // e.g., "Kameleon", "Tomaat", "Vos", "Tovenaar"
         
         // Translate to English for Leonardo.ai (it understands English better)
-        $englishCharacter = translateCharacterToEnglish($dutchCharacter);
+        $englishCharacter = translateCharacterToEnglish($dutchCharacter, $characterType);
         error_log("🌍 Translated '$dutchCharacter' to '$englishCharacter' for Leonardo.ai");
         
         return $englishCharacter;
@@ -208,72 +208,39 @@ function extractSpecificCharacter($aiSummary, $characterType) {
 }
 
 /**
- * Translate Dutch character names to English for Leonardo.ai
+ * Translate Dutch character names to English using JSON translation file
  */
-function translateCharacterToEnglish($dutchName) {
-    // Common translations
-    $translations = [
-        // Animals
-        'Vos' => 'Fox',
-        'Wolf' => 'Wolf',
-        'Beer' => 'Bear',
-        'Leeuw' => 'Lion',
-        'Tijger' => 'Tiger',
-        'Olifant' => 'Elephant',
-        'Kameleon' => 'Chameleon',
-        'Pinguïn' => 'Penguin',
-        'Uil' => 'Owl',
-        'Adelaar' => 'Eagle',
-        'Konijn' => 'Rabbit',
-        'Hert' => 'Deer',
-        'Panda' => 'Panda',
-        'Zebra' => 'Zebra',
-        'Giraffe' => 'Giraffe',
-        
-        // Fruits & Vegetables
-        'Tomaat' => 'Tomato',
-        'Banaan' => 'Banana',
-        'Appel' => 'Apple',
-        'Peer' => 'Pear',
-        'Sinaasappel' => 'Orange',
-        'Citroen' => 'Lemon',
-        'Aardbei' => 'Strawberry',
-        'Wortel' => 'Carrot',
-        'Aubergine' => 'Eggplant',
-        'Paprika' => 'Bell Pepper',
-        'Komkommer' => 'Cucumber',
-        'Broccoli' => 'Broccoli',
-        'Ananas' => 'Pineapple',
-        'Watermeloen' => 'Watermelon',
-        'Druif' => 'Grape',
-        'Kers' => 'Cherry',
-        
-        // Fantasy Heroes
-        'Tovenaar' => 'Wizard',
-        'Ridder' => 'Knight',
-        'Elf' => 'Elf',
-        'Dwerg' => 'Dwarf',
-        'Krijger' => 'Warrior',
-        'Magiër' => 'Mage',
-        'Boogschutter' => 'Archer',
-        'Paladin' => 'Paladin',
-        'Druïde' => 'Druid',
-        'Tovenares' => 'Sorceress',
-        
-        // Fairy Tales
-        'Prins' => 'Prince',
-        'Prinses' => 'Princess',
-        'Heks' => 'Witch',
-        'Fee' => 'Fairy',
-        'Trol' => 'Troll',
-        'Reus' => 'Giant',
-        'Kabouter' => 'Gnome',
-        'Draak' => 'Dragon'
-    ];
+function translateCharacterToEnglish($dutchName, $characterType) {
+    static $translations = null;
     
-    // Return translation if exists, otherwise return original (might be English already)
-    return $translations[$dutchName] ?? $dutchName;
+    // Load translations once
+    if ($translations === null) {
+        $translationsFile = __DIR__ . '/character-translations.json';
+        if (file_exists($translationsFile)) {
+            $translations = json_decode(file_get_contents($translationsFile), true);
+        } else {
+            error_log("⚠️ Translation file not found: $translationsFile");
+            $translations = [];
+        }
+    }
+    
+    // Try to find translation in the specific category
+    if (isset($translations[$characterType][$dutchName])) {
+        return $translations[$characterType][$dutchName];
+    }
+    
+    // Try all categories as fallback
+    foreach ($translations as $category => $categoryTranslations) {
+        if (isset($categoryTranslations[$dutchName])) {
+            return $categoryTranslations[$dutchName];
+        }
+    }
+    
+    // Return original if no translation found (might already be English)
+    error_log("⚠️ No translation found for '$dutchName' in category '$characterType'");
+    return $dutchName;
 }
+
 
 /**
  * Generate realistic image prompt for Leonardo.ai
@@ -306,17 +273,17 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
     $prompt .= "Full body portrait of $specificCharacter named $characterName. ";
     $prompt .= "The character is a $specificCharacter. ";
     
-    // Add type-specific details
+    // Add type-specific details - ALL types are anthropomorphic/humanized
     if ($characterType === 'fruits_vegetables') {
-        $prompt .= "Anthropomorphic $specificCharacter with cartoon face, expressive eyes, smiling mouth, stick arms, stick legs, wearing clothes. Pixar/Disney style. ";
+        $prompt .= "Anthropomorphic $specificCharacter with cartoon face, expressive eyes, smiling mouth, stick arms with hands, stick legs with feet, wearing stylish clothes. Pixar/Disney style, NOT realistic. ";
     } elseif ($characterType === 'animals') {
-        $prompt .= "Anthropomorphic $specificCharacter with clothes and personality. ";
+        $prompt .= "Anthropomorphic $specificCharacter standing upright on two legs like a human, wearing stylish clothes, expressive face with human-like emotions, hands instead of paws. Pixar/Disney style, NOT realistic animal. ";
     } elseif ($characterType === 'fantasy_heroes') {
-        $prompt .= "Fantasy $specificCharacter with detailed costume. ";
+        $prompt .= "Humanoid fantasy $specificCharacter character with detailed costume, armor or robes, standing upright, expressive face. Fantasy RPG style, NOT realistic. ";
     } elseif ($characterType === 'pixar_disney') {
-        $prompt .= "Pixar-style 3D animated $specificCharacter. ";
+        $prompt .= "Pixar-style 3D animated human $specificCharacter character, expressive face, stylized proportions, wearing modern clothes. Animated movie style, NOT realistic. ";
     } elseif ($characterType === 'fairy_tales') {
-        $prompt .= "Fairy tale $specificCharacter. ";
+        $prompt .= "Storybook fairy tale $specificCharacter character, whimsical style, expressive features, magical costume. Illustrated fairy tale style, NOT realistic. ";
     }
     
     // Add character description (shortened to 100 chars)
