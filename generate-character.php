@@ -28,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 define('MASKED_EMPLOYEE_APP', true);
 require_once __DIR__ . '/api-keys.php';
 
-// Get OpenAI API key
-$apiKey = defined('OPENAI_API_KEY') ? OPENAI_API_KEY : '';
-if (empty($apiKey) || $apiKey === 'YOUR_OPENAI_API_KEY_HERE') {
+// Get Claude API key from api-keys.php
+$apiKey = defined('CLAUDE_API_KEY') ? CLAUDE_API_KEY : '';
+if (empty($apiKey)) {
     http_response_code(500);
-    echo json_encode(['error' => 'API key not configured']);
+    echo json_encode(['error' => 'Claude API key not configured in api-keys.php']);
     exit;
 }
 
@@ -180,9 +180,34 @@ function formatAnswersForAI($answers, $chapters) {
 }
 
 /**
+ * Extract specific character (animal/fruit/hero) from AI summary
+ */
+function extractSpecificCharacter($aiSummary, $characterType) {
+    // Try to extract the specific animal/fruit/character
+    // Pattern: "De [SPECIFIC] genaamd"
+    if (preg_match('/De\s+([A-Z][a-zëéèêïöü]+)\s+genaamd/i', $aiSummary, $matches)) {
+        return $matches[1]; // e.g., "Kameleon", "Tomaat", "Vos"
+    }
+    
+    // Fallback: return generic type
+    $fallbacks = [
+        'animals' => 'dier',
+        'fruits_vegetables' => 'groente',
+        'fantasy_heroes' => 'held',
+        'pixar_disney' => 'figuur',
+        'fairy_tales' => 'sprookjesfiguur'
+    ];
+    
+    return $fallbacks[$characterType] ?? 'karakter';
+}
+
+/**
  * Generate realistic image prompt for Leonardo.ai
  */
 function generateImagePrompt($characterName, $aiSummary, $characterType) {
+    // Extract specific character (e.g., "Kameleon", "Tomaat", "Vos")
+    $specificCharacter = extractSpecificCharacter($aiSummary, $characterType);
+    error_log("🎯 Extracted specific character: $specificCharacter");
     // Extract the KARAKTER section (most important details)
     $karakterText = "";
     if (preg_match('/1\.\s*KARAKTER[:\s]+(.+?)(?=2\.\s*OMGEVING|$)/is', $aiSummary, $matches)) {
@@ -202,33 +227,36 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $environmentText = substr($environmentText, 0, 80);
     }
     
-    // Build SHORT focused prompt - CHARACTER FIRST (most important)
-    $prompt = "Full body portrait of ";
+    // Build ULTRA-SPECIFIC prompt - REPEAT character type 3 times for emphasis
+    $prompt = "CRITICAL: This MUST be a $specificCharacter (NOT any other animal/fruit/character). ";
+    $prompt .= "Full body portrait of $specificCharacter named $characterName. ";
+    $prompt .= "The character is a $specificCharacter. ";
     
-    // Add character type with SHORTER descriptions
-    $typeDescriptions = [
-        'animals' => 'anthropomorphic animal with clothes',
-        'fruits_vegetables' => 'anthropomorphic fruit/vegetable with cartoon face, eyes, mouth, arms, legs, wearing clothes. Pixar style, NOT human',
-        'fantasy_heroes' => 'fantasy character with costume',
-        'pixar_disney' => 'Pixar 3D animated character',
-        'fairy_tales' => 'fairy tale character'
-    ];
-    
-    $prompt .= $typeDescriptions[$characterType] ?? 'character';
-    $prompt .= " named $characterName. ";
-    
-    // Add character description (shortened)
-    if (!empty($karakterText)) {
-        $prompt .= $karakterText . " ";
+    // Add type-specific details
+    if ($characterType === 'fruits_vegetables') {
+        $prompt .= "Anthropomorphic $specificCharacter with cartoon face, expressive eyes, smiling mouth, stick arms, stick legs, wearing clothes. Pixar/Disney style. ";
+    } elseif ($characterType === 'animals') {
+        $prompt .= "Anthropomorphic $specificCharacter with clothes and personality. ";
+    } elseif ($characterType === 'fantasy_heroes') {
+        $prompt .= "Fantasy $specificCharacter with detailed costume. ";
+    } elseif ($characterType === 'pixar_disney') {
+        $prompt .= "Pixar-style 3D animated $specificCharacter. ";
+    } elseif ($characterType === 'fairy_tales') {
+        $prompt .= "Fairy tale $specificCharacter. ";
     }
     
-    // Add environment (shortened)
+    // Add character description (shortened to 100 chars)
+    if (!empty($karakterText)) {
+        $prompt .= substr($karakterText, 0, 100) . " ";
+    }
+    
+    // Add environment (shortened to 60 chars)
     if (!empty($environmentText)) {
-        $prompt .= "Setting: " . $environmentText . " ";
+        $prompt .= "Setting: " . substr($environmentText, 0, 60) . " ";
     }
     
     // Add SHORT technical requirements
-    $prompt .= "16:9 widescreen, 4K, cinematic lighting, full body, rule of thirds.";
+    $prompt .= "16:9, 4K, cinematic, full body, rule of thirds.";
     
     // Log prompt length for debugging
     error_log("Image prompt length: " . strlen($prompt) . " characters");
@@ -237,22 +265,25 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
 }
 
 /**
- * Call OpenAI API
+ * Call Claude Haiku API (Anthropic)
  */
-function callOpenAI($apiKey, $systemPrompt, $userPrompt, $maxTokens = 500, $isRegenerate = false) {
-    $ch = curl_init('https://api.openai.com/v1/chat/completions');
+function callClaudeHaiku($apiKey, $systemPrompt, $userPrompt, $maxTokens = 1024, $isRegenerate = false) {
+    $ch = curl_init('https://api.anthropic.com/v1/messages');
     
     // Increase temperature for regeneration to get more variation
     $temperature = $isRegenerate ? 1.0 : 0.8;
     
     $payload = [
-        'model' => 'gpt-4',
-        'messages' => [
-            ['role' => 'system', 'content' => $systemPrompt],
-            ['role' => 'user', 'content' => $userPrompt]
-        ],
+        'model' => 'claude-3-haiku-20240307',
         'max_tokens' => $maxTokens,
-        'temperature' => $temperature
+        'temperature' => $temperature,
+        'system' => $systemPrompt,
+        'messages' => [
+            [
+                'role' => 'user',
+                'content' => $userPrompt
+            ]
+        ]
     ];
     
     curl_setopt_array($ch, [
@@ -261,7 +292,8 @@ function callOpenAI($apiKey, $systemPrompt, $userPrompt, $maxTokens = 500, $isRe
         CURLOPT_POSTFIELDS => json_encode($payload),
         CURLOPT_HTTPHEADER => [
             'Content-Type: application/json',
-            'Authorization: Bearer ' . $apiKey
+            'x-api-key: ' . $apiKey,
+            'anthropic-version: 2023-06-01'
         ],
         CURLOPT_TIMEOUT => 30
     ]);
@@ -271,15 +303,17 @@ function callOpenAI($apiKey, $systemPrompt, $userPrompt, $maxTokens = 500, $isRe
     curl_close($ch);
     
     if ($httpCode !== 200) {
-        throw new Exception("OpenAI API error: HTTP $httpCode");
+        error_log("Claude API error: HTTP $httpCode - Response: $response");
+        throw new Exception("Claude API error: HTTP $httpCode");
     }
     
     $result = json_decode($response, true);
-    if (!isset($result['choices'][0]['message']['content'])) {
-        throw new Exception("Invalid API response");
+    if (!isset($result['content'][0]['text'])) {
+        error_log("Invalid Claude API response: " . json_encode($result));
+        throw new Exception("Invalid API response from Claude");
     }
     
-    return trim($result['choices'][0]['message']['content']);
+    return trim($result['content'][0]['text']);
 }
 
 try {
@@ -367,7 +401,7 @@ try {
         "Antwoorden van de speler:\n" .
         $formattedAnswers;
     
-    $aiSummary = callOpenAI($apiKey, $systemPrompt1, $userPrompt1, 600, $isRegenerate);
+    $aiSummary = callClaudeHaiku($apiKey, $systemPrompt1, $userPrompt1, 1024, $isRegenerate);
     
     // Extract character name from the summary (try multiple patterns)
     $characterName = 'De Gemaskeerde Medewerker'; // Default fallback
