@@ -300,16 +300,27 @@ function callClaudeHaiku($apiKey, $systemPrompt, $userPrompt, $maxTokens = 1024,
     
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curlError = curl_error($ch);
     curl_close($ch);
     
+    // Log the full response for debugging
+    error_log("Claude API Response - HTTP $httpCode: $response");
+    
+    if ($curlError) {
+        error_log("Claude cURL error: $curlError");
+        throw new Exception("Claude API connection error: $curlError");
+    }
+    
     if ($httpCode !== 200) {
-        error_log("Claude API error: HTTP $httpCode - Response: $response");
-        throw new Exception("Claude API error: HTTP $httpCode");
+        $errorData = json_decode($response, true);
+        $errorMsg = $errorData['error']['message'] ?? 'Unknown error';
+        error_log("Claude API error: HTTP $httpCode - Message: $errorMsg - Full response: $response");
+        throw new Exception("Claude API error: $errorMsg");
     }
     
     $result = json_decode($response, true);
     if (!isset($result['content'][0]['text'])) {
-        error_log("Invalid Claude API response: " . json_encode($result));
+        error_log("Invalid Claude API response structure: " . json_encode($result));
         throw new Exception("Invalid API response from Claude");
     }
     
