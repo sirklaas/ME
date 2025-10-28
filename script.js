@@ -1692,6 +1692,10 @@ class MaskedEmployeeForm {
                 this.imagePrompt = characterData.image_prompt;
                 this.aiSummary = characterData.ai_summary;
                 
+                // CRITICAL: Update currentCharacterData so image generation uses the NEW character
+                this.currentCharacterData = characterData;
+                console.log('✅ Updated currentCharacterData with regenerated character');
+                
                 this.displayCharacterData(characterData);
             } else {
                 throw new Error('Character generation failed');
