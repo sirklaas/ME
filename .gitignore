@@ -2,6 +2,7 @@
 .env
 config-api.php
 api-keys.php
+API-KEYS-REFERENCE.txt
 
 # macOS
 .DS_Store
