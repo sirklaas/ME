@@ -252,42 +252,23 @@ function generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $cha
     // Create a focused prompt for Claude to generate the image description
     $systemPrompt = "You are an expert at creating stunning image generation prompts for AI image generators like Leonardo.ai. Create concise, visual, cinematic English-language prompts that produce professional, high-quality images.";
     
-    // Type-specific requirements for stunning images
+    // Load type-specific requirements from JSON file
+    $requirementsFile = __DIR__ . '/image-prompt-requirements.json';
+    $requirementsConfig = json_decode(file_get_contents($requirementsFile), true);
+    
+    // Get requirements for this character type
+    $typeConfig = $requirementsConfig[$characterType] ?? $requirementsConfig['animals'];
+    $generalQuality = $requirementsConfig['general_quality'];
+    
+    // Build type-specific requirements string
     $typeSpecificRequirements = "";
-    switch($characterType) {
-        case 'animals':
-            $typeSpecificRequirements = "- CRITICAL: Mascot costume of $specificCharacter standing upright on TWO LEGS (not four legs)\n";
-            $typeSpecificRequirements .= "- Large friendly expressive eyes, human-like hands with gloves (NOT paws)\n";
-            $typeSpecificRequirements .= "- Wearing the exact clothing/costume described (over the mascot suit)\n";
-            $typeSpecificRequirements .= "- Professional theme park mascot quality, fabric/foam materials visible\n";
-            break;
-        case 'fruits_vegetables':
-            $typeSpecificRequirements = "- CRITICAL: Anthropomorphic $specificCharacter with cartoon face\n";
-            $typeSpecificRequirements .= "- Large expressive eyes, friendly smiling mouth, visible emotions\n";
-            $typeSpecificRequirements .= "- Stick arms with hands/gloves, stick legs with feet/shoes\n";
-            $typeSpecificRequirements .= "- Wearing stylish clothes (jacket, pants, accessories)\n";
-            $typeSpecificRequirements .= "- Pixar/Disney mascot style, NOT realistic fruit\n";
-            break;
-        case 'fantasy_heroes':
-            $typeSpecificRequirements = "- CRITICAL: Humanoid fantasy $specificCharacter character\n";
-            $typeSpecificRequirements .= "- Detailed fantasy costume, armor, robes, or magical outfit\n";
-            $typeSpecificRequirements .= "- Standing upright, heroic pose, expressive face\n";
-            $typeSpecificRequirements .= "- Fantasy RPG mascot style, epic and magical\n";
-            break;
-        case 'pixar_disney':
-            $typeSpecificRequirements = "- CRITICAL: Pixar/Disney-style human character as mascot\n";
-            $typeSpecificRequirements .= "- Expressive animated face, stylized proportions\n";
-            $typeSpecificRequirements .= "- Wearing modern/trendy clothes matching personality\n";
-            $typeSpecificRequirements .= "- Theme park character mascot quality\n";
-            break;
-        case 'fairy_tales':
-            $typeSpecificRequirements = "- CRITICAL: Storybook fairy tale $specificCharacter character\n";
-            $typeSpecificRequirements .= "- Whimsical style, magical costume, expressive features\n";
-            $typeSpecificRequirements .= "- Fairy tale mascot style, enchanting and colorful\n";
-            break;
-        default:
-            $typeSpecificRequirements = "- Mascot costume style, standing upright\n";
+    foreach ($typeConfig['requirements'] as $requirement) {
+        // Replace {character} placeholder with actual character name
+        $requirement = str_replace('{character}', $specificCharacter, $requirement);
+        $typeSpecificRequirements .= "- " . $requirement . "\n";
     }
+    
+    error_log("🎨 Using style: " . $typeConfig['style'] . " for character type: $characterType");
     
     $userPrompt = "Based on this Dutch character description, create a STUNNING English image generation prompt (MAX 250 characters) for Leonardo.ai.\n\n";
     $userPrompt .= "CHARACTER DESCRIPTION:\n$aiSummary\n\n";

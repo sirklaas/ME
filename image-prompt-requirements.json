@@ -1,0 +1,55 @@
+{
+  "animals": {
+    "style": "mascot_costume",
+    "requirements": [
+      "CRITICAL: Mascot costume of {character} standing upright on TWO LEGS (not four legs)",
+      "Large friendly expressive eyes, human-like hands with gloves (NOT paws)",
+      "Wearing the exact clothing/costume described (over the mascot suit)",
+      "Professional theme park mascot quality, fabric/foam materials visible"
+    ]
+  },
+  "fruits_vegetables": {
+    "style": "anthropomorphic_cartoon",
+    "requirements": [
+      "CRITICAL: Anthropomorphic {character} with cartoon face",
+      "Large expressive eyes, friendly smiling mouth, visible emotions",
+      "Stick arms with hands/gloves, stick legs with feet/shoes",
+      "Wearing stylish clothes (jacket, pants, accessories)",
+      "Pixar/Disney mascot style, NOT realistic fruit"
+    ]
+  },
+  "fantasy_heroes": {
+    "style": "realistic_person",
+    "requirements": [
+      "CRITICAL: REALISTIC PERSON dressed as {character}",
+      "Professional cosplay quality, detailed fantasy costume, armor, robes, or magical outfit",
+      "Real human actor in full costume, heroic pose, expressive face",
+      "High-end fantasy movie production quality, epic and cinematic",
+      "NOT cartoon, NOT mascot - REAL PERSON in costume"
+    ]
+  },
+  "pixar_disney": {
+    "style": "anthropomorphic_cartoon",
+    "requirements": [
+      "CRITICAL: Pixar/Disney-style human character as mascot",
+      "Expressive animated face, stylized proportions",
+      "Wearing modern/trendy clothes matching personality",
+      "Theme park character mascot quality"
+    ]
+  },
+  "fairy_tales": {
+    "style": "realistic_person",
+    "requirements": [
+      "CRITICAL: REALISTIC PERSON dressed as {character}",
+      "Professional theatrical costume, high-quality fabric and details",
+      "Real human actor in full fairy tale costume, enchanting pose",
+      "Broadway/Disney live-action production quality, magical and whimsical",
+      "NOT cartoon, NOT mascot - REAL PERSON in costume"
+    ]
+  },
+  "general_quality": {
+    "technical": "16:9, 4K, cinematic, full body, rule of thirds",
+    "lighting": "professional studio lighting, vibrant colors",
+    "composition": "full body shot, dynamic pose, engaging expression"
+  }
+}

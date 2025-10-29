@@ -24,10 +24,22 @@ class LeonardoAPI {
      * @return array ['success' => bool, 'image_data' => string, 'error' => string]
      */
     public function generateImage($prompt, $options = []) {
+        // Determine negative prompt based on prompt content
+        $negativePrompt = '';
+        
+        // If prompt contains "REALISTIC PERSON" or "real human" - it's for fantasy/fairy tales
+        if (stripos($prompt, 'REALISTIC PERSON') !== false || stripos($prompt, 'real human') !== false || stripos($prompt, 'cosplay') !== false) {
+            // For realistic person images - avoid cartoons and mascots
+            $negativePrompt = 'cartoon, animated, 3D animation, Pixar style, Disney animation, anime, mascot costume, fursuit, theme park character, toy, doll, illustrated, painting, digital art, wrong character, incorrect costume, close-up, portrait only, headshot, cropped body, blurry, low quality, pixelated, distorted, amateur, poorly lit, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, long neck, duplicate, mutated, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, bad proportions, watermark, signature, text, logo, no character, empty scene, landscape only';
+        } else {
+            // For mascot/cartoon images - avoid realistic photos
+            $negativePrompt = 'realistic photo, real animal photograph, nature documentary, wildlife photography, photorealistic, realistic fur texture, real animal, zoo photo, safari photo, realistic person, real human, photograph, DSLR photo, professional photography, wrong animal, incorrect species, close-up, portrait only, headshot, cropped body, blurry, low quality, pixelated, distorted, amateur, poorly lit, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, long neck, duplicate, mutated, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, bad proportions, watermark, signature, text, logo, no character, empty scene, landscape only, four legs, walking on four legs, animal on all fours, paws, claws, animal feet';
+        }
+        
         // Default settings optimized for character generation
         $defaults = [
             'prompt' => $prompt,
-            'negative_prompt' => 'realistic photo, real animal photograph, nature documentary, wildlife photography, photorealistic, realistic fur texture, real animal, zoo photo, safari photo, realistic tiger, realistic wolf, realistic panda, realistic bear, realistic fox, realistic rabbit, DSLR photo, real world, cartoon, animated, 3D animation, Pixar style, Disney animation, anime, drawn, illustrated, painting, digital art, CGI, wrong animal, incorrect species, rabbit when should be chameleon, cat when should be tomato, realistic human face, photo of person, man, woman, human body, human skin, close-up, portrait only, headshot, cropped body, blurry, low quality, pixelated, distorted, amateur, poorly lit, deformed, ugly, bad anatomy, extra limbs, missing limbs, floating limbs, disconnected limbs, malformed hands, long neck, duplicate, mutated, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, bad proportions, gross proportions, watermark, signature, text, logo, no character, empty scene, landscape only, four legs, walking on four legs, animal on all fours, paws, claws, animal feet',
+            'negative_prompt' => $negativePrompt,
             'modelId' => 'b24e16ff-06e3-43eb-8d33-4416c2d75876', // Leonardo Phoenix (latest model)
             'width' => 1472, // 16:9 ratio (1472x832 is supported)
             'height' => 832,
