@@ -284,21 +284,21 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
     }
     
     // Build ULTRA-SPECIFIC prompt - REPEAT character type and style 3 times for emphasis
-    $prompt = "CRITICAL: This MUST be a CARTOON/ANIMATED $specificCharacter (NOT a realistic photo or real animal). ";
-    $prompt .= "Full body portrait of anthropomorphic cartoon $specificCharacter named $characterName. ";
-    $prompt .= "The character is a stylized animated $specificCharacter in Pixar/Disney style. ";
+    $prompt = "CRITICAL: This MUST be a $specificCharacter MASCOT COSTUME character (NOT a realistic photo or real animal). ";
+    $prompt .= "Full body portrait of anthropomorphic $specificCharacter mascot named $characterName. ";
+    $prompt .= "The character is a stylized $specificCharacter mascot suit character, like a theme park or sports mascot. ";
     
-    // Add type-specific details - ALL types are anthropomorphic/humanized
+    // Add type-specific details - ALL types are mascot costume style
     if ($characterType === 'fruits_vegetables') {
-        $prompt .= "Anthropomorphic $specificCharacter with cartoon face, expressive eyes, smiling mouth, stick arms with hands, stick legs with feet, wearing stylish clothes. Pixar/Disney style, NOT realistic. ";
+        $prompt .= "Mascot costume of anthropomorphic $specificCharacter with large expressive eyes, friendly smile, fabric/foam construction, wearing stylish clothes over the costume. Theme park mascot style, NOT realistic fruit. ";
     } elseif ($characterType === 'animals') {
-        $prompt .= "CARTOON anthropomorphic $specificCharacter character standing upright on TWO LEGS like a human, wearing the EXACT clothes described, expressive cartoon face with big eyes and smile, human-like hands with fingers (NOT paws), human posture. 3D animated Pixar/Disney/Zootopia style. ABSOLUTELY NOT a realistic animal photo. MUST be cartoon/animated style. ";
+        $prompt .= "MASCOT COSTUME of $specificCharacter standing upright on TWO LEGS like a human, wearing the EXACT clothes described over the mascot suit, large friendly expressive face with big eyes, human-like hands with gloves (NOT paws), upright human posture. Professional theme park or sports team mascot style, made of fabric and foam materials. ABSOLUTELY NOT a realistic animal photo or cartoon. MUST be mascot costume style. ";
     } elseif ($characterType === 'fantasy_heroes') {
-        $prompt .= "Humanoid fantasy $specificCharacter character with detailed costume, armor or robes, standing upright, expressive face. Fantasy RPG style, NOT realistic. ";
+        $prompt .= "Mascot costume of humanoid fantasy $specificCharacter character with detailed costume, armor or robes, standing upright, friendly expressive face. Fantasy mascot style, NOT realistic. ";
     } elseif ($characterType === 'pixar_disney') {
-        $prompt .= "Pixar-style 3D animated human $specificCharacter character, expressive face, stylized proportions, wearing modern clothes. Animated movie style, NOT realistic. ";
+        $prompt .= "Mascot costume of $specificCharacter character, expressive face, stylized proportions, wearing modern clothes. Theme park character mascot style, NOT realistic. ";
     } elseif ($characterType === 'fairy_tales') {
-        $prompt .= "Storybook fairy tale $specificCharacter character, whimsical style, expressive features, magical costume. Illustrated fairy tale style, NOT realistic. ";
+        $prompt .= "Mascot costume of fairy tale $specificCharacter character, whimsical style, expressive features, magical costume. Storybook character mascot style, NOT realistic. ";
     }
     
     // Add character description with clothing details (up to 200 chars now)
@@ -312,8 +312,8 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $prompt .= "Background setting: " . $environmentText . ". ";
     }
     
-    // Add SHORT technical requirements emphasizing cartoon style
-    $prompt .= "Cartoon 3D animation style, vibrant colors, full body shot, 16:9 ratio, professional animation quality.";
+    // Add SHORT technical requirements emphasizing mascot costume style
+    $prompt .= "Professional mascot costume photography, vibrant colors, full body shot, 16:9 ratio, theme park quality, fabric and foam materials visible.";
     
     // Log prompt length for debugging
     error_log("Image prompt length: " . strlen($prompt) . " characters");
