@@ -1681,10 +1681,15 @@ class MaskedEmployeeForm {
             
             // Display the new character
             if (characterData && characterData.success) {
-                // Track this character to avoid duplicates
-                if (characterData.character_name) {
-                    this.usedCharacters.push(characterData.character_name);
-                    console.log('📝 Used characters:', this.usedCharacters);
+                // Track this character TYPE to avoid duplicates (e.g., "panda", not "Bamboe Bea")
+                if (characterData.ai_summary) {
+                    // Extract character type from "De [TYPE] genaamd [NAME]"
+                    const typeMatch = characterData.ai_summary.match(/De\s+([A-Z][a-zëéèêïöü]+)\s+genaamd/i);
+                    if (typeMatch) {
+                        const characterType = typeMatch[1].toLowerCase(); // e.g., "Panda" -> "panda"
+                        this.usedCharacters.push(characterType);
+                        console.log('📝 Used character types:', this.usedCharacters);
+                    }
                 }
                 
                 // Update stored character data for image generation
@@ -2638,10 +2643,15 @@ class MaskedEmployeeForm {
             // Store character data for later use (email, image generation)
             this.currentCharacterData = characterData;
             
-            // Track first character to avoid duplicates in regeneration
-            if (characterData.success && characterData.character_name) {
-                this.usedCharacters = [characterData.character_name];
-                console.log('📝 Initial character tracked:', this.usedCharacters);
+            // Track first character TYPE to avoid duplicates in regeneration
+            if (characterData.success && characterData.ai_summary) {
+                // Extract character type from "De [TYPE] genaamd [NAME]"
+                const typeMatch = characterData.ai_summary.match(/De\s+([A-Z][a-zëéèêïöü]+)\s+genaamd/i);
+                if (typeMatch) {
+                    const characterType = typeMatch[1].toLowerCase(); // e.g., "Panda" -> "panda"
+                    this.usedCharacters = [characterType];
+                    console.log('📝 Initial character type tracked:', this.usedCharacters);
+                }
             }
 
             console.log('📤 Step 2: Saving to PocketBase...');
