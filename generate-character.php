@@ -552,9 +552,16 @@ try {
     
     $typeExample = $characterTypeExamples[$characterType] ?? $characterTypeExamples['animals'];
     
-    // Add special instructions for fruits/vegetables and fantasy heroes
+    // Add special instructions for ALL character types
     $specialInstructions = "";
-    if ($characterType === 'fruits_vegetables') {
+    if ($characterType === 'animals') {
+        $specialInstructions = "🦁 EXTRA BELANGRIJK VOOR DIEREN:\n" .
+            "- Het dier MOET een realistisch dierenhoofd hebben op een MENSELIJK lichaam\n" .
+            "- Staand op TWEE benen, NOOIT op vier poten\n" .
+            "- Draagt VOLLEDIGE menselijke kleding (shirt, broek, schoenen)\n" .
+            "- ⚠️ BELANGRIJK: Gebruik VARIATIE - kies verschillende dieren uit de lijst!\n" .
+            "- Denk aan: leeuw, tijger, beer, olifant, giraffe, panda, wolf, vos, uil, etc.\n\n";
+    } elseif ($characterType === 'fruits_vegetables') {
         $specialInstructions = "🥕 EXTRA BELANGRIJK VOOR GROENTE/FRUIT:\n" .
             "- Het fruit/groente MOET gehumaniseerd zijn met:\n" .
             "  * Expressieve ogen (groot, levendig, met emotie)\n" .
@@ -563,14 +570,27 @@ try {
             "  * Benen (kunnen lopen, dansen, bewegen)\n" .
             "  * Handen en voeten (met vingers/tenen of handschoenen/schoenen)\n" .
             "- Denk aan Pixar-stijl: levendig, expressief, vol persoonlijkheid!\n" .
-            "- ⚠️ BELANGRIJK: Kies een ANDER fruit/groente uit de lijst hierboven - NIET altijd tomaat!\n\n";
+            "- ⚠️ BELANGRIJK: Gebruik VARIATIE - NIET altijd tomaat!\n" .
+            "- Denk aan: banaan, wortel, broccoli, paprika, komkommer, aardbei, etc.\n\n";
     } elseif ($characterType === 'fantasy_heroes') {
         $specialInstructions = "⚔️ EXTRA BELANGRIJK VOOR FANTASY HELDEN:\n" .
             "- Het karakter MOET een MENSELIJK persoon zijn in een kostuum/uitrusting\n" .
             "- GEEN dieren, GEEN eenhoorns, GEEN mythische wezens\n" .
-            "- Denk aan: ridder, tovenaar, elf (menselijk), krijger, magiër, etc.\n" .
-            "- ⚠️ BELANGRIJK: Kies een MENSELIJK karakter uit de lijst - NIET eenhoorn of dier!\n" .
+            "- Denk aan: ridder, tovenaar, elf (menselijk), krijger, magiër, boogschutter, etc.\n" .
+            "- ⚠️ BELANGRIJK: Gebruik VARIATIE - NIET altijd eenhoorn!\n" .
             "- Het moet een PERSOON zijn die een fantasy rol speelt\n\n";
+    } elseif ($characterType === 'pixar_disney') {
+        $specialInstructions = "🎬 EXTRA BELANGRIJK VOOR PIXAR/DISNEY:\n" .
+            "- Het karakter MOET een menselijk Pixar/Disney-stijl karakter zijn\n" .
+            "- Geanimeerde stijl met expressief gezicht\n" .
+            "- Draagt moderne, trendy kleding\n" .
+            "- ⚠️ BELANGRIJK: Gebruik VARIATIE uit de lijst!\n\n";
+    } elseif ($characterType === 'fairy_tales') {
+        $specialInstructions = "🧚 EXTRA BELANGRIJK VOOR SPROOKJES:\n" .
+            "- Het karakter MOET een MENSELIJK persoon zijn in sprookjeskostuum\n" .
+            "- Denk aan: prins, prinses, heks, fee, kabouter (menselijk), etc.\n" .
+            "- Professioneel theaterkostuum\n" .
+            "- ⚠️ BELANGRIJK: Gebruik VARIATIE uit de lijst!\n\n";
     }
     
     $userPrompt1 = "⚠️ BELANGRIJK: Het karakter MOET een echt dier/fruit/fantasy wezen zijn - GEEN persoon met masker!\n\n" .
@@ -580,11 +600,19 @@ try {
         "Creëer een karakter beschrijving in het Nederlands met deze 3 secties:\n\n" .
         "1. KARAKTER (100-150 woorden):\n" .
         "- Begin met: 'De [DIER/FRUIT/HELD NAAM] genaamd [Creatieve Naam]'\n" .
-        ($characterType === 'fantasy_heroes' ? 
-            "- Bijvoorbeeld: 'De Ridder genaamd Roland' of 'De Tovenaar genaamd Merlin' of 'De Krijger genaamd Kara'\n" :
-            "- Bijvoorbeeld: 'De Vos genaamd Luna' of 'De Banaan genaamd Benny' of 'De Wortel genaamd Wally'\n") .
+        ($characterType === 'animals' ? 
+            "- Bijvoorbeeld: 'De Leeuw genaamd Leo' of 'De Olifant genaamd Ella' of 'De Uil genaamd Oscar'\n" :
+            ($characterType === 'fruits_vegetables' ?
+                "- Bijvoorbeeld: 'De Banaan genaamd Benny' of 'De Wortel genaamd Wally' of 'De Aardbei genaamd Anna'\n" :
+                ($characterType === 'fantasy_heroes' ?
+                    "- Bijvoorbeeld: 'De Ridder genaamd Roland' of 'De Tovenaar genaamd Merlin' of 'De Krijger genaamd Kara'\n" :
+                    ($characterType === 'pixar_disney' ?
+                        "- Bijvoorbeeld: 'De Uitvinder genaamd Edison' of 'De Ontdekkingsreiziger genaamd Dora'\n" :
+                        "- Bijvoorbeeld: 'De Prins genaamd Philip' of 'De Heks genaamd Helga' of 'De Fee genaamd Flora'\n")))) .
         "- ⚠️ KIES EEN SPECIFIEK karakter uit de lijst hierboven - gebruik VARIATIE!\n" .
         ($characterType === 'fantasy_heroes' ? "- ⚠️ GEEN eenhoorn, GEEN dieren - alleen MENSELIJKE fantasy karakters!\n" : "") .
+        ($characterType === 'animals' ? "- ⚠️ Kies VERSCHILLENDE dieren - niet altijd dezelfde!\n" : "") .
+        ($characterType === 'fruits_vegetables' ? "- ⚠️ Kies VERSCHILLENDE groenten/fruit - niet altijd tomaat!\n" : "") .
         "- GEEN MASKER - het karakter IS het dier/fruit/held zelf\n" .
         ($characterType === 'fruits_vegetables' ? "- VERPLICHT: Beschrijf de ogen, mond, armen en benen van het fruit/groente!\n" : "") .
         "- Beschrijf hun kleding (ze dragen altijd kleding!)\n" .
