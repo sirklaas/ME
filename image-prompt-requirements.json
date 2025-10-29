@@ -1,34 +1,37 @@
 {
   "animals": {
-    "style": "mascot_costume",
+    "style": "anthropomorphic_realistic",
     "requirements": [
-      "CRITICAL: Mascot costume of {character} standing upright on TWO LEGS (not four legs)",
-      "Large friendly expressive eyes LOOKING DIRECTLY AT CAMERA, human-like hands with gloves (NOT paws)",
-      "Wearing the exact clothing/costume described (over the mascot suit)",
-      "Professional theme park mascot quality, fabric/foam materials visible",
-      "Face visible, eyes clearly looking at camera, engaging expression"
+      "CRITICAL: Anthropomorphic {character} with realistic animal head/face but HUMAN BODY",
+      "Standing upright on TWO LEGS like a human, NEVER on four legs",
+      "Wearing FULL HUMAN CLOTHES: shirt/jacket, pants/trousers, shoes/boots (MUST be visible)",
+      "Human posture and stance, dressed like a person going to work/event",
+      "Head FACING CAMERA, eyes LOOKING DIRECTLY INTO CAMERA LENS, making eye contact",
+      "Hyper-realistic style, NOT cartoon, NOT mascot costume - realistic animal head on human body in clothes"
     ]
   },
   "fruits_vegetables": {
     "style": "anthropomorphic_cartoon",
     "requirements": [
-      "CRITICAL: Anthropomorphic {character} with cartoon face",
-      "Large expressive eyes LOOKING DIRECTLY AT CAMERA, friendly smiling mouth, visible emotions",
+      "CRITICAL: Anthropomorphic {character} with cartoon face (NOT tomato unless specified)",
+      "Large expressive eyes LOOKING DIRECTLY INTO CAMERA LENS, friendly smiling mouth, visible emotions",
       "Stick arms with hands/gloves, stick legs with feet/shoes",
       "Wearing stylish clothes (jacket, pants, accessories)",
       "Pixar/Disney mascot style, NOT realistic fruit",
-      "Face visible, eyes clearly looking at camera"
+      "Head and face FACING CAMERA, making direct eye contact with viewer",
+      "IMPORTANT: Use the EXACT fruit/vegetable type specified, do not default to tomato"
     ]
   },
   "fantasy_heroes": {
     "style": "realistic_person",
     "requirements": [
-      "CRITICAL: REALISTIC PERSON dressed as {character}",
+      "CRITICAL: REALISTIC PERSON dressed as {character} (NOT unicorn unless specified)",
       "Professional cosplay quality, detailed fantasy costume, armor, robes, or magical outfit",
-      "Real human actor in full costume, heroic pose, LOOKING DIRECTLY AT CAMERA with expressive face",
+      "Real human actor in full costume, heroic pose, HEAD FACING CAMERA, eyes LOOKING DIRECTLY INTO CAMERA LENS",
       "High-end fantasy movie production quality, epic and cinematic",
-      "NOT cartoon, NOT mascot - REAL PERSON in costume",
-      "Face clearly visible, eyes looking at camera, engaging eye contact"
+      "NOT cartoon, NOT mascot, NOT animal - REAL HUMAN PERSON in costume",
+      "Face clearly visible, making direct eye contact with camera, engaging expression",
+      "IMPORTANT: Use the EXACT character type specified (wizard, knight, elf, etc.), do not default to unicorn"
     ]
   },
   "pixar_disney": {
