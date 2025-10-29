@@ -1479,13 +1479,22 @@ class MaskedEmployeeForm {
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
         
+        // Debug: Check what we have
+        console.log('🔍 Character data check:', {
+            hasData: !!characterData,
+            hasSuccess: characterData?.success,
+            hasCharacterName: characterData?.character_name,
+            hasAiSummary: characterData?.ai_summary
+        });
+        
         // If we already have character data, display it directly
-        if (characterData && characterData.success) {
+        if (characterData && (characterData.success || characterData.character_name)) {
             console.log('✅ Using pre-generated character data');
             this.displayCharacterData(characterData);
         } else {
             // Fallback: Generate character preview (old method)
             console.log('⚠️ No character data, using fallback generation');
+            console.log('⚠️ Character data received:', characterData);
             await this.generateCharacterPreview();
         }
     }
