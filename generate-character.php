@@ -243,9 +243,47 @@ function translateCharacterToEnglish($dutchName, $characterType) {
 
 
 /**
+ * Generate image prompt using Claude AI (much better than PHP string manipulation!)
+ */
+function generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $characterType, $isRegenerate = false) {
+    // Extract specific character type (e.g., "Panda", "Tomaat")
+    $specificCharacter = extractSpecificCharacter($aiSummary, $characterType);
+    
+    // Create a focused prompt for Claude to generate the image description
+    $systemPrompt = "You are an expert at creating image generation prompts for AI image generators like Leonardo.ai. Create concise, visual, English-language prompts that focus on what should be IN the image.";
+    
+    $userPrompt = "Based on this Dutch character description, create a SHORT English image generation prompt (MAX 250 characters) for Leonardo.ai.\n\n";
+    $userPrompt .= "CHARACTER DESCRIPTION:\n$aiSummary\n\n";
+    $userPrompt .= "REQUIREMENTS:\n";
+    $userPrompt .= "- Character type: $specificCharacter mascot costume\n";
+    $userPrompt .= "- Style: Theme park mascot suit (fabric/foam materials)\n";
+    $userPrompt .= "- Posture: Standing upright on two legs like a human\n";
+    $userPrompt .= "- Include: The specific clothing/costume mentioned in the description\n";
+    $userPrompt .= "- Include: The environment/setting mentioned\n";
+    $userPrompt .= "- Format: Full body shot, vibrant colors, 16:9\n";
+    $userPrompt .= "- MAX 250 characters!\n\n";
+    $userPrompt .= "OUTPUT FORMAT (plain text, no quotes):\n";
+    $userPrompt .= "$specificCharacter mascot costume named $characterName, [clothing details], [pose/expression], [environment]. Theme park mascot, full body, vibrant colors, 16:9.\n\n";
+    $userPrompt .= "Write ONLY the image prompt in English. Be concise and visual. Focus on what the image should show.";
+    
+    // Call Claude with shorter max tokens since we only need a short prompt
+    $imagePrompt = callClaudeHaiku($apiKey, $systemPrompt, $userPrompt, 150, $isRegenerate);
+    
+    // Clean up the response (remove quotes if Claude added them)
+    $imagePrompt = trim($imagePrompt);
+    $imagePrompt = trim($imagePrompt, '"\'');
+    
+    error_log("🎨 Claude-generated image prompt: $imagePrompt");
+    error_log("📏 Image prompt length: " . strlen($imagePrompt) . " characters");
+    
+    return $imagePrompt;
+}
+
+/**
+ * OLD FUNCTION - Keep as fallback but not used anymore
  * Generate realistic image prompt for Leonardo.ai
  */
-function generateImagePrompt($characterName, $aiSummary, $characterType) {
+function generateImagePrompt_OLD($characterName, $aiSummary, $characterType) {
     // Extract specific character (e.g., "Kameleon", "Tomaat", "Vos")
     $specificCharacter = extractSpecificCharacter($aiSummary, $characterType);
     error_log("🎯 Extracted specific character: $specificCharacter");
@@ -565,8 +603,8 @@ try {
         $storyLevel3 = $data['answers'][43];
     }
     
-    // Generate image prompt for realistic studio photo
-    $imagePrompt = generateImagePrompt($characterName, $aiSummary, $characterType);
+    // CALL 2: Ask Claude to generate a professional image prompt
+    $imagePrompt = generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $characterType, $isRegenerate);
     
     // Format personality traits as string for PocketBase
     $personalityTraitsString = "";
@@ -586,7 +624,7 @@ try {
         'story_prompt_level2' => $storyLevel2,
         'story_prompt_level3' => $storyLevel3,
         'image_generation_prompt' => $imagePrompt,
-        'api_calls_used' => 1, // Only 1 call now (character generation)
+        'api_calls_used' => 2, // 2 Claude API calls: character generation + image prompt
         'timestamp' => date('Y-m-d H:i:s')
     ];
     
