@@ -3,19 +3,21 @@
     "style": "mascot_costume",
     "requirements": [
       "CRITICAL: Mascot costume of {character} standing upright on TWO LEGS (not four legs)",
-      "Large friendly expressive eyes, human-like hands with gloves (NOT paws)",
+      "Large friendly expressive eyes LOOKING DIRECTLY AT CAMERA, human-like hands with gloves (NOT paws)",
       "Wearing the exact clothing/costume described (over the mascot suit)",
-      "Professional theme park mascot quality, fabric/foam materials visible"
+      "Professional theme park mascot quality, fabric/foam materials visible",
+      "Face visible, eyes clearly looking at camera, engaging expression"
     ]
   },
   "fruits_vegetables": {
     "style": "anthropomorphic_cartoon",
     "requirements": [
       "CRITICAL: Anthropomorphic {character} with cartoon face",
-      "Large expressive eyes, friendly smiling mouth, visible emotions",
+      "Large expressive eyes LOOKING DIRECTLY AT CAMERA, friendly smiling mouth, visible emotions",
       "Stick arms with hands/gloves, stick legs with feet/shoes",
       "Wearing stylish clothes (jacket, pants, accessories)",
-      "Pixar/Disney mascot style, NOT realistic fruit"
+      "Pixar/Disney mascot style, NOT realistic fruit",
+      "Face visible, eyes clearly looking at camera"
     ]
   },
   "fantasy_heroes": {
@@ -23,18 +25,20 @@
     "requirements": [
       "CRITICAL: REALISTIC PERSON dressed as {character}",
       "Professional cosplay quality, detailed fantasy costume, armor, robes, or magical outfit",
-      "Real human actor in full costume, heroic pose, expressive face",
+      "Real human actor in full costume, heroic pose, LOOKING DIRECTLY AT CAMERA with expressive face",
       "High-end fantasy movie production quality, epic and cinematic",
-      "NOT cartoon, NOT mascot - REAL PERSON in costume"
+      "NOT cartoon, NOT mascot - REAL PERSON in costume",
+      "Face clearly visible, eyes looking at camera, engaging eye contact"
     ]
   },
   "pixar_disney": {
     "style": "anthropomorphic_cartoon",
     "requirements": [
       "CRITICAL: Pixar/Disney-style human character as mascot",
-      "Expressive animated face, stylized proportions",
+      "Expressive animated face LOOKING DIRECTLY AT CAMERA, stylized proportions",
       "Wearing modern/trendy clothes matching personality",
-      "Theme park character mascot quality"
+      "Theme park character mascot quality",
+      "Face visible, eyes clearly looking at camera"
     ]
   },
   "fairy_tales": {
@@ -42,9 +46,10 @@
     "requirements": [
       "CRITICAL: REALISTIC PERSON dressed as {character}",
       "Professional theatrical costume, high-quality fabric and details",
-      "Real human actor in full fairy tale costume, enchanting pose",
+      "Real human actor in full fairy tale costume, enchanting pose, LOOKING DIRECTLY AT CAMERA",
       "Broadway/Disney live-action production quality, magical and whimsical",
-      "NOT cartoon, NOT mascot - REAL PERSON in costume"
+      "NOT cartoon, NOT mascot - REAL PERSON in costume",
+      "Face clearly visible, eyes looking at camera, engaging eye contact"
     ]
   },
   "general_quality": {

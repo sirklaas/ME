@@ -585,7 +585,7 @@ class MaskedEmployeeForm {
             story_prompt1: characterData.story_prompt_level1 || '',
             story_prompt2: characterData.story_prompt_level2 || '',
             story_prompt3: characterData.story_prompt_level3 || '',
-            image_generation_prompt: characterData.image_generation_prompt || '',
+            image_prompt: characterData.image_prompt || '',
             character_generation_success: characterData.success || false
         };
         
@@ -1072,9 +1072,9 @@ class MaskedEmployeeForm {
         try {
             console.log('🎨 Generating character image via Leonardo.ai...');
             
-            // Use the image_generation_prompt from character data
+            // Use the image_prompt from character data
             const characterData = this.currentCharacterData || {};
-            const imagePrompt = characterData.image_generation_prompt;
+            const imagePrompt = characterData.image_prompt;
             
             if (!imagePrompt) {
                 throw new Error('No image generation prompt available');
@@ -2676,7 +2676,7 @@ class MaskedEmployeeForm {
         try {
             console.log('🎨 Step 1: Generating image via Leonardo.ai...');
             
-            const imagePrompt = characterData.image_generation_prompt;
+            const imagePrompt = characterData.image_prompt;
             if (!imagePrompt) {
                 throw new Error('No image prompt available');
             }
@@ -2811,7 +2811,7 @@ class MaskedEmployeeForm {
                 story_prompt_level1: '',
                 story_prompt_level2: '',
                 story_prompt_level3: '',
-                image_generation_prompt: '',
+                image_prompt: '',
                 error: error.message
             };
         }

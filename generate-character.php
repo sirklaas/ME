@@ -249,6 +249,15 @@ function generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $cha
     // Extract specific character type (e.g., "Panda", "Tomaat")
     $specificCharacter = extractSpecificCharacter($aiSummary, $characterType);
     
+    // Extract gender from Dutch text (hij = male, zij = female, het = neutral)
+    $gender = "neutral";
+    if (preg_match('/\b(Hij|hij)\b/', $aiSummary)) {
+        $gender = "male";
+    } elseif (preg_match('/\b(Zij|zij|Ze|ze)\b/', $aiSummary)) {
+        $gender = "female";
+    }
+    error_log("👤 Detected gender: $gender for character: $characterName");
+    
     // Create a focused prompt for Claude to generate the image description
     $systemPrompt = "You are an expert at creating stunning image generation prompts for AI image generators like Leonardo.ai. Create concise, visual, cinematic English-language prompts that produce professional, high-quality images.";
     
@@ -272,12 +281,21 @@ function generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $cha
     
     $userPrompt = "Based on this Dutch character description, create a STUNNING English image generation prompt (MAX 250 characters) for Leonardo.ai.\n\n";
     $userPrompt .= "CHARACTER DESCRIPTION:\n$aiSummary\n\n";
-    $userPrompt .= "TYPE-SPECIFIC REQUIREMENTS:\n";
+    $userPrompt .= "⚠️ CRITICAL GENDER: The character is " . strtoupper($gender) . ". ";
+    if ($gender === "male") {
+        $userPrompt .= "The image MUST show a MALE person/character (man, boy, masculine features).\n";
+    } elseif ($gender === "female") {
+        $userPrompt .= "The image MUST show a FEMALE person/character (woman, girl, feminine features).\n";
+    } else {
+        $userPrompt .= "The image can be gender-neutral.\n";
+    }
+    $userPrompt .= "\nTYPE-SPECIFIC REQUIREMENTS:\n";
     $userPrompt .= $typeSpecificRequirements;
     $userPrompt .= "\nGENERAL REQUIREMENTS:\n";
     $userPrompt .= "- Include: The specific clothing/costume details from description\n";
     $userPrompt .= "- Include: The environment/setting mentioned\n";
     $userPrompt .= "- Quality: 16:9, 4K, cinematic, full body, rule of thirds\n";
+    $userPrompt .= "- Character MUST be looking directly at camera with eyes visible\n";
     $userPrompt .= "- MAX 250 characters total!\n\n";
     $userPrompt .= "OUTPUT FORMAT (plain text, no quotes):\n";
     $userPrompt .= "$specificCharacter mascot named $characterName, [clothing], [pose], [environment]. Cinematic, 4K, full body, rule of thirds, 16:9.\n\n";
@@ -640,7 +658,7 @@ try {
         'story_prompt_level1' => $storyLevel1,
         'story_prompt_level2' => $storyLevel2,
         'story_prompt_level3' => $storyLevel3,
-        'image_generation_prompt' => $imagePrompt,
+        'image_prompt' => $imagePrompt, // Renamed from image_generation_prompt for consistency
         'api_calls_used' => 2, // 2 Claude API calls: character generation + image prompt
         'timestamp' => date('Y-m-d H:i:s')
     ];
