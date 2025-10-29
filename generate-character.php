@@ -294,12 +294,14 @@ function generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $cha
     $userPrompt .= "\nGENERAL REQUIREMENTS:\n";
     $userPrompt .= "- Include: The specific clothing/costume details from description\n";
     $userPrompt .= "- Include: The environment/setting mentioned\n";
-    $userPrompt .= "- Quality: 16:9, 4K, cinematic, full body, rule of thirds\n";
     $userPrompt .= "- Character MUST be looking directly at camera with eyes visible\n";
-    $userPrompt .= "- MAX 250 characters total!\n\n";
+    $userPrompt .= "- Technical quality: " . $generalQuality['technical'] . "\n";
+    $userPrompt .= "- Camera: " . $generalQuality['camera'] . "\n";
+    $userPrompt .= "- Style: " . $generalQuality['style'] . "\n";
+    $userPrompt .= "- MAX 300 characters total (increased for quality details)!\n\n";
     $userPrompt .= "OUTPUT FORMAT (plain text, no quotes):\n";
-    $userPrompt .= "$specificCharacter mascot named $characterName, [clothing], [pose], [environment]. Cinematic, 4K, full body, rule of thirds, 16:9.\n\n";
-    $userPrompt .= "Write ONLY the image prompt in English. Be concise, visual, and cinematic. Create a prompt that will generate a STUNNING professional image.";
+    $userPrompt .= "$specificCharacter mascot named $characterName, [clothing], [pose], [environment], looking at camera. Shot with Sony a7V, Sigma 85mm, hyper-realistic, cinema still, 4K, 16:9, full body.\n\n";
+    $userPrompt .= "Write ONLY the image prompt in English. Be concise, visual, and cinematic. Include professional camera/photography details. Create a prompt that will generate a STUNNING hyper-realistic professional image.";
     
     // Call Claude with shorter max tokens since we only need a short prompt
     $imagePrompt = callClaudeHaiku($apiKey, $systemPrompt, $userPrompt, 150, $isRegenerate);
