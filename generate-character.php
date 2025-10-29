@@ -255,8 +255,23 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $karakterText = trim($matches[1]);
         // Remove line breaks and extra spaces
         $karakterText = preg_replace('/\s+/', ' ', $karakterText);
-        // Limit to first 150 chars for character description (reduced from 300)
-        $karakterText = substr($karakterText, 0, 150);
+        // Extract clothing/costume details (CRITICAL for accurate image)
+        $clothingKeywords = ['draagt', 'ruimtepak', 'pak', 'kleding', 'kostuum', 'outfit', 'jasje', 'broek', 'schoenen', 'hoed', 'cape', 'armor', 'robes'];
+        $clothingDetails = '';
+        foreach ($clothingKeywords as $keyword) {
+            if (stripos($karakterText, $keyword) !== false) {
+                // Extract sentence containing clothing keyword
+                if (preg_match('/[^.]*' . preg_quote($keyword, '/') . '[^.]*/i', $karakterText, $clothingMatch)) {
+                    $clothingDetails .= trim($clothingMatch[0]) . '. ';
+                }
+            }
+        }
+        // Prioritize clothing details, then rest of description
+        if (!empty($clothingDetails)) {
+            $karakterText = $clothingDetails . ' ' . $karakterText;
+        }
+        // Limit to first 200 chars to include important clothing details
+        $karakterText = substr($karakterText, 0, 200);
     }
     
     // Extract environment from AI summary (OMGEVING section)
@@ -268,16 +283,16 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $environmentText = substr($environmentText, 0, 80);
     }
     
-    // Build ULTRA-SPECIFIC prompt - REPEAT character type 3 times for emphasis
-    $prompt = "CRITICAL: This MUST be a $specificCharacter (NOT any other animal/fruit/character). ";
-    $prompt .= "Full body portrait of $specificCharacter named $characterName. ";
-    $prompt .= "The character is a $specificCharacter. ";
+    // Build ULTRA-SPECIFIC prompt - REPEAT character type and style 3 times for emphasis
+    $prompt = "CRITICAL: This MUST be a CARTOON/ANIMATED $specificCharacter (NOT a realistic photo or real animal). ";
+    $prompt .= "Full body portrait of anthropomorphic cartoon $specificCharacter named $characterName. ";
+    $prompt .= "The character is a stylized animated $specificCharacter in Pixar/Disney style. ";
     
     // Add type-specific details - ALL types are anthropomorphic/humanized
     if ($characterType === 'fruits_vegetables') {
         $prompt .= "Anthropomorphic $specificCharacter with cartoon face, expressive eyes, smiling mouth, stick arms with hands, stick legs with feet, wearing stylish clothes. Pixar/Disney style, NOT realistic. ";
     } elseif ($characterType === 'animals') {
-        $prompt .= "Anthropomorphic $specificCharacter standing upright on two legs like a human, wearing stylish clothes, expressive face with human-like emotions, hands instead of paws. Pixar/Disney style, NOT realistic animal. ";
+        $prompt .= "CARTOON anthropomorphic $specificCharacter character standing upright on TWO LEGS like a human, wearing the EXACT clothes described, expressive cartoon face with big eyes and smile, human-like hands with fingers (NOT paws), human posture. 3D animated Pixar/Disney/Zootopia style. ABSOLUTELY NOT a realistic animal photo. MUST be cartoon/animated style. ";
     } elseif ($characterType === 'fantasy_heroes') {
         $prompt .= "Humanoid fantasy $specificCharacter character with detailed costume, armor or robes, standing upright, expressive face. Fantasy RPG style, NOT realistic. ";
     } elseif ($characterType === 'pixar_disney') {
@@ -286,18 +301,19 @@ function generateImagePrompt($characterName, $aiSummary, $characterType) {
         $prompt .= "Storybook fairy tale $specificCharacter character, whimsical style, expressive features, magical costume. Illustrated fairy tale style, NOT realistic. ";
     }
     
-    // Add character description (shortened to 100 chars)
+    // Add character description with clothing details (up to 200 chars now)
     if (!empty($karakterText)) {
-        $prompt .= substr($karakterText, 0, 100) . " ";
+        $prompt .= $karakterText . " ";
     }
     
-    // Add environment (shortened to 60 chars)
+    // Add environment with more detail (up to 100 chars for better scene)
     if (!empty($environmentText)) {
-        $prompt .= "Setting: " . substr($environmentText, 0, 60) . " ";
+        $environmentText = substr($environmentText, 0, 100);
+        $prompt .= "Background setting: " . $environmentText . ". ";
     }
     
-    // Add SHORT technical requirements
-    $prompt .= "16:9, 4K, cinematic, full body, rule of thirds.";
+    // Add SHORT technical requirements emphasizing cartoon style
+    $prompt .= "Cartoon 3D animation style, vibrant colors, full body shot, 16:9 ratio, professional animation quality.";
     
     // Log prompt length for debugging
     error_log("Image prompt length: " . strlen($prompt) . " characters");
@@ -437,11 +453,32 @@ try {
     $pixarDisney = $characterOptions['pixar_disney_80'];
     $fairyTales = $characterOptions['fairy_tales_80'];
     
-    shuffle($animals);
-    shuffle($fruitsVeggies);
-    shuffle($fantasyHeroes);
-    shuffle($pixarDisney);
-    shuffle($fairyTales);
+    // Shuffle multiple times for better randomization
+    for ($i = 0; $i < 3; $i++) {
+        shuffle($animals);
+        shuffle($fruitsVeggies);
+        shuffle($fantasyHeroes);
+        shuffle($pixarDisney);
+        shuffle($fairyTales);
+    }
+    
+    // For regeneration, move used characters to the END of the list
+    if ($isRegenerate && !empty($usedCharacters)) {
+        $animals = array_diff($animals, $usedCharacters);
+        $animals = array_merge($animals, array_intersect($usedCharacters, $characterOptions['animals_80']));
+        
+        $fruitsVeggies = array_diff($fruitsVeggies, $usedCharacters);
+        $fruitsVeggies = array_merge($fruitsVeggies, array_intersect($usedCharacters, $characterOptions['fruits_vegetables_80']));
+        
+        $fantasyHeroes = array_diff($fantasyHeroes, $usedCharacters);
+        $fantasyHeroes = array_merge($fantasyHeroes, array_intersect($usedCharacters, $characterOptions['fantasy_heroes_80']));
+        
+        $pixarDisney = array_diff($pixarDisney, $usedCharacters);
+        $pixarDisney = array_merge($pixarDisney, array_intersect($usedCharacters, $characterOptions['pixar_disney_80']));
+        
+        $fairyTales = array_diff($fairyTales, $usedCharacters);
+        $fairyTales = array_merge($fairyTales, array_intersect($usedCharacters, $characterOptions['fairy_tales_80']));
+    }
     
     $characterTypeExamples = [
         'animals' => "VERPLICHT: Kies EEN dier uit deze lijst:\n" . implode(', ', $animals),
