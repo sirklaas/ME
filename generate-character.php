@@ -250,21 +250,57 @@ function generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $cha
     $specificCharacter = extractSpecificCharacter($aiSummary, $characterType);
     
     // Create a focused prompt for Claude to generate the image description
-    $systemPrompt = "You are an expert at creating image generation prompts for AI image generators like Leonardo.ai. Create concise, visual, English-language prompts that focus on what should be IN the image.";
+    $systemPrompt = "You are an expert at creating stunning image generation prompts for AI image generators like Leonardo.ai. Create concise, visual, cinematic English-language prompts that produce professional, high-quality images.";
     
-    $userPrompt = "Based on this Dutch character description, create a SHORT English image generation prompt (MAX 250 characters) for Leonardo.ai.\n\n";
+    // Type-specific requirements for stunning images
+    $typeSpecificRequirements = "";
+    switch($characterType) {
+        case 'animals':
+            $typeSpecificRequirements = "- CRITICAL: Mascot costume of $specificCharacter standing upright on TWO LEGS (not four legs)\n";
+            $typeSpecificRequirements .= "- Large friendly expressive eyes, human-like hands with gloves (NOT paws)\n";
+            $typeSpecificRequirements .= "- Wearing the exact clothing/costume described (over the mascot suit)\n";
+            $typeSpecificRequirements .= "- Professional theme park mascot quality, fabric/foam materials visible\n";
+            break;
+        case 'fruits_vegetables':
+            $typeSpecificRequirements = "- CRITICAL: Anthropomorphic $specificCharacter with cartoon face\n";
+            $typeSpecificRequirements .= "- Large expressive eyes, friendly smiling mouth, visible emotions\n";
+            $typeSpecificRequirements .= "- Stick arms with hands/gloves, stick legs with feet/shoes\n";
+            $typeSpecificRequirements .= "- Wearing stylish clothes (jacket, pants, accessories)\n";
+            $typeSpecificRequirements .= "- Pixar/Disney mascot style, NOT realistic fruit\n";
+            break;
+        case 'fantasy_heroes':
+            $typeSpecificRequirements = "- CRITICAL: Humanoid fantasy $specificCharacter character\n";
+            $typeSpecificRequirements .= "- Detailed fantasy costume, armor, robes, or magical outfit\n";
+            $typeSpecificRequirements .= "- Standing upright, heroic pose, expressive face\n";
+            $typeSpecificRequirements .= "- Fantasy RPG mascot style, epic and magical\n";
+            break;
+        case 'pixar_disney':
+            $typeSpecificRequirements = "- CRITICAL: Pixar/Disney-style human character as mascot\n";
+            $typeSpecificRequirements .= "- Expressive animated face, stylized proportions\n";
+            $typeSpecificRequirements .= "- Wearing modern/trendy clothes matching personality\n";
+            $typeSpecificRequirements .= "- Theme park character mascot quality\n";
+            break;
+        case 'fairy_tales':
+            $typeSpecificRequirements = "- CRITICAL: Storybook fairy tale $specificCharacter character\n";
+            $typeSpecificRequirements .= "- Whimsical style, magical costume, expressive features\n";
+            $typeSpecificRequirements .= "- Fairy tale mascot style, enchanting and colorful\n";
+            break;
+        default:
+            $typeSpecificRequirements = "- Mascot costume style, standing upright\n";
+    }
+    
+    $userPrompt = "Based on this Dutch character description, create a STUNNING English image generation prompt (MAX 250 characters) for Leonardo.ai.\n\n";
     $userPrompt .= "CHARACTER DESCRIPTION:\n$aiSummary\n\n";
-    $userPrompt .= "REQUIREMENTS:\n";
-    $userPrompt .= "- Character type: $specificCharacter mascot costume\n";
-    $userPrompt .= "- Style: Theme park mascot suit (fabric/foam materials)\n";
-    $userPrompt .= "- Posture: Standing upright on two legs like a human\n";
-    $userPrompt .= "- Include: The specific clothing/costume mentioned in the description\n";
+    $userPrompt .= "TYPE-SPECIFIC REQUIREMENTS:\n";
+    $userPrompt .= $typeSpecificRequirements;
+    $userPrompt .= "\nGENERAL REQUIREMENTS:\n";
+    $userPrompt .= "- Include: The specific clothing/costume details from description\n";
     $userPrompt .= "- Include: The environment/setting mentioned\n";
-    $userPrompt .= "- Format: Full body shot, vibrant colors, 16:9\n";
-    $userPrompt .= "- MAX 250 characters!\n\n";
+    $userPrompt .= "- Quality: 16:9, 4K, cinematic, full body, rule of thirds\n";
+    $userPrompt .= "- MAX 250 characters total!\n\n";
     $userPrompt .= "OUTPUT FORMAT (plain text, no quotes):\n";
-    $userPrompt .= "$specificCharacter mascot costume named $characterName, [clothing details], [pose/expression], [environment]. Theme park mascot, full body, vibrant colors, 16:9.\n\n";
-    $userPrompt .= "Write ONLY the image prompt in English. Be concise and visual. Focus on what the image should show.";
+    $userPrompt .= "$specificCharacter mascot named $characterName, [clothing], [pose], [environment]. Cinematic, 4K, full body, rule of thirds, 16:9.\n\n";
+    $userPrompt .= "Write ONLY the image prompt in English. Be concise, visual, and cinematic. Create a prompt that will generate a STUNNING professional image.";
     
     // Call Claude with shorter max tokens since we only need a short prompt
     $imagePrompt = callClaudeHaiku($apiKey, $systemPrompt, $userPrompt, 150, $isRegenerate);
