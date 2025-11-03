@@ -62,8 +62,8 @@ class MaskedEmployeeForm {
                 modalAcceptButton: 'Ik ga akkoord',
                 // Summary Page
                 // Preview Page
-                previewTitle: '🎭 We hebben je karakter gevonden!',
-                previewSubtitle: 'Op basis van je antwoorden hebben we dit unieke karakter voor je gecreëerd:',
+                previewTitle: 'Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.',
+                previewSubtitle: '',
                 loadingPreview: 'AI creëert je karakter...',
                 regenerateButton: '🔄 Genereer opnieuw',
                 acceptButton: '✅ Ja, dit ben ik!',
@@ -128,8 +128,8 @@ class MaskedEmployeeForm {
                 modalAcceptButton: 'I agree',
                 // Summary Page
                 // Preview Page
-                previewTitle: '🎭 We found your character!',
-                previewSubtitle: 'Based on your answers, we created this unique character for you:',
+                previewTitle: 'Using the latest AI technology, we have created a Unique Character based on your answers.',
+                previewSubtitle: '',
                 loadingPreview: 'AI is creating your character...',
                 regenerateButton: '🔄 No, please Regenerate',
                 acceptButton: '✅ Yes, this is me!',
@@ -2275,7 +2275,6 @@ class MaskedEmployeeForm {
         
         // Preview page
         safeUpdate('previewTitle', t.previewTitle);
-        safeUpdate('previewSubtitle', t.previewSubtitle);
         safeUpdate('loadingPreviewText', t.loadingPreview);
         safeUpdate('regenerateButtonText', t.regenerateButton);
         safeUpdate('acceptButtonText', t.acceptButton);
