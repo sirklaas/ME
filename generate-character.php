@@ -129,6 +129,91 @@ function determineCharacterType($traits) {
 }
 
 /**
+ * Query PocketBase to get character usage counts
+ */
+function getCharacterUsageCounts($characterType) {
+    // Load PocketBase configuration
+    require_once __DIR__ . '/api-keys.php';
+    $pbUrl = defined('POCKETBASE_URL') ? POCKETBASE_URL : 'https://pb.masked-employee.com';
+    
+    $usageCounts = [];
+    
+    try {
+        // Query all records for this character type
+        $url = $pbUrl . '/api/collections/ME_questions/records?filter=(character_type="' . urlencode($characterType) . '")&perPage=500';
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($httpCode === 200 && $response) {
+            $data = json_decode($response, true);
+            
+            if (isset($data['items'])) {
+                // Count occurrences of each character name
+                foreach ($data['items'] as $record) {
+                    if (isset($record['character_name'])) {
+                        // Extract just the character type from "De Leeuw genaamd Luna" -> "leeuw"
+                        $fullName = $record['character_name'];
+                        
+                        // Try to extract the character type (e.g., "De Leeuw genaamd X" -> "leeuw")
+                        if (preg_match('/De\s+(\w+)\s+genaamd/i', $fullName, $matches)) {
+                            $characterName = strtolower($matches[1]);
+                        } else {
+                            // Fallback: use the full name
+                            $characterName = strtolower($fullName);
+                        }
+                        
+                        if (!isset($usageCounts[$characterName])) {
+                            $usageCounts[$characterName] = 0;
+                        }
+                        $usageCounts[$characterName]++;
+                    }
+                }
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Error querying PocketBase for usage counts: " . $e->getMessage());
+    }
+    
+    return $usageCounts;
+}
+
+/**
+ * Sort character options by usage count (least used first)
+ */
+function sortByUsageCount($options, $usageCounts) {
+    // Create array with usage counts
+    $optionsWithCounts = [];
+    foreach ($options as $option) {
+        $optionLower = strtolower($option);
+        $count = isset($usageCounts[$optionLower]) ? $usageCounts[$optionLower] : 0;
+        $optionsWithCounts[] = [
+            'name' => $option,
+            'count' => $count
+        ];
+    }
+    
+    // Sort by count (ascending - least used first)
+    usort($optionsWithCounts, function($a, $b) {
+        if ($a['count'] === $b['count']) {
+            // If same count, randomize order
+            return rand(-1, 1);
+        }
+        return $a['count'] - $b['count'];
+    });
+    
+    // Extract just the names
+    return array_map(function($item) {
+        return $item['name'];
+    }, $optionsWithCounts);
+}
+
+/**
  * Format answers into readable text for AI
  */
 function formatAnswersForAI($answers, $chapters) {
@@ -508,21 +593,40 @@ try {
     // Load 80 options per character type
     $characterOptions = json_decode(file_get_contents('character-options-80.json'), true);
     
-    // RANDOMIZE the order to get more variety (especially important for regeneration)
-    $animals = $characterOptions['animals_80'];
-    $fruitsVeggies = $characterOptions['fruits_vegetables_80'];
-    $fantasyHeroes = $characterOptions['fantasy_heroes_80'];
-    $pixarDisney = $characterOptions['pixar_disney_80'];
-    $fairyTales = $characterOptions['fairy_tales_80'];
-    
-    // Shuffle multiple times for better randomization
-    for ($i = 0; $i < 3; $i++) {
-        shuffle($animals);
-        shuffle($fruitsVeggies);
-        shuffle($fantasyHeroes);
-        shuffle($pixarDisney);
-        shuffle($fairyTales);
+    // Get all options for the selected character type
+    $allOptions = [];
+    switch ($characterType) {
+        case 'animals':
+            $allOptions = $characterOptions['animals_80'];
+            break;
+        case 'fruits_vegetables':
+            $allOptions = $characterOptions['fruits_vegetables_80'];
+            break;
+        case 'fantasy_heroes':
+            $allOptions = $characterOptions['fantasy_heroes_80'];
+            break;
+        case 'pixar_disney':
+            $allOptions = $characterOptions['pixar_disney_80'];
+            break;
+        case 'fairy_tales':
+            $allOptions = $characterOptions['fairy_tales_80'];
+            break;
+        default:
+            $allOptions = $characterOptions['animals_80'];
     }
+    
+    // Query PocketBase to get usage counts for this character type
+    $usageCounts = getCharacterUsageCounts($characterType);
+    
+    // Sort options by usage count (least used first)
+    $sortedOptions = sortByUsageCount($allOptions, $usageCounts);
+    
+    // Use sorted options (least-used characters will be at the front)
+    $animals = ($characterType === 'animals') ? $sortedOptions : $characterOptions['animals_80'];
+    $fruitsVeggies = ($characterType === 'fruits_vegetables') ? $sortedOptions : $characterOptions['fruits_vegetables_80'];
+    $fantasyHeroes = ($characterType === 'fantasy_heroes') ? $sortedOptions : $characterOptions['fantasy_heroes_80'];
+    $pixarDisney = ($characterType === 'pixar_disney') ? $sortedOptions : $characterOptions['pixar_disney_80'];
+    $fairyTales = ($characterType === 'fairy_tales') ? $sortedOptions : $characterOptions['fairy_tales_80'];
     
     // For regeneration, move used characters to the END of the list
     if ($isRegenerate && !empty($usedCharacters)) {
