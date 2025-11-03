@@ -67,7 +67,9 @@ if ($language === 'nl') {
             <div class='content'>
                 <h2>Hallo " . htmlspecialchars($playerName) . "!</h2>
                 
-                <p>Je karakter voor <strong>" . htmlspecialchars($gameName) . "</strong> is gegenereerd!</p>
+                <p><strong>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</strong></p>
+                
+                <p>Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid. Ontdek wie je bent achter het masker...</p>
                 
                 <div class='section'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
@@ -130,7 +132,9 @@ if ($language === 'nl') {
             <div class='content'>
                 <h2>Hello " . htmlspecialchars($playerName) . "!</h2>
                 
-                <p>Your character for <strong>" . htmlspecialchars($gameName) . "</strong> has been generated!</p>
+                <p><strong>Using the latest AI technology, we have created a Unique Character based on your answers.</strong></p>
+                
+                <p>Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality. Discover who you are behind the mask...</p>
                 
                 <div class='section'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>

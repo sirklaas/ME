@@ -71,7 +71,11 @@ if ($language === 'nl') {
             <div class='content'>
                 <h2>Hallo " . htmlspecialchars($playerName) . "!</h2>
                 
+                <p><strong>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</strong></p>
+                
                 <p>🎉 <strong>Geweldig nieuws!</strong> Je unieke karakter afbeelding is gegenereerd!</p>
+                
+                <p>Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid.</p>
                 
                 <div class='image-container'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
@@ -146,7 +150,11 @@ if ($language === 'nl') {
             <div class='content'>
                 <h2>Hello " . htmlspecialchars($playerName) . "!</h2>
                 
+                <p><strong>Using the latest AI technology, we have created a Unique Character based on your answers.</strong></p>
+                
                 <p>🎉 <strong>Great news!</strong> Your unique character image has been generated!</p>
+                
+                <p>Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality.</p>
                 
                 <div class='image-container'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
