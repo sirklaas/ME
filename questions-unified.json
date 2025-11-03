@@ -776,35 +776,35 @@
     {
       "id": 9,
       "title": {
-        "nl": "Film Maken",
-        "en": "Movie Making"
+        "nl": "Jouw Geheime Verhaal in Beeld",
+        "en": "Your Secret Story on Screen"
       },
       "description": {
-        "nl": "Beschrijf de 3 mysterieuze filmpjes die jouw verhaal vertellen",
-        "en": "Describe the 3 mysterious videos that tell your story"
+        "nl": "Laat je mysterieuze kant zien! We gaan samen 3 korte films maken die jouw verhaal onthullen – laag voor laag. Van mysterieus en raadselachtig tot de ultieme onthulling. Elk filmpje bestaat uit 3 scenes: een intrigerende opening, een verdiepend midden en een spannend eind. Ben jij klaar om je masker langzaam af te leggen?",
+        "en": "Show your mysterious side! Together we'll create 3 short films that reveal your story – layer by layer. From mysterious and enigmatic to the ultimate revelation. Each video consists of 3 scenes: an intriguing opening, a deepening middle and an exciting ending. Are you ready to slowly take off your mask?"
       },
       "questions": [
         {
           "id": 41,
           "type": "text",
           "question": {
-            "nl": "Omschrijf het eerste filmpje en meest vage filmpje dat je zou willen maken in 3 scenes: Een begin / een midden / en een spannend eind Dit moet een geheime kant van jou vertellen maar nog niet al te veel prijsgeven.",
-            "en": "Describe the first video and most vague one you would like to make in 3 scenes: a beginning / a middle / and an exiting end. This should reveal a secret side of you but not give away too much yet."
+            "nl": "Film 1 - Het Mysterie Achter het Masker: Tijd voor je meest cryptische filmpje! Beschrijf 3 scenes die nieuwsgierigheid wekken maar je geheim nog bewaren. Van een intrigerend begin, via een mysterieus midden, naar een spannend slot. Welke geheime kant van jezelf laat je subtiel doorschemeren?",
+            "en": "Film 1 - The Mystery Behind the Mask: Time for your most cryptic video! Describe 3 scenes that spark curiosity but still keep your secret. From an intriguing beginning, through a mysterious middle, to an exciting finale. Which secret side of yourself do you subtly reveal?"
           },
           "placeholder": {
-            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
-            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+            "nl": "Scene 1 - De Opening: Waar ben je? Wat zie we? Wat voel je?\nScene 2 - Het Mysterie Diept: Wat gebeurt er? Welke hint geef je weg?\nScene 3 - De Cliffhanger: Hoe eindigt het? Wat blijft onbeantwoord?",
+            "en": "Scene 1 - The Opening: Where are you? What do we see? What do you feel?\nScene 2 - The Mystery Deepens: What happens? Which hint do you give away?\nScene 3 - The Cliffhanger: How does it end? What remains unanswered?"
           },
           "scenes": {
             "nl": [
-              "Scene 1",
-              "Scene 2",
-              "Scene 3"
+              "Scene 1 - De Opening",
+              "Scene 2 - Het Mysterie Diept",
+              "Scene 3 - De Cliffhanger"
             ],
             "en": [
-              "Scene 1",
-              "Scene 2",
-              "Scene 3"
+              "Scene 1 - The Opening",
+              "Scene 2 - The Mystery Deepens",
+              "Scene 3 - The Cliffhanger"
             ]
           }
         },
@@ -812,23 +812,23 @@
           "id": 42,
           "type": "text",
           "question": {
-            "nl": "Omschrijf het middelste filmpje, met iets meer hints dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag al iets meer prijsgeven.",
-            "en": "Describe the middle video, the one a more revealing you would like to make in 3 scenes. a beginning / a middle / and an exiting end. This should reveal a secret side of you and may give away a bit more."
+            "nl": "Film 2 - De Sluier Verschuift: Omschrijf het middelste filmpje, met iets meer hints dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag al iets meer prijsgeven.",
+            "en": "Film 2 - The Veil Shifts: Describe the middle video, with a few more hints that you would like to make in 3 scenes. A beginning / a middle / and an exciting end. This should tell a secret side of you and may reveal a bit more."
           },
           "placeholder": {
-            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
-            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+            "nl": "Scene 1 - De Opening: Hoe begin je? Wat laat je zien?\nScene 2 - Het Mysterie Diept: Welke hints geef je nu prijs?\nScene 3 - De Cliffhanger: Hoe bouw je de spanning op?",
+            "en": "Scene 1 - The Opening: How do you start? What do you show?\nScene 2 - The Mystery Deepens: Which hints do you reveal now?\nScene 3 - The Cliffhanger: How do you build the tension?"
           },
           "scenes": {
             "nl": [
-              "Scene 1",
-              "Scene 2",
-              "Scene 3"
+              "Scene 1 - De Opening",
+              "Scene 2 - Het Mysterie Diept",
+              "Scene 3 - De Cliffhanger"
             ],
             "en": [
-              "Scene 1",
-              "Scene 2",
-              "Scene 3"
+              "Scene 1 - The Opening",
+              "Scene 2 - The Mystery Deepens",
+              "Scene 3 - The Cliffhanger"
             ]
           }
         },
@@ -836,23 +836,23 @@
           "id": 43,
           "type": "text",
           "question": {
-            "nl": "Omschrijf het laatste filmpje dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag het laatste beetje prijsgeven.",
-            "en": "Describe the final video you would like to make in 3 scenes. a beginning / a middle / and an exiting end. This should reveal a secret side of you and may give away the final clues."
+            "nl": "Film 3 - Het Masker Valt: Omschrijf het laatste filmpje dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag het laatste beetje prijsgeven.",
+            "en": "Film 3 - The Mask Falls: Describe the final video you would like to make in 3 scenes. A beginning / a middle / and an exciting end. This should tell a secret side of you and may reveal the final piece."
           },
           "placeholder": {
-            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
-            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+            "nl": "Scene 1 - De Opening: Waar begint je onthulling?\nScene 2 - Het Mysterie Diept: Wat wordt nu duidelijk?\nScene 3 - De Cliffhanger: Hoe sluit je jouw verhaal af?",
+            "en": "Scene 1 - The Opening: Where does your revelation begin?\nScene 2 - The Mystery Deepens: What becomes clear now?\nScene 3 - The Cliffhanger: How do you close your story?"
           },
           "scenes": {
             "nl": [
-              "Scene 1",
-              "Scene 2",
-              "Scene 3"
+              "Scene 1 - De Opening",
+              "Scene 2 - Het Mysterie Diept",
+              "Scene 3 - De Cliffhanger"
             ],
             "en": [
-              "Scene 1",
-              "Scene 2",
-              "Scene 3"
+              "Scene 1 - The Opening",
+              "Scene 2 - The Mystery Deepens",
+              "Scene 3 - The Cliffhanger"
             ]
           }
         }
