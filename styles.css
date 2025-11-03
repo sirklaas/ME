@@ -1683,3 +1683,114 @@ text-align: left;
     opacity: 0.5;
     cursor: not-allowed;
 }
+
+/* Personality Bars */
+.personality-bars {
+    margin-top: 15px;
+}
+
+.personality-bar-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 10px;
+}
+
+.trait-label {
+    min-width: 120px;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.95em;
+}
+
+.personality-bar {
+    flex: 1;
+    height: 24px;
+    background: white;
+    border: 2px solid #8A2BE2;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.personality-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #667eea 0%, #8A2BE2 100%);
+    transition: width 0.6s ease-in-out;
+    border-radius: 10px;
+}
+
+.trait-value {
+    min-width: 20px;
+    text-align: center;
+    font-weight: 600;
+    color: #8A2BE2;
+    font-size: 0.95em;
+}
+
+/* Character Preview Sections */
+.character-preview .intro-section {
+    background: linear-gradient(135deg, #667eea 0%, #8A2BE2 100%);
+    color: white;
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 30px;
+}
+
+.character-preview .intro-section h2 {
+    color: white;
+    margin-bottom: 15px;
+    font-size: 1.4em;
+}
+
+.character-preview .intro-section p {
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.character-preview .character-details,
+.character-preview .summary-section,
+.character-preview .story-section {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.character-preview h3 {
+    color: #8A2BE2;
+    margin-bottom: 15px;
+    font-size: 1.3em;
+}
+
+.character-preview h4 {
+    color: #667eea;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.character-preview .personality-section {
+    margin-top: 20px;
+}
+
+.story-prompt {
+    background: #f8f9ff;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border-left: 4px solid #8A2BE2;
+}
+
+.story-prompt strong {
+    color: #8A2BE2;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.story-prompt p {
+    margin: 0;
+    color: #333;
+    line-height: 1.6;
+}

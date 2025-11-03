@@ -1567,23 +1567,59 @@ class MaskedEmployeeForm {
         document.querySelector('.loading-preview').style.display = 'none';
         const previewContent = document.getElementById('previewContent');
         
+        // Extract character name only (remove "De [Type] genaamd" part)
+        const fullName = characterData.character_name || 'Your Character';
+        const nameOnly = fullName.split(' genaamd ').pop() || fullName;
+        
+        // Parse personality traits into bars
+        const personalityBars = this.createPersonalityBars(characterData.personality_traits || '');
+        
+        // Extract sections from AI summary
+        const sections = this.parseAISummary(characterData.ai_summary || '');
+        
         const html = `
             <div class="character-preview">
-                <div class="character-section">
-                    <h3>🎭 ${characterData.character_name || 'Your Character'}</h3>
-                    <p><strong>${this.currentLanguage === 'nl' ? 'Type' : 'Type'}:</strong> ${characterData.character_type || 'N/A'}</p>
-                    <p><strong>${this.currentLanguage === 'nl' ? 'Persoonlijkheid' : 'Personality'}:</strong><br>${characterData.personality_traits || 'N/A'}</p>
+                <div class="intro-section">
+                    <h2>🎭 ${this.currentLanguage === 'nl' ? 'Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.' : 'Using the latest AI technology, we have created a Unique Character based on your answers.'}</h2>
+                    <p>${this.currentLanguage === 'nl' ? 'Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid. Ontdek wie je bent achter het masker...' : 'Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality. Discover who you are behind the mask...'}</p>
                 </div>
-                <div class="world-section">
-                    <h3>📖 ${this.currentLanguage === 'nl' ? 'AI Samenvatting' : 'AI Summary'}</h3>
-                    <p>${characterData.ai_summary || 'N/A'}</p>
+                
+                <div class="character-details">
+                    <h3>${this.currentLanguage === 'nl' ? 'Karakter Details' : 'Character Details'}</h3>
+                    <p><strong>🎭 ${this.currentLanguage === 'nl' ? 'Jouw nieuwe Naam is' : 'Your new Name is'}:</strong> ${nameOnly}</p>
+                    <p><strong>🎨 ${this.currentLanguage === 'nl' ? 'Stijl' : 'Style'}:</strong> ${this.formatCharacterType(characterData.character_type)}</p>
+                    <div class="personality-section">
+                        <p><strong>✨ ${this.currentLanguage === 'nl' ? 'Jouw nieuwe en unieke Persoonlijkheid' : 'Your new and unique Personality'}:</strong></p>
+                        ${personalityBars}
+                    </div>
                 </div>
+                
+                <div class="summary-section">
+                    <h3>${this.currentLanguage === 'nl' ? 'Een perfecte samenvatting van wie je bent:' : 'A perfect summary of who you are:'}</h3>
+                    <h4>📖 ${this.currentLanguage === 'nl' ? 'Jouw Verhaal in Vogelvlucht' : 'Your Story at a Glance'}</h4>
+                    <p>${sections.character || characterData.ai_summary}</p>
+                    
+                    ${sections.environment ? `
+                    <h4>${this.currentLanguage === 'nl' ? 'En waar je zoal uithangt' : 'And where you hang out'}</h4>
+                    <p>${sections.environment}</p>
+                    ` : ''}
+                </div>
+                
                 ${characterData.story_prompt_level1 ? `
                 <div class="story-section">
-                    <h3>🎬 ${this.currentLanguage === 'nl' ? 'Verhaal Prompts' : 'Story Prompts'}</h3>
-                    <p><strong>${this.currentLanguage === 'nl' ? 'Video 1 (Subtiel)' : 'Video 1 (Subtle)'}:</strong><br>${characterData.story_prompt_level1}</p>
-                    <p><strong>${this.currentLanguage === 'nl' ? 'Video 2 (Meer hints)' : 'Video 2 (More clues)'}:</strong><br>${characterData.story_prompt_level2}</p>
-                    <p><strong>${this.currentLanguage === 'nl' ? 'Video 3 (Onthulling)' : 'Video 3 (Reveal)'}:</strong><br>${characterData.story_prompt_level3}</p>
+                    <h3>🎬 ${this.currentLanguage === 'nl' ? 'Jouw fantastische Verhaallijnen' : 'Your Fantastic Storylines'}</h3>
+                    <div class="story-prompt">
+                        <strong>${this.currentLanguage === 'nl' ? 'Video 1 (Subtiel)' : 'Video 1 (Subtle)'}:</strong>
+                        <p>${characterData.story_prompt_level1}</p>
+                    </div>
+                    <div class="story-prompt">
+                        <strong>${this.currentLanguage === 'nl' ? 'Video 2 (Meer hints)' : 'Video 2 (More clues)'}:</strong>
+                        <p>${characterData.story_prompt_level2}</p>
+                    </div>
+                    <div class="story-prompt">
+                        <strong>${this.currentLanguage === 'nl' ? 'Video 3 (Onthulling)' : 'Video 3 (Reveal)'}:</strong>
+                        <p>${characterData.story_prompt_level3}</p>
+                    </div>
                 </div>
                 ` : ''}
             </div>
@@ -1591,6 +1627,79 @@ class MaskedEmployeeForm {
         
         previewContent.innerHTML = html;
         previewContent.style.display = 'block';
+    }
+    
+    createPersonalityBars(personalityText) {
+        // Parse personality traits like "Adventurous: 0\nPractical: 0\nPlayful: 2\nWise: 0\nCreative: 6"
+        const traits = {
+            'Adventurous': 0,
+            'Practical': 0,
+            'Playful': 0,
+            'Wise': 0,
+            'Creative': 0
+        };
+        
+        // Extract values from text
+        const lines = personalityText.split('\n');
+        lines.forEach(line => {
+            const match = line.match(/(Adventurous|Practical|Playful|Wise|Creative):\s*(\d+)/i);
+            if (match) {
+                traits[match[1]] = parseInt(match[2]);
+            }
+        });
+        
+        // Create HTML for bars
+        let html = '<div class="personality-bars">';
+        for (const [trait, value] of Object.entries(traits)) {
+            const percentage = (value / 6) * 100;
+            html += `
+                <div class="personality-bar-container">
+                    <span class="trait-label">${trait}:</span>
+                    <div class="personality-bar">
+                        <div class="personality-fill" style="width: ${percentage}%"></div>
+                    </div>
+                    <span class="trait-value">${value}</span>
+                </div>
+            `;
+        }
+        html += '</div>';
+        return html;
+    }
+    
+    parseAISummary(summary) {
+        // Try to extract KARAKTER and OMGEVING sections
+        const sections = {
+            character: '',
+            environment: ''
+        };
+        
+        // Look for "1. KARAKTER" and "2. OMGEVING" sections
+        const karakterMatch = summary.match(/1\.\s*KARAKTER[^:]*:([\s\S]*?)(?=2\.\s*OMGEVING|$)/i);
+        const omgevingMatch = summary.match(/2\.\s*OMGEVING[^:]*:([\s\S]*?)$/i);
+        
+        if (karakterMatch) {
+            sections.character = karakterMatch[1].trim();
+        } else {
+            // If no sections found, use full summary
+            sections.character = summary;
+        }
+        
+        if (omgevingMatch) {
+            sections.environment = omgevingMatch[1].trim();
+        }
+        
+        return sections;
+    }
+    
+    formatCharacterType(type) {
+        const typeMap = {
+            'animals': 'Animals',
+            'fruits_vegetables': 'Fruits & Vegetables',
+            'fantasy_heroes': 'Fantasy Heroes',
+            'pixar_disney': 'Pixar Disney',
+            'fairy_tales': 'Fairy Tales'
+        };
+        return typeMap[type] || type;
     }
 
     formatPreviewDisplay(characterDesc, worldDesc) {
