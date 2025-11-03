@@ -40,13 +40,14 @@ class LeonardoAPI {
         $defaults = [
             'prompt' => $prompt,
             'negative_prompt' => $negativePrompt,
-            'modelId' => 'b24e16ff-06e3-43eb-8d33-4416c2d75876', // Leonardo Phoenix (latest model)
+            'modelId' => 'de7d3faf-762f-48e0-b3b7-9d0ac3a3fcf3', // Leonardo Phoenix 1.0
             'width' => 1472, // 16:9 ratio (1472x832 is supported)
             'height' => 832,
             'num_images' => 1,
-            'guidance_scale' => 7,
-            'num_inference_steps' => 30,
-            'presetStyle' => 'CINEMATIC'
+            'contrast' => 3.5, // Medium contrast (required for Phoenix)
+            'alchemy' => true, // Quality mode (required for Phoenix)
+            'styleUUID' => 'a5632c7c-ddbb-4e2f-ba34-8456ab3ac436', // Cinematic style
+            'enhancePrompt' => false // We already have detailed prompts from Claude
         ];
         
         $data = array_merge($defaults, $options);
