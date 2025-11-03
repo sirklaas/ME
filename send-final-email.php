@@ -60,6 +60,8 @@ if ($language === 'nl') {
             h3 { color: #8A2BE2; }
             .emoji { font-size: 2em; }
             .cta-box { background: #d4edda; padding: 20px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 5px; }
+            .download-btn { display: inline-block; background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3); }
+            .download-btn:hover { background: linear-gradient(135deg, #9932CC, #8A2BE2); }
         </style>
     </head>
     <body>
@@ -80,6 +82,9 @@ if ($language === 'nl') {
                 <div class='image-container'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
                     <img src='" . htmlspecialchars($imageUrl) . "' alt='Jouw Karakter' class='character-image' />
+                    <div style='margin-top: 20px;'>
+                        <a href='" . htmlspecialchars($imageUrl) . "' download='" . htmlspecialchars($characterName) . ".png' class='download-btn'>📥 Download Afbeelding</a>
+                    </div>
                 </div>
                 
                 <div class='section'>
@@ -139,6 +144,8 @@ if ($language === 'nl') {
             h3 { color: #8A2BE2; }
             .emoji { font-size: 2em; }
             .cta-box { background: #d4edda; padding: 20px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 5px; }
+            .download-btn { display: inline-block; background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3); }
+            .download-btn:hover { background: linear-gradient(135deg, #9932CC, #8A2BE2); }
         </style>
     </head>
     <body>
@@ -159,6 +166,9 @@ if ($language === 'nl') {
                 <div class='image-container'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
                     <img src='" . htmlspecialchars($imageUrl) . "' alt='Your Character' class='character-image' />
+                    <div style='margin-top: 20px;'>
+                        <a href='" . htmlspecialchars($imageUrl) . "' download='" . htmlspecialchars($characterName) . ".png' class='download-btn'>📥 Download Image</a>
+                    </div>
                 </div>
                 
                 <div class='section'>
