@@ -77,13 +77,13 @@ class MaskedEmployeeForm {
                 aiAnalyzing: 'AI analyseert je antwoorden...',
                 // Processing Page
                 processingTitle: 'Je afbeelding wordt gegenereerd!',
-                processingThankYou: 'Bedankt',
-                processingDescription: 'Je antwoorden zijn opgeslagen en we genereren nu je unieke karakter afbeelding.',
+                processingThankYou: 'Bedankt [naam]!',
+                processingDescription: 'Je antwoorden zijn opgeslagen en AI genereert nu je unieke karakter afbeelding.',
                 processingWhatNow: '🎭 Wat gebeurt er nu?',
                 processingStep1: '✅ Je antwoorden zijn opgeslagen',
-                processingStep2: '🎨 AI genereert je karakter afbeelding',
-                processingStep3: '📧 Je ontvangt een kopie per email',
-                processingStep4: '🔒 Onthoud: absolute geheimhouding blijft van kracht!',
+                processingStep2: '📧 Je ontvangt een email met je karakter omschrijving',
+                processingStep3: '🎨 AI werkt hard aan je karakter afbeelding',
+                processingStep4: '🔒 Onthoud: absolute geheimhouding blijft nog steeds van kracht!',
                 restartButton: 'Terug naar start',
                 // Loading
                 loadingText: 'Antwoorden worden opgeslagen...'
@@ -143,13 +143,13 @@ class MaskedEmployeeForm {
                 aiAnalyzing: 'AI is analyzing your answers...',
                 // Processing Page
                 processingTitle: 'Your image is being generated!',
-                processingThankYou: 'Thank you',
-                processingDescription: 'Your answers have been saved and we are now generating your unique character image.',
+                processingThankYou: 'Thank you [name]!',
+                processingDescription: 'Your answers have been saved and AI is now generating your unique character image.',
                 processingWhatNow: '🎭 What happens now?',
                 processingStep1: '✅ Your answers have been saved',
-                processingStep2: '🎨 AI generates your character image',
-                processingStep3: '📧 You will receive a copy by email',
-                processingStep4: '🔒 Remember: absolute confidentiality remains in effect!',
+                processingStep2: '📧 You will receive an email with your character description',
+                processingStep3: '🎨 AI is working hard on your character image',
+                processingStep4: '🔒 Remember: absolute confidentiality still remains in effect!',
                 restartButton: 'Back to start',
                 // Loading
                 loadingText: 'Saving answers...'
@@ -2059,12 +2059,7 @@ class MaskedEmployeeForm {
             this.goToPreviousChapter();
         });
 
-        // Restart button
-        document.getElementById('restartButton').addEventListener('click', () => {
-            this.restart();
-        });
-
-        // Player name input validation (on language page)
+        // Language toggle input validation (on language page)
         const playerNameLangInput = document.getElementById('playerNameLang');
         if (playerNameLangInput) {
             playerNameLangInput.addEventListener('input', (e) => {

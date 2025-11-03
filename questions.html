@@ -110,8 +110,11 @@
         <div class="step-indicator" id="stepIndicator" style="display: none;">
             <span id="currentStep">1</span> <span id="stepOf">van</span> <span id="totalSteps">8</span>
         </div>
-        <div class="progress-bar" id="progressBar" style="display: none;">
-            <div class="progress-fill" id="progressFill"></div>
+        <div class="progress-container" style="display: none;" id="progressContainer">
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-percentage" id="progressPercentage">0%</div>
         </div>
 
         <div class="content">
@@ -221,8 +224,8 @@
                     <div class="success-icon">🎨</div>
                     <h2 id="processingTitle">Je afbeelding wordt gegenereerd!</h2>
                     <p id="processingMessage">
-                        <span id="processingThankYou">Bedankt</span> <span id="processingPlayerName"></span>!<br>
-                        <span id="processingDescription">Je antwoorden zijn opgeslagen en we genereren nu je unieke karakter afbeelding.</span>
+                        <span id="processingThankYou">Bedankt [naam]!</span><br><br>
+                        <span id="processingDescription">Je antwoorden zijn opgeslagen en AI genereert nu je unieke karakter afbeelding.</span>
                     </p>
                     
                     <!-- Generated Image Container -->
@@ -234,15 +237,11 @@
                         <h3 style="color: #155724; margin-bottom: 15px;" id="processingWhatNow">🎭 Wat gebeurt er nu?</h3>
                         <ul id="processingSteps">
                             <li id="processingStep1">✅ Je antwoorden zijn opgeslagen</li>
-                            <li id="processingStep2">🎨 AI genereert je karakter afbeelding</li>
-                            <li id="processingStep3">📧 Je ontvangt een kopie per email</li>
-                            <li id="processingStep4">🔒 Onthoud: absolute geheimhouding blijft van kracht!</li>
+                            <li id="processingStep2">📧 Je ontvangt een email met je karakter omschrijving</li>
+                            <li id="processingStep3">🎨 AI werkt hard aan je karakter afbeelding</li>
+                            <li id="processingStep4">🔒 Onthoud: absolute geheimhouding blijft nog steeds van kracht!</li>
                         </ul>
                     </div>
-
-                    <button class="btn btn-primary" id="restartButton">
-                        <span id="restartButtonText">Terug naar start</span>
-                    </button>
                 </div>
             </div>
         </div>
