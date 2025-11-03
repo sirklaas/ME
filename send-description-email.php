@@ -62,22 +62,21 @@ if ($language === 'nl') {
         <div class='container'>
             <div class='header'>
                 <div class='emoji'>🎭</div>
-                <h1>" . htmlspecialchars($characterName) . "</h1>
+                <h1>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</h1>
             </div>
             <div class='content'>
                 <h2>Hallo " . htmlspecialchars($playerName) . "!</h2>
                 
-                <p><strong>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</strong></p>
-                
                 <p>Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid. Ontdek wie je bent achter het masker...</p>
                 
                 <div class='section'>
-                    <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
+                    <h3>🎭 Jouw Karakter</h3>
+                    <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
                 </div>
                 
                 <div class='section'>
-                    <h3>🌍 Jouw Wereld</h3>
+                    <h3>🌍 En waar je zoal uithangt</h3>
                     <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 
@@ -127,22 +126,21 @@ if ($language === 'nl') {
         <div class='container'>
             <div class='header'>
                 <div class='emoji'>🎭</div>
-                <h1>" . htmlspecialchars($characterName) . "</h1>
+                <h1>Using the latest AI technology, we have created a Unique Character based on your answers.</h1>
             </div>
             <div class='content'>
                 <h2>Hello " . htmlspecialchars($playerName) . "!</h2>
                 
-                <p><strong>Using the latest AI technology, we have created a Unique Character based on your answers.</strong></p>
-                
                 <p>Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality. Discover who you are behind the mask...</p>
                 
                 <div class='section'>
-                    <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
+                    <h3>🎭 Your Character</h3>
+                    <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
                 </div>
                 
                 <div class='section'>
-                    <h3>🌍 Your World</h3>
+                    <h3>🌍 And where you hang out</h3>
                     <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 

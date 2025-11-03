@@ -68,12 +68,10 @@ if ($language === 'nl') {
         <div class='container'>
             <div class='header'>
                 <div class='emoji'>🎨</div>
-                <h1>" . htmlspecialchars($characterName) . "</h1>
+                <h1>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</h1>
             </div>
             <div class='content'>
                 <h2>Hallo " . htmlspecialchars($playerName) . "!</h2>
-                
-                <p><strong>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</strong></p>
                 
                 <p>🎉 <strong>Geweldig nieuws!</strong> Je unieke karakter afbeelding is gegenereerd!</p>
                 
@@ -83,17 +81,20 @@ if ($language === 'nl') {
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
                     <img src='" . htmlspecialchars($imageUrl) . "' alt='Jouw Karakter' class='character-image' />
                     <div style='margin-top: 20px;'>
-                        <a href='" . htmlspecialchars($imageUrl) . "' download='" . htmlspecialchars($characterName) . ".png' class='download-btn'>📥 Download Afbeelding</a>
+                        <form method='get' action='" . htmlspecialchars($imageUrl) . "' target='_blank'>
+                            <button type='submit' class='download-btn' style='border: none; cursor: pointer;'>📥 Download Afbeelding</button>
+                        </form>
                     </div>
                 </div>
                 
                 <div class='section'>
-                    <h3>🎭 Karakter Beschrijving</h3>
+                    <h3>🎭 Jouw Karakter</h3>
+                    <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
                 </div>
                 
                 <div class='section'>
-                    <h3>🌍 Jouw Wereld</h3>
+                    <h3>🌍 En waar je zoal uithangt</h3>
                     <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 
@@ -152,12 +153,10 @@ if ($language === 'nl') {
         <div class='container'>
             <div class='header'>
                 <div class='emoji'>🎨</div>
-                <h1>" . htmlspecialchars($characterName) . "</h1>
+                <h1>Using the latest AI technology, we have created a Unique Character based on your answers.</h1>
             </div>
             <div class='content'>
                 <h2>Hello " . htmlspecialchars($playerName) . "!</h2>
-                
-                <p><strong>Using the latest AI technology, we have created a Unique Character based on your answers.</strong></p>
                 
                 <p>🎉 <strong>Great news!</strong> Your unique character image has been generated!</p>
                 
@@ -167,17 +166,20 @@ if ($language === 'nl') {
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
                     <img src='" . htmlspecialchars($imageUrl) . "' alt='Your Character' class='character-image' />
                     <div style='margin-top: 20px;'>
-                        <a href='" . htmlspecialchars($imageUrl) . "' download='" . htmlspecialchars($characterName) . ".png' class='download-btn'>📥 Download Image</a>
+                        <form method='get' action='" . htmlspecialchars($imageUrl) . "' target='_blank'>
+                            <button type='submit' class='download-btn' style='border: none; cursor: pointer;'>📥 Download Image</button>
+                        </form>
                     </div>
                 </div>
                 
                 <div class='section'>
-                    <h3>🎭 Character Description</h3>
+                    <h3>🎭 Your Character</h3>
+                    <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
                 </div>
                 
                 <div class='section'>
-                    <h3>🌍 Your World</h3>
+                    <h3>🌍 And where you hang out</h3>
                     <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 
