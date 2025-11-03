@@ -1283,7 +1283,12 @@ class MaskedEmployeeForm {
     showProcessingPageWithImage() {
         document.getElementById('summaryPage').style.display = 'none';
         document.getElementById('processingPage').style.display = 'block';
-        document.getElementById('processingPlayerName').textContent = this.playerName;
+        
+        // Update thank you message with player name
+        const thankYouElement = document.getElementById('processingThankYou');
+        if (thankYouElement) {
+            thankYouElement.textContent = `Bedankt ${this.playerName}!`;
+        }
         
         // Add image display if available
         const imageContainer = document.getElementById('generatedImageContainer');
@@ -1452,7 +1457,12 @@ class MaskedEmployeeForm {
     showProcessingPage() {
         document.getElementById('summaryPage').style.display = 'none';
         document.getElementById('processingPage').style.display = 'block';
-        document.getElementById('processingPlayerName').textContent = this.playerName;
+        
+        // Update thank you message with player name
+        const thankYouElement = document.getElementById('processingThankYou');
+        if (thankYouElement) {
+            thankYouElement.textContent = `Bedankt ${this.playerName}!`;
+        }
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2880,6 +2890,7 @@ class MaskedEmployeeForm {
             console.log('🤖 Calling generate-character.php...');
             console.log('📋 Character Type:', this.characterType);
             console.log('🏢 Department:', this.department);
+            console.log('🌐 Current URL:', window.location.href);
             
             const response = await fetch('generate-character.php', {
                 method: 'POST',
@@ -2895,6 +2906,13 @@ class MaskedEmployeeForm {
                     regenerate: submissionData.regenerate || false, // Pass regenerate flag
                     usedCharacters: submissionData.usedCharacters || [] // Pass used characters list
                 })
+            }).catch(fetchError => {
+                console.error('🚨 FETCH ERROR:', fetchError);
+                console.error('🚨 This usually means:');
+                console.error('   1. PHP file not found (check file path)');
+                console.error('   2. No local PHP server running (need: php -S localhost:8000)');
+                console.error('   3. CORS issue (check server configuration)');
+                throw fetchError;
             });
 
             if (!response.ok) {
