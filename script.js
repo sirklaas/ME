@@ -2288,7 +2288,6 @@ class MaskedEmployeeForm {
         safeUpdate('processingStep2', t.processingStep2);
         safeUpdate('processingStep3', t.processingStep3);
         safeUpdate('processingStep4', t.processingStep4);
-        safeUpdate('restartButtonText', t.restartButton);
         
         // Loading overlay
         safeUpdate('loadingText', t.loadingText);
