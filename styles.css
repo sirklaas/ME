@@ -1003,21 +1003,73 @@ text-align: left;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.agreement-checkbox label {
+/* Glitch Checkbox Effect */
+.glitch-checkbox {
     display: flex;
     align-items: flex-start;
     cursor: pointer;
+    position: relative;
+}
+
+.glitch-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.glitch-box {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    border: 2px solid #fff;
+    border-radius: 4px;
+    margin-right: 15px;
+    margin-top: 2px;
+    flex-shrink: 0;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.glitch-input:checked ~ .glitch-box {
+    background: #fff;
+    animation: glitch 0.3s ease;
+}
+
+.glitch-input:checked ~ .glitch-box::after {
+    content: '';
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 6px;
+    height: 12px;
+    border: solid #dc3545;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+@keyframes glitch {
+    0%, 100% {
+        transform: translate(0);
+    }
+    20% {
+        transform: translate(-2px, 2px);
+    }
+    40% {
+        transform: translate(-2px, -2px);
+    }
+    60% {
+        transform: translate(2px, 2px);
+    }
+    80% {
+        transform: translate(2px, -2px);
+    }
+}
+
+.glitch-label {
     font-size: 1.1rem;
     font-weight: 600;
     color: #fff;
-}
-
-.agreement-checkbox input[type="checkbox"] {
-    margin-right: 15px;
-    margin-top: 4px;
-    transform: scale(1.5);
-    accent-color: #fff;
-    cursor: pointer;
+    line-height: 1.4;
 }
 
 .modal-footer {
