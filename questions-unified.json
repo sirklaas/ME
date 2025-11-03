@@ -792,13 +792,13 @@
             "en": "Film 1 - The Mystery Behind the Mask: Time for your most cryptic video! Describe 3 scenes that spark curiosity but still keep your secret. From an intriguing beginning, through a mysterious middle, to an exciting finale. Which secret side of yourself do you subtly reveal?"
           },
           "placeholder": {
-            "nl": "Scene 1 - De Opening: Waar ben je? Wat zie we? Wat voel je?\nScene 2 - Het Mysterie Diept: Wat gebeurt er? Welke hint geef je weg?\nScene 3 - De Cliffhanger: Hoe eindigt het? Wat blijft onbeantwoord?",
-            "en": "Scene 1 - The Opening: Where are you? What do we see? What do you feel?\nScene 2 - The Mystery Deepens: What happens? Which hint do you give away?\nScene 3 - The Cliffhanger: How does it end? What remains unanswered?"
+            "nl": "Scene 1 - De Opening: Waar ben je? Wat zie we? Welke sfeer creëer je zonder te veel te onthullen?\nScene 2 - Het Mysterie Verdiept Zich: Wat gebeurt er? Welke subtiele hint geef je weg over wie je bent?\nScene 3 - De Cliffhanger: Hoe eindigt het? Wat laat je achter dat vragen oproept?",
+            "en": "Scene 1 - The Opening: Where are you? What do we see? What atmosphere do you create without revealing too much?\nScene 2 - The Mystery Deepens: What happens? What subtle hint do you give away about who you are?\nScene 3 - The Cliffhanger: How does it end? What do you leave behind that raises questions?"
           },
           "scenes": {
             "nl": [
               "Scene 1 - De Opening",
-              "Scene 2 - Het Mysterie Diept",
+              "Scene 2 - Het Mysterie Verdiept Zich",
               "Scene 3 - De Cliffhanger"
             ],
             "en": [
@@ -816,19 +816,19 @@
             "en": "Film 2 - The Veil Shifts: Describe the middle video, with a few more hints that you would like to make in 3 scenes. A beginning / a middle / and an exciting end. This should tell a secret side of you and may reveal a bit more."
           },
           "placeholder": {
-            "nl": "Scene 1 - De Opening: Hoe begin je? Wat laat je zien?\nScene 2 - Het Mysterie Diept: Welke hints geef je nu prijs?\nScene 3 - De Cliffhanger: Hoe bouw je de spanning op?",
-            "en": "Scene 1 - The Opening: How do you start? What do you show?\nScene 2 - The Mystery Deepens: Which hints do you reveal now?\nScene 3 - The Cliffhanger: How do you build the tension?"
+            "nl": "Scene 4 - Eerste Onthulling: Welke kant van jezelf laat je nu zien? Wat wordt iets duidelijker?\nScene 5 - De Puzzelstukjes: Welke details voeg je toe? Wat maakt nieuwsgierig naar meer?\nScene 6 - De Spanning Stijgt: Hoe bouw je de spanning verder op? Wat suggereert de grote onthulling?",
+            "en": "Scene 4 - First Revelation: Which side of yourself do you show now? What becomes a bit clearer?\nScene 5 - The Puzzle Pieces: What details do you add? What makes people curious for more?\nScene 6 - The Tension Rises: How do you build the tension further? What suggests the big reveal?"
           },
           "scenes": {
             "nl": [
-              "Scene 1 - De Opening",
-              "Scene 2 - Het Mysterie Diept",
-              "Scene 3 - De Cliffhanger"
+              "Scene 4 - Eerste Onthulling",
+              "Scene 5 - De Puzzelstukjes",
+              "Scene 6 - De Spanning Stijgt"
             ],
             "en": [
-              "Scene 1 - The Opening",
-              "Scene 2 - The Mystery Deepens",
-              "Scene 3 - The Cliffhanger"
+              "Scene 4 - First Revelation",
+              "Scene 5 - The Puzzle Pieces",
+              "Scene 6 - The Tension Rises"
             ]
           }
         },
@@ -840,19 +840,19 @@
             "en": "Film 3 - The Mask Falls: Describe the final video you would like to make in 3 scenes. A beginning / a middle / and an exciting end. This should tell a secret side of you and may reveal the final piece."
           },
           "placeholder": {
-            "nl": "Scene 1 - De Opening: Waar begint je onthulling?\nScene 2 - Het Mysterie Diept: Wat wordt nu duidelijk?\nScene 3 - De Cliffhanger: Hoe sluit je jouw verhaal af?",
-            "en": "Scene 1 - The Opening: Where does your revelation begin?\nScene 2 - The Mystery Deepens: What becomes clear now?\nScene 3 - The Cliffhanger: How do you close your story?"
+            "nl": "Scene 7 - Het Masker Scheurt een beetje: Hoe begin je jouw onthulling? Wat wordt nu echt zichtbaar?\nScene 8 - De Waarheid Komt Dichterbij: Welke laatste details onthul je? Wat maakt jouw verhaal compleet?\nScene 9 - De Grote Onthulling: Hoe sluit je af? Wat is de verrassende of krachtige finale van jouw verhaal?",
+            "en": "Scene 7 - The Mask Tears a Little: How do you begin your revelation? What becomes truly visible now?\nScene 8 - The Truth Draws Closer: What final details do you reveal? What makes your story complete?\nScene 9 - The Big Reveal: How do you conclude? What is the surprising or powerful finale of your story?"
           },
           "scenes": {
             "nl": [
-              "Scene 1 - De Opening",
-              "Scene 2 - Het Mysterie Diept",
-              "Scene 3 - De Cliffhanger"
+              "Scene 7 - Het Masker Scheurt een beetje",
+              "Scene 8 - De Waarheid Komt Dichterbij",
+              "Scene 9 - De Grote Onthulling"
             ],
             "en": [
-              "Scene 1 - The Opening",
-              "Scene 2 - The Mystery Deepens",
-              "Scene 3 - The Cliffhanger"
+              "Scene 7 - The Mask Tears a Little",
+              "Scene 8 - The Truth Draws Closer",
+              "Scene 9 - The Big Reveal"
             ]
           }
         }
