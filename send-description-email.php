@@ -74,14 +74,9 @@ if ($language === 'nl') {
                 <p>Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid. Ontdek wie je bent achter het masker...</p>
                 
                 <div class='section'>
-                    <h3>🎭 Jouw Karakter</h3>
+                    <h3>Ja dit ben je eigenlijk heel diep van binnen:</h3>
                     <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
-                </div>
-                
-                <div class='section'>
-                    <h3>🌍 En waar je zoal uithangt</h3>
-                    <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 
                 <p style='background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;'>
@@ -138,14 +133,9 @@ if ($language === 'nl') {
                 <p>Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality. Discover who you are behind the mask...</p>
                 
                 <div class='section'>
-                    <h3>🎭 Your Character</h3>
+                    <h3>Yes, this is who you really are deep down inside:</h3>
                     <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
-                </div>
-                
-                <div class='section'>
-                    <h3>🌍 And where you hang out</h3>
-                    <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 
                 <p style='background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;'>
