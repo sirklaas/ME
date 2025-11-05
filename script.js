@@ -1600,6 +1600,7 @@ class MaskedEmployeeForm {
         const nameOnly = fullName.split(' genaamd ').pop() || fullName;
         
         // Parse personality traits into bars
+        console.log('📊 Personality traits data:', characterData.personality_traits);
         const personalityBars = this.createPersonalityBars(characterData.personality_traits || '');
         
         // Extract sections from AI summary
@@ -1608,7 +1609,6 @@ class MaskedEmployeeForm {
         const html = `
             <div class="character-preview">
                 <div class="intro-section">
-                    <h2>🎭 ${this.currentLanguage === 'nl' ? 'Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.' : 'Using the latest AI technology, we have created a Unique Character based on your answers.'}</h2>
                     <p>${this.currentLanguage === 'nl' ? 'Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid. Ontdek wie je bent achter het masker...' : 'Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality. Discover who you are behind the mask...'}</p>
                 </div>
                 
