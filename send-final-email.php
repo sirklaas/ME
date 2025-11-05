@@ -2,7 +2,11 @@
 /**
  * Send final email with generated character image
  * Sent after image generation is complete
+ * Now using PHPMailer with SMTP for reliable delivery
  */
+
+// Load SMTP email configuration
+require_once __DIR__ . '/email-smtp-config.php';
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -248,27 +252,25 @@ $adminMessage = "
 </html>
 ";
 
-// Email headers
-$headers = "MIME-Version: 1.0" . "\r\n";
-$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-$headers .= "From: The Masked Employee <noreply@pinkmilk.eu>" . "\r\n";
-
-// Send email to user
-$userEmailSent = mail($userEmail, $subject, $userMessage, $headers);
+// Send email to user using SMTP
+$userResult = sendEmailSMTP($userEmail, $subject, $userMessage);
+$userEmailSent = $userResult['success'];
 
 // Log user email attempt
 error_log("User final email to $userEmail: " . ($userEmailSent ? 'SUCCESS' : 'FAILED'));
+if (!$userEmailSent) {
+    error_log("Error details: " . $userResult['error']);
+}
 
-// Admin email
-$adminHeaders = "MIME-Version: 1.0" . "\r\n";
-$adminHeaders .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-$adminHeaders .= "From: Masked Employee <noreply@pinkmilk.eu>" . "\r\n";
-$adminHeaders .= "Reply-To: $userEmail" . "\r\n";
-
-$adminEmailSent = mail($adminEmail, $adminSubject, $adminMessage, $adminHeaders);
+// Send admin email using SMTP
+$adminResult = sendEmailSMTP($adminEmail, $adminSubject, $adminMessage, 'maskedemployee@pinkmilk.eu', 'Masked Employee', $userEmail);
+$adminEmailSent = $adminResult['success'];
 
 // Log admin email attempt
 error_log("Admin final email to $adminEmail: " . ($adminEmailSent ? 'SUCCESS' : 'FAILED'));
+if (!$adminEmailSent) {
+    error_log("Error details: " . $adminResult['error']);
+}
 error_log("=== FINAL EMAIL REQUEST END ===");
 
 // Response
