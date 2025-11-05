@@ -360,7 +360,14 @@
 
             document.getElementById('lightboxImage').src = imageUrl;
             
-            const characterName = char.character_name || char.charactername || char.name || 'Unknown Character';
+            // Clean up character name (remove duplicates like "Leo\n\nLeo")
+            let characterName = char.character_name || char.charactername || char.name || 'Unknown Character';
+            const nameParts = characterName.split(/[\n\r]+/).map(n => n.trim()).filter(n => n);
+            if (nameParts.length > 1 && nameParts[0] === nameParts[nameParts.length - 1]) {
+                characterName = nameParts[0]; // Use first if duplicated
+            } else {
+                characterName = nameParts[0] || characterName; // Use first line
+            }
             document.getElementById('lightboxTitle').textContent = characterName;
             
             // Email with copy button
@@ -372,8 +379,20 @@
                 : '<span style="color: #999;">📧 No email provided</span>';
             document.getElementById('lightboxEmail').innerHTML = emailHtml;
             
-            // Use ai_summary as the main description source
-            const description = char.ai_summary || char.character_description || char.characterdescription || char.description || 'No description available';
+            // Use ai_summary and extract only FIRST character
+            let description = char.ai_summary || char.character_description || char.characterdescription || char.description || 'No description available';
+            
+            // Extract only first character from ai_summary (may contain multiple characters)
+            const characterPattern = /De\s+\w+\s+genaamd\s+\w+/g;
+            const matches = description.match(characterPattern);
+            if (matches && matches.length > 1) {
+                // Multiple characters found, extract only first one
+                const secondCharIndex = description.indexOf(matches[1]);
+                if (secondCharIndex > 0) {
+                    description = description.substring(0, secondCharIndex).trim();
+                }
+            }
+            
             console.log('📝 Description length:', description.length);
             document.getElementById('lightboxDescription').textContent = description;
 
