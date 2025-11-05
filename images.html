@@ -283,11 +283,11 @@
             try {
                 // Fetch all records with generated images
                 const records = await pb.collection('MEQuestions').getFullList({
-                    filter: 'character_image != ""',
                     sort: '-created',
                 });
 
-                characters = records;
+                // Filter records that have images
+                characters = records.filter(record => record.character_image && record.character_image !== '');
 
                 // Update stats
                 document.getElementById('characterCount').textContent = 
