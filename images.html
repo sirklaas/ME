@@ -281,17 +281,28 @@
         // Load all characters
         async function loadCharacters() {
             try {
-                // Fetch all records with generated images
+                // Fetch all records
                 const records = await pb.collection('MEQuestions').getFullList({
                     sort: '-created',
                 });
 
-                // Filter records that have images
-                characters = records.filter(record => record.character_image && record.character_image !== '');
+                console.log('📊 Total records:', records.length);
+                console.log('📋 First record:', records[0]);
+
+                // Filter records that have images - check multiple possible field names
+                characters = records.filter(record => {
+                    const hasImage = record.character_image || record.generated_image || record.image_url;
+                    if (hasImage) {
+                        console.log('✅ Found character with image:', record);
+                    }
+                    return hasImage;
+                });
+
+                console.log('🎭 Characters with images:', characters.length);
 
                 // Update stats
                 document.getElementById('characterCount').textContent = 
-                    `📊 ${characters.length} Character${characters.length !== 1 ? 's' : ''} Generated`;
+                    `📊 ${characters.length} Character${characters.length !== 1 ? 's' : ''} Generated (${records.length} total records)`;
 
                 // Display gallery
                 displayGallery();
@@ -313,11 +324,13 @@
             }
 
             gallery.innerHTML = characters.map((char, index) => {
-                const imageUrl = char.character_image 
-                    ? `https://pinkmilk.pockethost.io/api/files/${char.collectionId}/${char.id}/${char.character_image}`
+                // Check multiple possible image field names
+                const imageField = char.character_image || char.generated_image || char.image_url || '';
+                const imageUrl = imageField 
+                    ? `https://pinkmilk.pockethost.io/api/files/${char.collectionId}/${char.id}/${imageField}`
                     : '';
 
-                const characterName = char.character_name || 'Unknown Character';
+                const characterName = char.character_name || char.charactername || char.name || 'Unknown Character';
 
                 return `
                     <div class="character-card" onclick="openLightbox(${index})">
@@ -334,24 +347,28 @@
             const char = characters[index];
             const lightbox = document.getElementById('lightbox');
 
-            const imageUrl = char.character_image 
-                ? `https://pinkmilk.pockethost.io/api/files/${char.collectionId}/${char.id}/${char.character_image}`
+            // Check multiple possible image field names
+            const imageField = char.character_image || char.generated_image || char.image_url || '';
+            const imageUrl = imageField 
+                ? `https://pinkmilk.pockethost.io/api/files/${char.collectionId}/${char.id}/${imageField}`
                 : '';
 
             document.getElementById('lightboxImage').src = imageUrl;
-            document.getElementById('lightboxTitle').textContent = char.character_name || 'Unknown Character';
+            
+            const characterName = char.character_name || char.charactername || char.name || 'Unknown Character';
+            document.getElementById('lightboxTitle').textContent = characterName;
             
             // Email with copy button
-            const emailHtml = char.email 
+            const emailHtml = char.email || char.playeremail
                 ? `
-                    <span>📧 ${char.email}</span>
-                    <button class="email-copy-btn" onclick="copyEmail('${char.email}')">Copy</button>
+                    <span>📧 ${char.email || char.playeremail}</span>
+                    <button class="email-copy-btn" onclick="copyEmail('${char.email || char.playeremail}')">Copy</button>
                   `
                 : '<span style="color: #999;">📧 No email provided</span>';
             document.getElementById('lightboxEmail').innerHTML = emailHtml;
             
-            document.getElementById('lightboxDescription').textContent = 
-                char.character_description || 'No description available';
+            const description = char.character_description || char.characterdescription || char.description || 'No description available';
+            document.getElementById('lightboxDescription').textContent = description;
 
             lightbox.classList.add('active');
             document.body.style.overflow = 'hidden';
