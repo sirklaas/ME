@@ -13,6 +13,39 @@ if (empty($imageUrl)) {
     die('No image URL provided');
 }
 
+// Parse description to extract only the FIRST character
+function extractFirstCharacter($aiSummary) {
+    // Split by "De [Type] genaamd" pattern to find character sections
+    $pattern = '/De\s+\w+\s+genaamd\s+\w+/';
+    $parts = preg_split($pattern, $aiSummary, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+    
+    // If we found multiple sections, take only the first character description
+    if (preg_match($pattern, $aiSummary, $matches, PREG_OFFSET_CAPTURE)) {
+        $firstMatch = $matches[0][1];
+        // Find the next character mention or end of string
+        $nextPattern = '/\n\n\nDe\s+\w+\s+genaamd/';
+        if (preg_match($nextPattern, $aiSummary, $nextMatches, PREG_OFFSET_CAPTURE, $firstMatch)) {
+            // Extract from start to next character
+            return substr($aiSummary, 0, $nextMatches[0][1]);
+        }
+    }
+    
+    // If no pattern found or single character, return as is
+    return $aiSummary;
+}
+
+$description = extractFirstCharacter(urldecode($description));
+
+// Clean up character name (remove duplicates like "Philip\nPhilip")
+$nameParts = preg_split('/[\n\r]+/', $characterName);
+$nameParts = array_map('trim', $nameParts);
+$nameParts = array_filter($nameParts);
+if (count($nameParts) > 1 && $nameParts[0] === end($nameParts)) {
+    $characterName = $nameParts[0]; // Use first if duplicated
+} else {
+    $characterName = $nameParts[0] ?? $characterName; // Use first line
+}
+
 // Create download URL
 $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . urlencode($characterName);
 ?>

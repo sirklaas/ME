@@ -1577,7 +1577,16 @@ class MaskedEmployeeForm {
         
         // Extract character name only (remove "De [Type] genaamd" part)
         const fullName = characterData.character_name || 'Your Character';
-        const nameOnly = fullName.split(' genaamd ').pop() || fullName;
+        let nameOnly = fullName.split(' genaamd ').pop() || fullName;
+        
+        // Remove duplicate names (e.g., "Philip\n\nPhilip" -> "Philip")
+        const nameParts = nameOnly.split(/[\n\r]+/).map(n => n.trim()).filter(n => n);
+        if (nameParts.length > 1 && nameParts[0] === nameParts[nameParts.length - 1]) {
+            nameOnly = nameParts[0]; // Use first occurrence if duplicated
+        } else {
+            nameOnly = nameParts[0] || nameOnly; // Use first line
+        }
+        nameOnly = nameOnly.trim();
         
         // Parse personality traits into bars
         console.log('📊 Personality traits data:', characterData.personality_traits);
