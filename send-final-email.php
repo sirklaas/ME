@@ -52,6 +52,9 @@ if ($language === 'nl') {
     // Create download URL
     $downloadUrl = 'https://www.pinkmilk.eu/ME/download-image.php?url=' . urlencode($imageUrl) . '&name=' . urlencode($characterName);
     
+    // Create reveal page URL
+    $revealUrl = 'https://www.pinkmilk.eu/ME/reveal-character.php?img=' . urlencode($imageUrl) . '&name=' . urlencode($characterName) . '&desc=' . urlencode($characterDesc);
+    
     $userMessage = "
     <html>
     <head>
@@ -96,20 +99,11 @@ if ($language === 'nl') {
                 <p>Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid.</p>
                 
                 <!-- Reveal Box -->
-                <div class='reveal-box' id='revealBox'>
+                <div class='reveal-box'>
                     <h2 style='color: #856404; margin-top: 0;'>🔒 GEHEIM</h2>
                     <h3 style='color: #856404;'>Klik hier als je heel zeker weet dat niemand op je scherm kan kijken !!</h3>
                     <p style='font-size: 0.95em; color: #856404;'>⚠️ Je staat op het punt je geheime karakter te onthullen</p>
-                    <button onclick='revealImage()' class='reveal-btn'>👁️ ONTHUL MIJN KARAKTER</button>
-                </div>
-                
-                <!-- Hidden Image Content -->
-                <div class='image-container hidden-content' id='imageContent'>
-                    <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
-                    <img src='" . htmlspecialchars($imageUrl) . "' alt='Jouw Karakter' class='character-image' />
-                    <div style='margin-top: 20px;'>
-                        <a href='" . htmlspecialchars($downloadUrl) . "' class='download-btn' style='text-decoration: none;'>📥 Download Afbeelding</a>
-                    </div>
+                    <a href='" . htmlspecialchars($revealUrl) . "' class='reveal-btn' style='text-decoration: none; display: inline-block;'>👁️ ONTHUL MIJN KARAKTER</a>
                 </div>
                 
                 <div class='section'>
@@ -152,6 +146,9 @@ if ($language === 'nl') {
     
     // Create download URL
     $downloadUrl = 'https://www.pinkmilk.eu/ME/download-image.php?url=' . urlencode($imageUrl) . '&name=' . urlencode($characterName);
+    
+    // Create reveal page URL
+    $revealUrl = 'https://www.pinkmilk.eu/ME/reveal-character.php?img=' . urlencode($imageUrl) . '&name=' . urlencode($characterName) . '&desc=' . urlencode($characterDesc);
     
     $userMessage = "
     <html>
@@ -197,20 +194,11 @@ if ($language === 'nl') {
                 <p>Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality.</p>
                 
                 <!-- Reveal Box -->
-                <div class='reveal-box' id='revealBox'>
+                <div class='reveal-box'>
                     <h2 style='color: #856404; margin-top: 0;'>🔒 SECRET</h2>
                     <h3 style='color: #856404;'>Click here only if you're absolutely sure no one can see your screen !!</h3>
                     <p style='font-size: 0.95em; color: #856404;'>⚠️ You're about to reveal your secret character</p>
-                    <button onclick='revealImage()' class='reveal-btn'>👁️ REVEAL MY CHARACTER</button>
-                </div>
-                
-                <!-- Hidden Image Content -->
-                <div class='image-container hidden-content' id='imageContent'>
-                    <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
-                    <img src='" . htmlspecialchars($imageUrl) . "' alt='Your Character' class='character-image' />
-                    <div style='margin-top: 20px;'>
-                        <a href='" . htmlspecialchars($downloadUrl) . "' class='download-btn' style='text-decoration: none;'>📥 Download Image</a>
-                    </div>
+                    <a href='" . htmlspecialchars($revealUrl) . "' class='reveal-btn' style='text-decoration: none; display: inline-block;'>👁️ REVEAL MY CHARACTER</a>
                 </div>
                 
                 <div class='section'>
