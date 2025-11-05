@@ -2794,9 +2794,18 @@ class MaskedEmployeeForm {
             }
 
             console.log('📤 Step 2: Saving to PocketBase...');
+            console.log('🔍 Player Record ID:', this.playerRecordId);
+            console.log('📦 Submission Data:', submissionData);
             // Save to PocketBase with character data
-            await this.saveToPocketBase(submissionData, characterData);
+            const savedRecord = await this.saveToPocketBase(submissionData, characterData);
             console.log('✅ Saved to PocketBase successfully');
+            console.log('📝 Record ID:', savedRecord?.id);
+            
+            // Make sure we have the record ID
+            if (!this.playerRecordId && savedRecord?.id) {
+                this.playerRecordId = savedRecord.id;
+                console.log('💾 Stored record ID:', this.playerRecordId);
+            }
             
             // Show completion page with character data
             this.showCompletionPage(characterData);

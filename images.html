@@ -291,7 +291,7 @@
 
                 // Filter records that have images - check multiple possible field names
                 characters = records.filter(record => {
-                    const hasImage = record.character_image || record.generated_image || record.image_url;
+                    const hasImage = record.image || record.character_image || record.generated_image || record.image_url;
                     if (hasImage) {
                         console.log('✅ Found character with image:', record);
                     }
@@ -325,7 +325,7 @@
 
             gallery.innerHTML = characters.map((char, index) => {
                 // Check multiple possible image field names
-                const imageField = char.character_image || char.generated_image || char.image_url || '';
+                const imageField = char.image || char.character_image || char.generated_image || char.image_url || '';
                 const imageUrl = imageField 
                     ? `https://pinkmilk.pockethost.io/api/files/${char.collectionId}/${char.id}/${imageField}`
                     : '';
