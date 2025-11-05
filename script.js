@@ -605,32 +605,12 @@ class MaskedEmployeeForm {
             const credentials = 'biknu8-pyrnaB-mytvyx';
             pb.authStore.save(credentials, { admin: true });
             
-            // UPDATE existing record instead of creating new one
-            if (this.playerRecordId) {
-                console.log('🔄 Updating existing record:', this.playerRecordId);
-                const record = await pb.collection('MEQuestions').update(this.playerRecordId, submissionData);
-                console.log('✅ Updated existing PocketBase record:', record.id);
-                return record;
-            } else {
-                // Fallback: try to find existing record by player name
-                console.log('🔍 No playerRecordId found, searching for existing record...');
-                const existingRecords = await pb.collection('MEQuestions').getFullList({
-                    filter: `nameplayer = "${data.playerName}" && gamename = "${this.gameName}"`
-                });
-                
-                if (existingRecords.length > 0) {
-                    console.log('✅ Found existing record, updating:', existingRecords[0].id);
-                    const record = await pb.collection('MEQuestions').update(existingRecords[0].id, submissionData);
-                    this.playerRecordId = record.id;
-                    return record;
-                } else {
-                    console.log('⚠️ No existing record found, creating new one');
-                    const record = await pb.collection('MEQuestions').create(submissionData);
-                    this.playerRecordId = record.id;
-                    console.log('✅ Created new PocketBase record:', record.id);
-                    return record;
-                }
-            }
+            // ALWAYS CREATE NEW RECORD for final submission (each play is unique)
+            console.log('✨ Creating NEW record for this submission');
+            const record = await pb.collection('MEQuestions').create(submissionData);
+            this.playerRecordId = record.id;
+            console.log('✅ Created new PocketBase record:', record.id);
+            return record;
         } catch (error) {
             console.error('❌ PocketBase save error:', error);
             console.error('Error details:', error.response || error.message);
