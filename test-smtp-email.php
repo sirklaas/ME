@@ -24,7 +24,7 @@ if (class_exists('PHPMailer\PHPMailer\PHPMailer')) {
 
 echo "Step 2: SMTP Configuration\n";
 echo "-------------------------------------\n";
-echo "Host: mail.pinkmilk.eu\n";
+echo "Host: sh-woe014.hostslim.nl\n";
 echo "Port: 587 (STARTTLS)\n";
 echo "Username: maskedemployee@pinkmilk.eu\n";
 echo "Password: " . str_repeat('*', 8) . "\n\n";
