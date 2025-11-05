@@ -48,6 +48,10 @@ if (!filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
 // Email content based on language
 if ($language === 'nl') {
     $subject = '🎨 Jouw Karakter Afbeelding is Klaar! - ' . $gameName;
+    
+    // Create download URL
+    $downloadUrl = 'https://www.pinkmilk.eu/ME/download-image.php?url=' . urlencode($imageUrl) . '&name=' . urlencode($characterName);
+    
     $userMessage = "
     <html>
     <head>
@@ -57,16 +61,26 @@ if ($language === 'nl') {
             .header { background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
             .image-container { text-align: center; margin: 30px 0; }
-            .character-image { max-width: 100%; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+            .character-image { max-width: 100%; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); margin-top: 20px; }
             .section { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #8A2BE2; border-radius: 5px; }
             .footer { text-align: center; margin-top: 20px; color: #666; font-size: 0.9em; }
             h1 { margin: 0; font-size: 1.8em; }
             h3 { color: #8A2BE2; }
             .emoji { font-size: 2em; }
             .cta-box { background: #d4edda; padding: 20px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 5px; }
-            .download-btn { display: inline-block; background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3); }
+            .download-btn { display: inline-block; background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3); border: none; cursor: pointer; }
             .download-btn:hover { background: linear-gradient(135deg, #9932CC, #8A2BE2); }
+            .reveal-box { background: #fff3cd; border: 3px solid #ffc107; padding: 30px; margin: 30px 0; border-radius: 10px; text-align: center; }
+            .reveal-btn { background: linear-gradient(135deg, #dc3545, #c82333); color: white; padding: 20px 50px; font-size: 1.2em; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4); transition: all 0.3s; }
+            .reveal-btn:hover { background: linear-gradient(135deg, #c82333, #dc3545); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(220, 53, 69, 0.5); }
+            .hidden-content { display: none; }
         </style>
+        <script>
+            function revealImage() {
+                document.getElementById('revealBox').style.display = 'none';
+                document.getElementById('imageContent').style.display = 'block';
+            }
+        </script>
     </head>
     <body>
         <div class='container'>
@@ -81,13 +95,20 @@ if ($language === 'nl') {
                 
                 <p>Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid.</p>
                 
-                <div class='image-container'>
+                <!-- Reveal Box -->
+                <div class='reveal-box' id='revealBox'>
+                    <h2 style='color: #856404; margin-top: 0;'>🔒 GEHEIM</h2>
+                    <h3 style='color: #856404;'>Klik hier als je heel zeker weet dat niemand op je scherm kan kijken !!</h3>
+                    <p style='font-size: 0.95em; color: #856404;'>⚠️ Je staat op het punt je geheime karakter te onthullen</p>
+                    <button onclick='revealImage()' class='reveal-btn'>👁️ ONTHUL MIJN KARAKTER</button>
+                </div>
+                
+                <!-- Hidden Image Content -->
+                <div class='image-container hidden-content' id='imageContent'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
                     <img src='" . htmlspecialchars($imageUrl) . "' alt='Jouw Karakter' class='character-image' />
                     <div style='margin-top: 20px;'>
-                        <form method='get' action='" . htmlspecialchars($imageUrl) . "' target='_blank'>
-                            <button type='submit' class='download-btn' style='border: none; cursor: pointer;'>📥 Download Afbeelding</button>
-                        </form>
+                        <a href='" . htmlspecialchars($downloadUrl) . "' class='download-btn' style='text-decoration: none;'>📥 Download Afbeelding</a>
                     </div>
                 </div>
                 
@@ -128,6 +149,10 @@ if ($language === 'nl') {
     $adminSubject = '🎨 Afbeelding gegenereerd: ' . $playerName;
 } else {
     $subject = '🎨 Your Character Image is Ready! - ' . $gameName;
+    
+    // Create download URL
+    $downloadUrl = 'https://www.pinkmilk.eu/ME/download-image.php?url=' . urlencode($imageUrl) . '&name=' . urlencode($characterName);
+    
     $userMessage = "
     <html>
     <head>
@@ -137,16 +162,26 @@ if ($language === 'nl') {
             .header { background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9f9f9; padding: 30px; border-radius: 0 0 10px 10px; }
             .image-container { text-align: center; margin: 30px 0; }
-            .character-image { max-width: 100%; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+            .character-image { max-width: 100%; border-radius: 10px; box-shadow: 0 8px 30px rgba(0,0,0,0.2); margin-top: 20px; }
             .section { background: white; padding: 20px; margin: 20px 0; border-left: 4px solid #8A2BE2; border-radius: 5px; }
             .footer { text-align: center; margin-top: 20px; color: #666; font-size: 0.9em; }
             h1 { margin: 0; font-size: 1.8em; }
             h3 { color: #8A2BE2; }
             .emoji { font-size: 2em; }
             .cta-box { background: #d4edda; padding: 20px; border-left: 4px solid #28a745; margin: 20px 0; border-radius: 5px; }
-            .download-btn { display: inline-block; background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3); }
+            .download-btn { display: inline-block; background: linear-gradient(135deg, #8A2BE2, #9932CC); color: white; padding: 15px 40px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3); border: none; cursor: pointer; }
             .download-btn:hover { background: linear-gradient(135deg, #9932CC, #8A2BE2); }
+            .reveal-box { background: #fff3cd; border: 3px solid #ffc107; padding: 30px; margin: 30px 0; border-radius: 10px; text-align: center; }
+            .reveal-btn { background: linear-gradient(135deg, #dc3545, #c82333); color: white; padding: 20px 50px; font-size: 1.2em; font-weight: bold; border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4); transition: all 0.3s; }
+            .reveal-btn:hover { background: linear-gradient(135deg, #c82333, #dc3545); transform: translateY(-2px); box-shadow: 0 8px 25px rgba(220, 53, 69, 0.5); }
+            .hidden-content { display: none; }
         </style>
+        <script>
+            function revealImage() {
+                document.getElementById('revealBox').style.display = 'none';
+                document.getElementById('imageContent').style.display = 'block';
+            }
+        </script>
     </head>
     <body>
         <div class='container'>
@@ -161,13 +196,20 @@ if ($language === 'nl') {
                 
                 <p>Based on your answers, we have brought a special character to life for you. This is your alter ego – a reflection of your secret side, hidden talents and personality.</p>
                 
-                <div class='image-container'>
+                <!-- Reveal Box -->
+                <div class='reveal-box' id='revealBox'>
+                    <h2 style='color: #856404; margin-top: 0;'>🔒 SECRET</h2>
+                    <h3 style='color: #856404;'>Click here only if you're absolutely sure no one can see your screen !!</h3>
+                    <p style='font-size: 0.95em; color: #856404;'>⚠️ You're about to reveal your secret character</p>
+                    <button onclick='revealImage()' class='reveal-btn'>👁️ REVEAL MY CHARACTER</button>
+                </div>
+                
+                <!-- Hidden Image Content -->
+                <div class='image-container hidden-content' id='imageContent'>
                     <h3>🎭 " . htmlspecialchars($characterName) . "</h3>
                     <img src='" . htmlspecialchars($imageUrl) . "' alt='Your Character' class='character-image' />
                     <div style='margin-top: 20px;'>
-                        <form method='get' action='" . htmlspecialchars($imageUrl) . "' target='_blank'>
-                            <button type='submit' class='download-btn' style='border: none; cursor: pointer;'>📥 Download Image</button>
-                        </form>
+                        <a href='" . htmlspecialchars($downloadUrl) . "' class='download-btn' style='text-decoration: none;'>📥 Download Image</a>
                     </div>
                 </div>
                 
