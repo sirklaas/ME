@@ -92,14 +92,9 @@ if ($language === 'nl') {
                 </div>
                 
                 <div class='section'>
-                    <h3>🎭 Jouw Karakter</h3>
+                    <h3>Ja dit ben je eigenlijk heel diep van binnen:</h3>
                     <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
-                </div>
-                
-                <div class='section'>
-                    <h3>🌍 En waar je zoal uithangt</h3>
-                    <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 
                 <div class='cta-box'>
@@ -177,14 +172,9 @@ if ($language === 'nl') {
                 </div>
                 
                 <div class='section'>
-                    <h3>🎭 Your Character</h3>
+                    <h3>Yes, this is who you really are deep down inside:</h3>
                     <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
-                </div>
-                
-                <div class='section'>
-                    <h3>🌍 And where you hang out</h3>
-                    <p>" . nl2br(htmlspecialchars($worldDesc)) . "</p>
                 </div>
                 
                 <div class='cta-box'>
