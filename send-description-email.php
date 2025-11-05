@@ -5,8 +5,8 @@
  * Now using PHPMailer with SMTP for reliable delivery
  */
 
-// Load SMTP email configuration
-require_once __DIR__ . '/email-smtp-config.php';
+// Load simple email configuration (using mail() function)
+require_once __DIR__ . '/email-simple-config.php';
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
@@ -200,8 +200,8 @@ $adminMessage = "
 </html>
 ";
 
-// Send email to user using SMTP
-$userResult = sendEmailSMTP($userEmail, $subject, $userMessage);
+// Send email to user using simple mail() function
+$userResult = sendEmailSimple($userEmail, $subject, $userMessage);
 $userEmailSent = $userResult['success'];
 
 // Log user email attempt
@@ -210,8 +210,8 @@ if (!$userEmailSent) {
     error_log("Error details: " . $userResult['error']);
 }
 
-// Send admin email using SMTP
-$adminResult = sendEmailSMTP($adminEmail, $adminSubject, $adminMessage, 'maskedemployee@pinkmilk.eu', 'Masked Employee', $userEmail);
+// Send admin email using simple mail() function
+$adminResult = sendEmailSimple($adminEmail, $adminSubject, $adminMessage, 'maskedemployee@pinkmilk.eu', 'Masked Employee', $userEmail);
 $adminEmailSent = $adminResult['success'];
 
 // Log admin email attempt

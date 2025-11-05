@@ -50,11 +50,12 @@ function sendEmailSMTP($to, $subject, $htmlBody, $fromEmail = 'maskedemployee@pi
             )
         );
         
-        // Enable verbose debug output (disable in production)
-        // $mail->SMTPDebug = 2;
-        // $mail->Debugoutput = function($str, $level) {
-        //     error_log("SMTP Debug level $level: $str");
-        // };
+        // Enable verbose debug output for testing
+        $mail->SMTPDebug = 2;
+        $mail->Debugoutput = function($str, $level) {
+            error_log("SMTP Debug level $level: $str");
+            echo htmlspecialchars($str) . "<br>\n";
+        };
         
         // Recipients
         $mail->setFrom($fromEmail, $fromName);
