@@ -154,9 +154,10 @@
 
         .lightbox-image {
             width: 100%;
-            max-height: 500px;
+            max-height: 600px;
             object-fit: contain;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: block;
         }
 
         .lightbox-details {
@@ -348,10 +349,14 @@
             const lightbox = document.getElementById('lightbox');
 
             // Check multiple possible image field names
-            const imageField = char.character_image || char.generated_image || char.image_url || '';
+            const imageField = char.image || char.character_image || char.generated_image || char.image_url || '';
             const imageUrl = imageField 
                 ? `https://pinkmilk.pockethost.io/api/files/${char.collectionId}/${char.id}/${imageField}`
                 : '';
+            
+            console.log('🖼️ Opening lightbox for:', char.character_name);
+            console.log('📸 Image field:', imageField);
+            console.log('🔗 Image URL:', imageUrl);
 
             document.getElementById('lightboxImage').src = imageUrl;
             
@@ -367,7 +372,9 @@
                 : '<span style="color: #999;">📧 No email provided</span>';
             document.getElementById('lightboxEmail').innerHTML = emailHtml;
             
-            const description = char.character_description || char.characterdescription || char.description || 'No description available';
+            // Use ai_summary as the main description source
+            const description = char.ai_summary || char.character_description || char.characterdescription || char.description || 'No description available';
+            console.log('📝 Description length:', description.length);
             document.getElementById('lightboxDescription').textContent = description;
 
             lightbox.classList.add('active');
