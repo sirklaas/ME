@@ -33,13 +33,22 @@ function sendEmailSMTP($to, $subject, $htmlBody, $fromEmail = 'maskedemployee@pi
     try {
         // Server settings
         $mail->isSMTP();
-        $mail->Host       = 'mail.pinkmilk.eu';
+        $mail->Host       = 'sh-woe014.hostslim.nl'; // Use actual server hostname
         $mail->SMTPAuth   = true;
         $mail->Username   = 'maskedemployee@pinkmilk.eu';
         $mail->Password   = 'M@sked03';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
         $mail->CharSet    = 'UTF-8';
+        
+        // Disable SSL certificate verification for Hostslim
+        $mail->SMTPOptions = array(
+            'ssl' => array(
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+                'allow_self_signed' => true
+            )
+        );
         
         // Enable verbose debug output (disable in production)
         // $mail->SMTPDebug = 2;
@@ -108,7 +117,7 @@ function testSMTPConfig($testEmail = 'klaas@pinkmilk.eu') {
             </div>
             <p><strong>Configuration:</strong></p>
             <ul>
-                <li>Host: mail.pinkmilk.eu</li>
+                <li>Host: sh-woe014.hostslim.nl</li>
                 <li>Port: 587 (STARTTLS)</li>
                 <li>From: maskedemployee@pinkmilk.eu</li>
                 <li>Method: PHPMailer with SMTP</li>
