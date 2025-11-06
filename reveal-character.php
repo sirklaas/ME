@@ -54,6 +54,9 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎭 Reveal Your Character</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -62,7 +65,7 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Barlow Semi Condensed', Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -157,10 +160,12 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
         }
 
         .character-name {
-            font-size: 2em;
+            font-size: 2.5em;
+            font-weight: 700;
             color: #8A2BE2;
-            margin: 20px 0;
+            margin: 0 0 30px 0;
             text-align: center;
+            font-family: 'Barlow Semi Condensed', sans-serif;
         }
 
         .character-description {
@@ -168,7 +173,7 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
             line-height: 1.8;
             font-size: 1.1em;
             margin: 20px 0;
-            white-space: pre-wrap;
+            white-space: pre-line;
         }
 
         .download-btn {
@@ -208,7 +213,7 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
 
         <!-- Character Content (Hidden) -->
         <div class="character-content" id="characterContent">
-            <h2 class="character-name">🎭 <?php echo htmlspecialchars($characterName); ?></h2>
+            <h1 class="character-name"><?php echo htmlspecialchars($characterName); ?></h1>
             <img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="Your Character" class="character-image">
             
             <?php if (!empty($description)): ?>
