@@ -42,30 +42,17 @@ if (count($nameParts) > 1 && $nameParts[0] === end($nameParts)) {
 // Format character description: make "De [Type] genaamd [Name]" a heading
 function formatCharacterDescription($desc) {
     // Replace section headers with user-friendly versions
-    $desc = preg_replace('/\d+\.\s*KARAKTER\s*\([^)]+\):\s*/i', '<h4 style="color: #8A2BE2; margin-top: 20px;">🎭 Jouw Karakter</h4>', $desc);
-    $desc = preg_replace('/\d+\.\s*OMGEVING\s*\([^)]+\):\s*/i', '<h4 style="color: #8A2BE2; margin-top: 20px;">🌍 Dit is jouw wereld</h4>', $desc);
+    $desc = preg_replace('/\d+\.\s*KARAKTER\s*\([^)]+\):\s*/i', "\n\n🎭 Jouw Karakter\n\n", $desc);
+    $desc = preg_replace('/\d+\.\s*OMGEVING\s*\([^)]+\):\s*/i', "\n\n🌍 Dit is jouw wereld\n\n", $desc);
     
-    // Pattern to match "De [Type] genaamd [Name]" at start of description
-    $pattern = '/(De\s+\w+\s+genaamd\s+[\w\s]+)/';
-    
-    if (preg_match($pattern, $desc, $matches)) {
-        $heading = trim($matches[1]);
-        // Remove the heading from description and add it as H3
-        $desc = preg_replace($pattern, '', $desc, 1);
-        $desc = trim($desc);
-        
-        // Extract only first character section (stop at next "De [Type] genaamd")
-        $nextCharPattern = '/\n\n+De\s+\w+\s+genaamd/';
-        if (preg_match($nextCharPattern, $desc, $nextMatch, PREG_OFFSET_CAPTURE)) {
-            $desc = substr($desc, 0, $nextMatch[0][1]);
-        }
-        
-        // Return formatted with heading
-        return "<h3 style='color: #8A2BE2; margin-top: 0;'>" . htmlspecialchars($heading) . "</h3>" . nl2br(htmlspecialchars($desc));
+    // Extract only first character section (stop at next "De [Type] genaamd")
+    $nextCharPattern = '/\n\n+De\s+\w+\s+genaamd/';
+    if (preg_match($nextCharPattern, $desc, $nextMatch, PREG_OFFSET_CAPTURE, 50)) {
+        $desc = substr($desc, 0, $nextMatch[0][1]);
     }
     
-    // No pattern found, return as is (but still process the replacements)
-    return nl2br($desc);
+    // Return formatted with proper HTML
+    return nl2br(htmlspecialchars($desc));
 }
 
 // Admin email

@@ -13,21 +13,17 @@ if (empty($imageUrl)) {
     die('No image URL provided');
 }
 
-// Parse description to extract only the FIRST character
+// Format character description
 function extractFirstCharacter($aiSummary) {
-    // Split by "De [Type] genaamd" pattern to find character sections
-    $pattern = '/De\s+\w+\s+genaamd\s+\w+/';
-    $parts = preg_split($pattern, $aiSummary, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+    // Replace section headers with user-friendly versions
+    $aiSummary = preg_replace('/\d+\.\s*KARAKTER\s*\([^)]+\):\s*/i', "\n\n🎭 Jouw Karakter\n\n", $aiSummary);
+    $aiSummary = preg_replace('/\d+\.\s*OMGEVING\s*\([^)]+\):\s*/i', "\n\n🌍 Dit is jouw wereld\n\n", $aiSummary);
     
-    // If we found multiple sections, take only the first character description
-    if (preg_match($pattern, $aiSummary, $matches, PREG_OFFSET_CAPTURE)) {
-        $firstMatch = $matches[0][1];
-        // Find the next character mention or end of string
-        $nextPattern = '/\n\n\nDe\s+\w+\s+genaamd/';
-        if (preg_match($nextPattern, $aiSummary, $nextMatches, PREG_OFFSET_CAPTURE, $firstMatch)) {
-            // Extract from start to next character
-            return substr($aiSummary, 0, $nextMatches[0][1]);
-        }
+    // Extract only first character section (stop at next "De [Type] genaamd")
+    $nextPattern = '/\n\n+De\s+\w+\s+genaamd/';
+    if (preg_match($nextPattern, $aiSummary, $nextMatches, PREG_OFFSET_CAPTURE, 50)) {
+        // Extract from start to next character
+        return substr($aiSummary, 0, $nextMatches[0][1]);
     }
     
     // If no pattern found or single character, return as is
