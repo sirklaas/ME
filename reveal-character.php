@@ -214,7 +214,7 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
             
             <?php if (!empty($description)): ?>
             <div class="character-description">
-                <?php echo nl2br(htmlspecialchars(urldecode($description))); ?>
+                <?php echo nl2br($description); ?>
             </div>
             <?php endif; ?>
             
