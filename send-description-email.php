@@ -29,6 +29,35 @@ $characterDesc = $data['characterDescription'] ?? '';
 $worldDesc = $data['worldDescription'] ?? '';
 $characterName = $data['characterName'] ?? 'Your Character';
 
+// Clean up character name (remove duplicates like "Kara\n\nKara")
+$nameParts = preg_split('/[\n\r]+/', $characterName);
+$nameParts = array_map('trim', $nameParts);
+$nameParts = array_filter($nameParts);
+if (count($nameParts) > 1 && $nameParts[0] === end($nameParts)) {
+    $characterName = $nameParts[0]; // Use first if duplicated
+} else {
+    $characterName = $nameParts[0] ?? $characterName; // Use first line
+}
+
+// Format character description: make "De [Type] genaamd [Name]" a heading
+function formatCharacterDescription($desc) {
+    // Pattern to match "De [Type] genaamd [Name]" at start of description
+    $pattern = '/(De\s+\w+\s+genaamd\s+[\w\s]+)/';
+    
+    if (preg_match($pattern, $desc, $matches)) {
+        $heading = trim($matches[1]);
+        // Remove the heading from description and add it as H3
+        $desc = preg_replace($pattern, '', $desc, 1);
+        $desc = trim($desc);
+        
+        // Return formatted with heading
+        return "<h3 style='color: #8A2BE2; margin-top: 0;'>" . htmlspecialchars($heading) . "</h3>" . nl2br(htmlspecialchars($desc));
+    }
+    
+    // No pattern found, return as is
+    return nl2br(htmlspecialchars($desc));
+}
+
 // Admin email
 $adminEmail = 'klaas@pinkmilk.eu';
 
@@ -75,8 +104,7 @@ if ($language === 'nl') {
                 
                 <div class='section'>
                     <h3>Ja dit ben je eigenlijk heel diep van binnen:</h3>
-                    <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
-                    <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
+                    " . formatCharacterDescription($characterDesc) . "
                 </div>
                 
                 <p style='background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;'>
@@ -134,8 +162,7 @@ if ($language === 'nl') {
                 
                 <div class='section'>
                     <h3>Yes, this is who you really are deep down inside:</h3>
-                    <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
-                    <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
+                    " . formatCharacterDescription($characterDesc) . "
                 </div>
                 
                 <p style='background: #fff3cd; padding: 15px; border-left: 4px solid #ffc107; margin: 20px 0;'>
