@@ -315,9 +315,12 @@
 
                 console.log('🎭 Characters with images:', characters.length);
 
-                // Update stats
+                // Get gamename from first record
+                const gameName = records.length > 0 ? (records[0].gamename || 'Game') : 'Game';
+
+                // Update stats with gamename
                 document.getElementById('characterCount').textContent = 
-                    `📊 ${characters.length} Character${characters.length !== 1 ? 's' : ''} Generated (${records.length} total records)`;
+                    `${gameName} | ${characters.length} Character${characters.length !== 1 ? 's' : ''} Generated (${records.length} total records)`;
 
                 // Display gallery
                 displayGallery();
