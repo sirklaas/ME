@@ -134,8 +134,7 @@ if ($language === 'nl') {
                 
                 <div class='section'>
                     <h3>Ja dit ben je eigenlijk heel diep van binnen:</h3>
-                    <p><strong>" . htmlspecialchars($characterName) . "</strong></p>
-                    <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
+                    " . formatCharacterDescription($characterDesc) . "
                 </div>
                 
                 <div class='cta-box'>

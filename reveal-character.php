@@ -23,11 +23,14 @@ function extractFirstCharacter($aiSummary) {
     $nextPattern = '/\n\n+De\s+\w+\s+genaamd/';
     if (preg_match($nextPattern, $aiSummary, $nextMatches, PREG_OFFSET_CAPTURE, 50)) {
         // Extract from start to next character
-        return substr($aiSummary, 0, $nextMatches[0][1]);
+        $aiSummary = substr($aiSummary, 0, $nextMatches[0][1]);
     }
     
+    // Clean up excessive line breaks (more than 2 consecutive newlines)
+    $aiSummary = preg_replace('/\n{3,}/', "\n\n", $aiSummary);
+    
     // If no pattern found or single character, return as is
-    return $aiSummary;
+    return trim($aiSummary);
 }
 
 $description = extractFirstCharacter(urldecode($description));
