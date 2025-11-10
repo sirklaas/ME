@@ -1,13 +1,16 @@
 {
   "animals": {
-    "style": "anthropomorphic_realistic",
+    "style": "realistic_theme_park_mascot",
     "requirements": [
-      "CRITICAL: Anthropomorphic {character} with realistic animal head/face but HUMAN BODY",
-      "Standing upright on TWO LEGS like a human, NEVER on four legs",
-      "Wearing FULL HUMAN CLOTHES: shirt/jacket, pants/trousers, shoes/boots (MUST be visible)",
+      "CRITICAL: REALISTIC THEME PARK MASCOT COSTUME {character} - like you would see at Disney World, Universal Studios, or sports stadiums",
+      "STYLE: REAL professional mascot costume worn by a person - NOT cartoon drawing, NOT CGI, but an ACTUAL physical costume",
+      "MATERIAL: High-quality plush/fur costume material, professional theme park quality, soft and friendly appearance",
+      "FEATURES: Large friendly mascot-style eyes, soft rounded shapes, welcoming smile, approachable design",
+      "Standing upright on TWO LEGS like a person in a costume, NEVER on four legs",
+      "Wearing FULL HUMAN CLOTHES over the costume: colorful shirt/jacket, pants/trousers, shoes/boots (MUST be visible)",
       "Human posture and stance, dressed like a person going to work/event",
-      "Head FACING CAMERA, eyes LOOKING DIRECTLY INTO CAMERA LENS, making eye contact",
-      "Hyper-realistic style, NOT cartoon, NOT mascot costume - realistic animal head on human body in clothes"
+      "Head FACING CAMERA, eyes LOOKING DIRECTLY INTO CAMERA LENS with friendly, welcoming expression",
+      "Professional mascot costume like Mickey Mouse at Disneyland, Goofy, sports team mascots - REAL costume quality, NOT cartoon, NOT illustration, SINGLE CHARACTER ONLY"
     ]
   },
   "fruits_vegetables": {
@@ -56,7 +59,7 @@
     ]
   },
   "general_quality": {
-    "technical": "16:9, 4K, cinematic, full body, rule of thirds",
+    "technical": "16:9, 8K, cinematic, full body, rule of thirds",
     "lighting": "professional studio lighting, vibrant colors",
     "composition": "full body shot, dynamic pose, engaging expression",
     "camera": "shot with Sony a7V, Sigma 85mm lens, crystal-clear detail",

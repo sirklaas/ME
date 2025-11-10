@@ -184,6 +184,104 @@ function getCharacterUsageCounts($characterType) {
 }
 
 /**
+ * Get list of all used character NAMES and TYPES from PocketBase to avoid duplicates
+ * Returns array with 'names' and 'types' keys
+ */
+function getUsedCharacterNames() {
+    require_once __DIR__ . '/api-keys.php';
+    $pbUrl = defined('POCKETBASE_URL') ? POCKETBASE_URL : 'https://pb.masked-employee.com';
+    
+    $usedNames = [];
+    $usedTypes = []; // Track character types (Panda, Prinses, Carrot, etc.)
+    
+    try {
+        // Query ALL records to get all character names and types
+        $url = $pbUrl . '/api/collections/ME_questions/records?perPage=500';
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($httpCode === 200 && $response) {
+            $data = json_decode($response, true);
+            
+            if (isset($data['items'])) {
+                foreach ($data['items'] as $record) {
+                    // Extract character NAME
+                    if (isset($record['character_name']) && !empty($record['character_name'])) {
+                        $charName = $record['character_name'];
+                        $simpleName = '';
+                        
+                        // If it contains "genaamd", extract name after that (OLD format)
+                        if (preg_match('/genaamd\s+([A-Z][a-zA-Z\s]+?)(?:\s+is|\s+draagt|\s+heeft|\.|,)/i', $charName, $matches)) {
+                            $simpleName = trim($matches[1]);
+                        }
+                        // If it contains "Jij bent", extract name after that (NEW format in ai_summary)
+                        elseif (preg_match('/Jij bent\s+([A-Z][a-zA-Z\s]+?)(?:\s*,|\s+een)/i', $charName, $matches)) {
+                            $simpleName = trim($matches[1]);
+                        }
+                        // If it's just a simple name (e.g., "Bao", "Philip", "Kiran")
+                        else {
+                            // Just use the character_name as-is if it's a simple name
+                            $simpleName = trim($charName);
+                        }
+                        
+                        // Add to used names list (lowercase for comparison)
+                        if (!empty($simpleName) && strlen($simpleName) > 1) {
+                            $usedNames[] = strtolower($simpleName);
+                            error_log("✅ Added used name: " . $simpleName);
+                        }
+                    }
+                    
+                    // Extract character TYPE from ai_summary (e.g., "Een vrolijke Panda" -> "Panda")
+                    if (isset($record['ai_summary']) && !empty($record['ai_summary'])) {
+                        $aiSummary = $record['ai_summary'];
+                        
+                        // Try multiple patterns to extract the character type
+                        $characterType = null;
+                        
+                        // Pattern 1: "Een [adjective] [TYPE]" (e.g., "Een vrolijke Panda")
+                        if (preg_match('/Een\s+\w+\s+([A-Z][a-zëïöüáéíóú]+)/u', $aiSummary, $matches)) {
+                            $characterType = trim($matches[1]);
+                        }
+                        // Pattern 2: "Jij bent [Name], een [adjective] [TYPE]" (e.g., "Jij bent Leo, een majestueuze Leeuw")
+                        elseif (preg_match('/Jij bent\s+\w+,\s+een\s+\w+\s+([A-Z][a-zëïöüáéíóú]+)/u', $aiSummary, $matches)) {
+                            $characterType = trim($matches[1]);
+                        }
+                        // Pattern 3: Just "Een [TYPE]" at start of line (e.g., "Een Leeuw")
+                        elseif (preg_match('/^Een\s+([A-Z][a-zëïöüáéíóú]+)/um', $aiSummary, $matches)) {
+                            $characterType = trim($matches[1]);
+                        }
+                        
+                        if ($characterType) {
+                            $usedTypes[] = strtolower($characterType);
+                            error_log("🎭 Added used type: " . $characterType);
+                        }
+                    }
+                }
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Error querying used character names: " . $e->getMessage());
+    }
+    
+    $uniqueNames = array_unique($usedNames);
+    $uniqueTypes = array_unique($usedTypes);
+    
+    error_log("📝 Found " . count($uniqueNames) . " used character names: " . implode(', ', $uniqueNames));
+    error_log("🎭 Found " . count($uniqueTypes) . " used character types: " . implode(', ', $uniqueTypes));
+    
+    return [
+        'names' => $uniqueNames,
+        'types' => $uniqueTypes
+    ];
+}
+
+/**
  * Sort character options by usage count (least used first)
  */
 function sortByUsageCount($options, $usageCounts) {
@@ -557,6 +655,36 @@ try {
     // Still analyze personality for character traits
     $personalityTraits = analyzePersonality($data['answers']);
     
+    // Extract user-selected personality traits from question 2 (sliders)
+    $personalityTraitsFromUser = "";
+    $traitMapping = [
+        '2_trait_dreamy_pragmatic' => ['Dromerig', 'Pragmatisch'],
+        '2_trait_introverted_social' => ['Introvert', 'Sociaal'],
+        '2_trait_chaotic_organized' => ['Chaotisch', 'Georganiseerd'],
+        '2_trait_cautious_reckless' => ['Voorzichtig', 'Roekeloos'],
+        '2_trait_philosophical_practical' => ['Filosofisch', 'Praktisch'],
+        '2_trait_serious_lighthearted' => ['Serieus', 'Luchtig']
+    ];
+    
+    foreach ($traitMapping as $key => $labels) {
+        if (isset($data['answers'][$key])) {
+            $value = intval($data['answers'][$key]);
+            // Determine which trait is dominant based on value (1-9 scale)
+            if ($value <= 3) {
+                $personalityTraitsFromUser .= $labels[0] . ": " . $value . "/9\n";
+            } elseif ($value >= 7) {
+                $personalityTraitsFromUser .= $labels[1] . ": " . $value . "/9\n";
+            } else {
+                // Middle values show both traits
+                $personalityTraitsFromUser .= $labels[0] . "/" . $labels[1] . ": " . $value . "/9\n";
+            }
+        }
+    }
+    
+    if (empty($personalityTraitsFromUser)) {
+        $personalityTraitsFromUser = "Geen specifieke traits geselecteerd\n";
+    }
+    
     // Format answers for AI
     $formattedAnswers = formatAnswersForAI($data['answers'], $data['chapters'] ?? []);
     
@@ -569,6 +697,11 @@ try {
     
     // Get list of used characters to avoid duplicates
     $usedCharacters = isset($data['usedCharacters']) ? $data['usedCharacters'] : [];
+    
+    // Get ALL used character names AND types from database to ensure uniqueness
+    $usedData = getUsedCharacterNames();
+    $usedNames = $usedData['names'];
+    $usedTypes = $usedData['types'];
     
     // Add regeneration note if applicable
     if ($isRegenerate) {
@@ -660,11 +793,19 @@ try {
     $specialInstructions = "";
     if ($characterType === 'animals') {
         $specialInstructions = "🦁 EXTRA BELANGRIJK VOOR DIEREN:\n" .
-            "- Het dier MOET een realistisch dierenhoofd hebben op een MENSELIJK lichaam\n" .
-            "- Staand op TWEE benen, NOOIT op vier poten\n" .
-            "- Draagt VOLLEDIGE menselijke kleding (shirt, broek, schoenen)\n" .
+            "- Het dier MOET een PROFESSIONEEL MASCOTTE KOSTUUM zijn zoals je ziet in pretparken (Disney World, Universal Studios)\n" .
+            "- STIJL: REALISTISCH mascotte kostuum - NIET cartoon, NIET getekend, maar een ECHT kostuum dat iemand draagt\n" .
+            "- Denk aan: De Mickey Mouse die je ontmoet in Disneyland, de mascotte van een sportteam, pretpark karakters\n" .
+            "- KENMERKEN:\n" .
+            "  * Hoogwaardig pluche/fur kostuum materiaal (zacht, professioneel)\n" .
+            "  * Grote, vriendelijke ogen (mascotte-stijl, niet eng)\n" .
+            "  * Zachte, afgeronde vormen (veilig en toegankelijk)\n" .
+            "  * Vrolijke, uitnodigende uitstraling\n" .
+            "  * Professionele kostuum kwaliteit zoals in theme parks\n" .
+            "- Staand op TWEE benen zoals een persoon in een kostuum, NOOIT op vier poten\n" .
+            "- Draagt VOLLEDIGE menselijke kleding OVER het kostuum (shirt, broek, schoenen)\n" .
             "- ⚠️ BELANGRIJK: Gebruik VARIATIE - kies verschillende dieren uit de lijst!\n" .
-            "- Denk aan: leeuw, tijger, beer, olifant, giraffe, panda, wolf, vos, uil, etc.\n\n";
+            "- Voorbeelden: Mickey Mouse mascotte in Disneyland, Goofy mascotte, sportteam mascottes, pretpark karakters\n\n";
     } elseif ($characterType === 'fruits_vegetables') {
         $specialInstructions = "🥕 EXTRA BELANGRIJK VOOR GROENTE/FRUIT:\n" .
             "- Het fruit/groente MOET gehumaniseerd zijn met:\n" .
@@ -703,16 +844,22 @@ try {
         $specialInstructions .
         "Creëer een karakter beschrijving in het Nederlands met deze 3 secties:\n\n" .
         "1. KARAKTER (100-150 woorden):\n" .
-        "- Begin met: 'De [DIER/FRUIT/HELD NAAM] genaamd [Creatieve Naam]'\n" .
+        "- Begin met een HEADING op een aparte regel: 'Dit ben je eigenlijk heel diep van binnen:'\n" .
+        "- Dan een SUBHEADING op een aparte regel: 'Een [bijvoeglijk naamwoord] [DIER/FRUIT/HELD TYPE]' (bijvoorbeeld: 'Een charmante Prins' of 'Een speelse Panda' of 'Een vrolijke Aardbei')\n" .
+        "- Dan de BODY die begint met: 'Jij bent [Naam], een...'\n" .
+        "- ⚠️ BELANGRIJK: Gebruik de naam SLECHTS EEN KEER in de hele tekst!\n" .
+        "- ⚠️ WEES CREATIEF met namen - gebruik DIVERSE en UNIEKE namen die bij de persoonlijkheid passen!\n" .
+        "- 💡 TIP: Kies namen die de persoonlijkheid weerspiegelen (bijv. 'Luna' voor dromerig, 'Storm' voor roekeloos, 'Sage' voor filosofisch)\n" .
+        "- 🎲 VARIATIE: Kies een naam uit de voorbeelden hieronder die NIET al gebruikt is, of bedenk een NIEUWE unieke naam!\n" .
         ($characterType === 'animals' ? 
-            "- Bijvoorbeeld: 'De Leeuw genaamd Leo' of 'De Olifant genaamd Ella' of 'De Uil genaamd Oscar'\n" :
+            "- Dieren voorbeelden: Leeuw (Leo, Simba, Aslan, Nala), Olifant (Ella, Dumbo, Babar), Uil (Oscar, Archimedes, Hedwig), Vos (Felix, Robin, Scarlett), Panda (Bao, Mei, Po), Wolf (Luna, Shadow, Storm), Kat (Whiskers, Midnight, Salem), Hond (Max, Bella, Duke)\n" :
             ($characterType === 'fruits_vegetables' ?
-                "- Bijvoorbeeld: 'De Banaan genaamd Benny' of 'De Wortel genaamd Wally' of 'De Aardbei genaamd Anna'\n" :
+                "- Fruit/Groente voorbeelden: Aardbei (Berry, Rosie, Scarlett), Banaan (Benny, Chip, Sunny), Wortel (Carrie, Rusty, Amber), Tomaat (Tommy, Cherry, Ruby), Appel (Adam, Pippin, Crimson), Druif (Violet, Pearl, Jade), Citroen (Lemon, Zest, Citrus)\n" :
                 ($characterType === 'fantasy_heroes' ?
-                    "- Bijvoorbeeld: 'De Ridder genaamd Roland' of 'De Tovenaar genaamd Merlin' of 'De Krijger genaamd Kara'\n" :
+                    "- Fantasy voorbeelden: Ridder (Roland, Galahad, Percival, Lancelot, Tristan), Tovenaar (Merlin, Gandalf, Prospero, Alatar), Krijger (Kara, Xena, Conan, Ragnar), Boogschutter (Artemis, Robin, Legolas, Katniss), Magiër (Morgana, Circe, Elara)\n" :
                     ($characterType === 'pixar_disney' ?
-                        "- Bijvoorbeeld: 'De Uitvinder genaamd Edison' of 'De Ontdekkingsreiziger genaamd Dora'\n" :
-                        "- Bijvoorbeeld: 'De Prins genaamd Philip' of 'De Heks genaamd Helga' of 'De Fee genaamd Flora'\n")))) .
+                        "- Pixar/Disney voorbeelden: Uitvinder (Edison, Tesla, Gizmo, Spark), Ontdekkingsreiziger (Dora, Marco, Atlas, Nova), Dromer (Luna, Celeste, Orion), Kunstenaar (Vincent, Frida, Pablo, Monet)\n" :
+                        "- Sprookjes voorbeelden: Prins (Florian, Eric, Naveen, Adam, Kristoff, Eugene), Prinses (Aurora, Belle, Ariel, Jasmine, Elsa, Rapunzel), Heks (Morgana, Ursula, Maleficent, Circe), Fee (Flora, Fauna, Tinkerbell, Silvermist), Tovenaar (Prospero, Alatar, Radagast), Kabouter (Grumpy, Happy, Bashful, Sneezy)\n")))) .
         "- ⚠️ KIES EEN SPECIFIEK karakter uit de lijst hierboven - gebruik VARIATIE!\n" .
         ($characterType === 'fantasy_heroes' ? "- ⚠️ GEEN eenhoorn, GEEN dieren - alleen MENSELIJKE fantasy karakters!\n" : "") .
         ($characterType === 'animals' ? "- ⚠️ Kies VERSCHILLENDE dieren - niet altijd dezelfde!\n" : "") .
@@ -724,29 +871,103 @@ try {
         "- Maak het levendig en visueel\n\n" .
         "2. OMGEVING (30-50 woorden):\n" .
         "- Waar hangt dit karakter rond?\n" .
-        "- Beschrijf EEN SPECIFIEKE LOCATIE (bijv: 'een zonnige tuin', 'een moderne keuken', 'een druk marktplein')\n" .
-        "- HOUD HET SIMPEL EN CONCREET - geen abstracte concepten\n\n" .
+        "- Beschrijf EEN SPECIFIEKE, UNIEKE LOCATIE die bij het karakter en hun persoonlijkheid past\n" .
+        "- ⚠️ WEES CREATIEF - gebruik VARIATIE en DIVERSE locaties!\n" .
+        "- 💡 Voorbeelden per type:\n" .
+        ($characterType === 'animals' ? 
+            "  * Dromerig: Een mistige ochtend in een bamboebos, een rustige bibliotheek met hoge boekenkasten, een verlaten strand bij zonsondergang\n" .
+            "  * Sociaal: Een bruisend stadspark vol spelende kinderen, een gezellig café met terras, een kleurrijke markt vol geuren en geluiden\n" .
+            "  * Avontuurlijk: Een dichte jungle met lianen, een bergpas met adembenemend uitzicht, een mysterieuze grot met glinsterende kristallen\n" .
+            "  * Praktisch: Een goed georganiseerde werkplaats, een moderne kantoorruimte, een nette tuin met geometrische paden\n" :
+            ($characterType === 'fruits_vegetables' ?
+                "  * Dromerig: Een magische moestuin onder het maanlicht, een serene fruittuin met bloesems, een mystiek gewassen veld in de mist\n" .
+                "  * Sociaal: Een levendige boerenmarkt vol kraampjes, een gezellige fruitstalletje, een drukke supermarkt met verse producten\n" .
+                "  * Avontuurlijk: Een tropisch regenwoud vol exotisch fruit, een wilde boomgaard, een avontuurlijke smoothiebar\n" .
+                "  * Praktisch: Een modern distributiecentrum, een efficiënte kas, een georganiseerde koelcel\n" :
+                ($characterType === 'fantasy_heroes' ?
+                    "  * Dromerig: Een verlaten tempel in de bergen, een mystiek bos met oude ruïnes, een sterrenhemel boven een eenzame toren\n" .
+                    "  * Sociaal: Een bruisende taverne vol reizigers, een druk marktplein in een middeleeuwse stad, een koninklijke balzaal\n" .
+                    "  * Avontuurlijk: Een gevaarlijke bergpas, een donker kerker vol geheimen, een stormachtige zee met piratenschepen\n" .
+                    "  * Praktisch: Een goed uitgeruste smidse, een strategische commandopost, een georganiseerde wapenkamer\n" :
+                    ($characterType === 'pixar_disney' ?
+                        "  * Dromerig: Een magische sterrenwacht, een kleurrijk atelier vol schilderijen, een rustige bibliotheek vol verhalen\n" .
+                        "  * Sociaal: Een bruisend filmstudio, een gezellig animatieatelier, een levendig pretpark\n" .
+                        "  * Avontuurlijk: Een futuristische uitvinderslab, een wilde safari, een spannende filmset\n" .
+                        "  * Praktisch: Een modern ontwerpstudio, een efficiënt productiebedrijf, een georganiseerd archief\n" :
+                        "  * Dromerig: Een betoverd kasteel met torens, een magisch bos met sprekende bomen, een mysterieus paleistuinen bij maanlicht\n" .
+                        "  * Sociaal: Een bruisend koninklijk bal, een gezellige dorpsfeest, een drukke sprookjesmarkt\n" .
+                        "  * Avontuurlijk: Een donker verwoud vol gevaren, een hoge bergtop met drakenest, een verborgen grot met schatten\n" .
+                        "  * Praktisch: Een goed georganiseerde paleiskeuken, een efficiënte koninklijke bibliotheek, een nette kruidentuin\n")))) .
+        "- KIES EEN LOCATIE die de persoonlijkheid weerspiegelt en VERMIJD clichés!\n\n" .
+        "3. PERSOONLIJKHEID:\n" .
+        "- De speler heeft hun persoonlijkheid al gedefinieerd met deze traits (gebruik deze in je beschrijving):\n" .
+        $personalityTraitsFromUser . "\n" .
+        "- Integreer deze eigenschappen natuurlijk in je karakterbeschrijving\n" .
+        "- Begin deze sectie met: '=== PERSOONLIJKHEID ===' op een aparte regel\n" .
+        "- Geef elke trait weer in het format: 'Trait Naam: score/9'\n\n" .
         "⚠️ NOGMAALS: Kies EEN specifiek item uit de lijst hierboven. GEEN gemaskeerde personen!\n" .
         "⚠️ VERBODEN WOORDEN: Gebruik NOOIT de woorden 'masker', 'mask', 'gemaskeerd', 'masked' in je beschrijving!\n\n" .
+        (!empty($usedNames) ? 
+            "⚠️ CRITICAL: DO NOT USE THESE NAMES (already taken by other characters):\n" . 
+            implode(', ', array_slice($usedNames, 0, 50)) . "\n" .
+            "Pick a COMPLETELY DIFFERENT and UNIQUE name that is NOT in this list!\n\n" : 
+            "⚠️ NOTE: This is the first character, so all names are available.\n\n") .
+        (!empty($usedTypes) ? 
+            "🚨🚨🚨 ABSOLUTE CRITICAL RULE - NO EXCEPTIONS 🚨🚨🚨\n" .
+            "THESE ANIMAL/CHARACTER TYPES ARE ALREADY USED - YOU CANNOT USE THEM AGAIN:\n" . 
+            strtoupper(implode(', ', array_slice($usedTypes, 0, 50))) . "\n\n" .
+            "⛔ FORBIDDEN: If you see 'leeuw' in the list above, you CANNOT create another Leeuw!\n" .
+            "⛔ FORBIDDEN: If you see 'panda' in the list above, you CANNOT create another Panda!\n" .
+            "⛔ FORBIDDEN: If you see 'tijger' in the list above, you CANNOT create another Tijger!\n\n" .
+            "✅ REQUIRED: Pick a COMPLETELY DIFFERENT animal from the list that is NOT mentioned above!\n" .
+            "✅ We have 80 different animals - use the variety! Pick one that has NOT been used yet!\n\n" : 
+            "⚠️ NOTE: This is the first character, so all types are available.\n\n") .
         "Antwoorden van de speler:\n" .
         $formattedAnswers;
+    
+    // Log used names and types for debugging
+    error_log("🚫 Excluding these names from AI prompt: " . (!empty($usedNames) ? implode(', ', $usedNames) : 'NONE'));
+    error_log("📝 Total excluded names: " . count($usedNames));
+    error_log("🚫 Excluding these types from AI prompt: " . (!empty($usedTypes) ? implode(', ', $usedTypes) : 'NONE'));
+    error_log("🎭 Total excluded types: " . count($usedTypes));
     
     $aiSummary = callClaudeHaiku($apiKey, $systemPrompt1, $userPrompt1, 1024, $isRegenerate);
     
     // Extract character name from the summary (try multiple patterns)
     $characterName = 'De Gemaskeerde Medewerker'; // Default fallback
     
-    // Pattern 1: Look for "genaamd Name" (handles multi-word names like "Paarse Nebula")
-    if (preg_match('/genaamd\s+([A-Z][a-zA-Z\s]+?)(?:\s+is|\s+draagt|\s+heeft|\.|,)/i', $aiSummary, $matches)) {
+    // Pattern 1: NEW FORMAT - Look for "Jij bent Name" (new format - handles multi-word names)
+    if (preg_match('/Jij bent\s+([A-Z][a-zA-Z\s]+?)(?:\s*,|\s+een)/i', $aiSummary, $matches)) {
         $characterName = trim($matches[1]);
     }
-    // Pattern 2: Look for 'Name' in quotes
+    // Pattern 2: OLD FORMAT - Look for "genaamd Name" (handles multi-word names like "Paarse Nebula")
+    elseif (preg_match('/genaamd\s+([A-Z][a-zA-Z\s]+?)(?:\s+is|\s+draagt|\s+heeft|\.|,)/i', $aiSummary, $matches)) {
+        $characterName = trim($matches[1]);
+    }
+    // Pattern 3: Look for 'Name' in quotes
     elseif (preg_match("/'([^']+)'/", $aiSummary, $matches)) {
         $characterName = $matches[1];
     }
-    // Pattern 3: Look for "De [Type] genaamd Name"
+    // Pattern 4: Look for "De [Type] genaamd Name"
     elseif (preg_match('/De\s+\w+\s+genaamd\s+([A-Z][a-zA-Z\s]+)/i', $aiSummary, $matches)) {
         $characterName = trim($matches[1]);
+    }
+    
+    // Remove newlines and extra whitespace from name
+    $characterName = preg_replace('/[\n\r]+/', ' ', $characterName);
+    $characterName = preg_replace('/\s+/', ' ', $characterName);
+    $characterName = trim($characterName);
+    
+    // Fix duplicate names (e.g., "Kara Kara" -> "Kara", "Philip Philip" -> "Philip")
+    $nameParts = explode(' ', $characterName);
+    if (count($nameParts) >= 2) {
+        // Check if first and last words are the same (duplicate)
+        if (strtolower($nameParts[0]) === strtolower($nameParts[count($nameParts) - 1])) {
+            // Remove the duplicate - keep only first occurrence
+            array_pop($nameParts);
+            $characterName = implode(' ', $nameParts);
+            error_log("⚠️ Fixed duplicate name: " . $characterName);
+        }
     }
     
     // Use Chapter 9 answers directly (Questions 41-43 with 3 scenes each)
@@ -786,10 +1007,19 @@ try {
     // CALL 2: Ask Claude to generate a professional image prompt
     $imagePrompt = generateImagePromptWithClaude($apiKey, $characterName, $aiSummary, $characterType, $isRegenerate);
     
-    // Format personality traits as string for PocketBase
+    // Extract personality traits from Claude's response (new method)
     $personalityTraitsString = "";
-    foreach ($personalityTraits as $trait => $score) {
-        $personalityTraitsString .= ucfirst($trait) . ": " . $score . "\n";
+    if (preg_match('/=== PERSOONLIJKHEID ===(.*?)(?:===|$)/s', $aiSummary, $matches)) {
+        // Found Claude-generated personality traits
+        $personalitySection = trim($matches[1]);
+        $personalityTraitsString = $personalitySection;
+        error_log("✅ Using Claude-generated personality traits");
+    } else {
+        // Fallback to old PHP keyword analysis (safety net)
+        error_log("⚠️ Claude personality section not found, using PHP fallback");
+        foreach ($personalityTraits as $trait => $score) {
+            $personalityTraitsString .= ucfirst($trait) . ": " . $score . "\n";
+        }
     }
     $personalityTraitsString = trim($personalityTraitsString);
     

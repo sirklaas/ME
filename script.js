@@ -11,6 +11,8 @@ class MaskedEmployeeForm {
         this.confidentialityAccepted = false;
         this.aiSummary = '';
         this.userEmail = '';
+        this.playerEmail = ''; // Email collected at confidentiality agreement
+        this.startTimestamp = ''; // Timestamp when user starts questionnaire
         this.characterPreview = ''; // Short character preview
         this.characterDescription = ''; // Real AI character description
         this.worldDescription = ''; // Real AI world description
@@ -408,11 +410,16 @@ class MaskedEmployeeForm {
     async saveInitialPlayerData() {
         try {
             console.log('🚀 Creating initial PocketBase record for player...');
+            console.log('📧 Email:', this.playerEmail);
+            console.log('⏰ Datum (timestamp):', this.startTimestamp);
+            console.log('🌐 Language:', this.currentLanguage);
             
             // Prepare initial data with player info and empty chapters
             const initialData = {
                 gamename: this.gameName,
                 nameplayer: this.playerName,
+                email: this.playerEmail, // Email collected at confidentiality agreement
+                datum: this.startTimestamp, // ISO DateTime for PocketBase
                 language: this.currentLanguage, // Save selected language
                 current_chapter: 0, // Haven't started any chapter yet
                 total_chapters: this.totalChapters,
@@ -433,8 +440,13 @@ class MaskedEmployeeForm {
             console.log('📊 Initial player data:', {
                 player: initialData.nameplayer,
                 gamename: initialData.gamename,
+                email: initialData.email,
+                start_timestamp: initialData.start_timestamp,
+                language: initialData.language,
                 status: initialData.status
             });
+            
+            console.log('📦 Full initialData object:', initialData);
             
             // Save to localStorage as backup
             localStorage.setItem('maskedEmployeeInitial', JSON.stringify(initialData));
@@ -456,10 +468,16 @@ class MaskedEmployeeForm {
                 // Update existing record (player is restarting)
                 record = await pb.collection('MEQuestions').update(existingRecords[0].id, initialData);
                 console.log('✅ Updated existing player record (restart):', record.id);
+                console.log('📧 Record email:', record.email);
+                console.log('⏰ Record datum:', record.datum);
+                console.log('🌐 Record language:', record.language);
             } else {
                 // Create new record for new player
                 record = await pb.collection('MEQuestions').create(initialData);
                 console.log('✅ Created new player record:', record.id);
+                console.log('📧 Record email:', record.email);
+                console.log('⏰ Record datum:', record.datum);
+                console.log('🌐 Record language:', record.language);
             }
             
             // Store the record ID for future updates
@@ -500,6 +518,17 @@ class MaskedEmployeeForm {
                 chapter07: chapterAnswers.chapter07 || {},
                 chapter08: chapterAnswers.chapter08 || {}
             };
+            
+            // Only include email/timestamp/language if they have values (don't overwrite with empty)
+            if (this.playerEmail) {
+                progressData.email = this.playerEmail;
+            }
+            if (this.startTimestamp) {
+                progressData.datum = this.startTimestamp;
+            }
+            if (this.currentLanguage) {
+                progressData.language = this.currentLanguage;
+            }
             
             console.log('📊 Progress data to save:', {
                 player: progressData.nameplayer,
@@ -561,10 +590,37 @@ class MaskedEmployeeForm {
         // Organize answers by chapter to match PocketBase structure
         const chapterAnswers = this.organizeAnswersByChapter(data.answers);
         
+        // Calculate total character count from all text answers
+        const calculateTotalCharacters = () => {
+            let totalChars = 0;
+            
+            // Count characters from all answers
+            for (const [questionId, answer] of Object.entries(this.answers)) {
+                if (typeof answer === 'string') {
+                    totalChars += answer.length;
+                } else if (typeof answer === 'object' && answer !== null) {
+                    // Handle scene-based answers (chapter 9)
+                    for (const sceneAnswer of Object.values(answer)) {
+                        if (typeof sceneAnswer === 'string') {
+                            totalChars += sceneAnswer.length;
+                        }
+                    }
+                }
+            }
+            
+            console.log('📊 Total character count calculated:', totalChars);
+            return totalChars;
+        }
+        
+        const totalCharCount = calculateTotalCharacters();
+        console.log('✍️ Player wrote a total of', totalCharCount, 'characters across all answers');
+
         // Prepare data for PocketBase schema with separate chapter fields AND character data
         const submissionData = {
             gamename: this.gameName,
             nameplayer: data.playerName,
+            email: this.playerEmail, // Email from confidentiality agreement
+            datum: this.startTimestamp, // Timestamp when user started
             chapter01: chapterAnswers.chapter01 || {},
             chapter02: chapterAnswers.chapter02 || {},
             chapter03: chapterAnswers.chapter03 || {},
@@ -586,7 +642,8 @@ class MaskedEmployeeForm {
             story_prompt2: characterData.story_prompt_level2 || '',
             story_prompt3: characterData.story_prompt_level3 || '',
             image_prompt: characterData.image_prompt || '',
-            character_generation_success: characterData.success || false
+            character_generation_success: characterData.success || false,
+            nr_tekens: totalCharCount
         };
         
         try {
@@ -605,12 +662,21 @@ class MaskedEmployeeForm {
             const credentials = 'biknu8-pyrnaB-mytvyx';
             pb.authStore.save(credentials, { admin: true });
             
-            // ALWAYS CREATE NEW RECORD for final submission (each play is unique)
-            console.log('✨ Creating NEW record for this submission');
-            const record = await pb.collection('MEQuestions').create(submissionData);
-            this.playerRecordId = record.id;
-            console.log('✅ Created new PocketBase record:', record.id);
-            return record;
+            // Update existing record instead of creating new one
+            if (this.playerRecordId) {
+                console.log('✅ Updating existing record:', this.playerRecordId);
+                const record = await pb.collection('MEQuestions').update(this.playerRecordId, submissionData);
+                console.log('✅ Updated PocketBase record:', record.id);
+                console.log('✍️ Character count saved:', totalCharCount, 'tekens');
+                return record;
+            } else {
+                // Fallback: create new record if no ID found
+                console.log('⚠️ No playerRecordId found, creating new record');
+                const record = await pb.collection('MEQuestions').create(submissionData);
+                this.playerRecordId = record.id;
+                console.log('✅ Created new PocketBase record:', record.id);
+                return record;
+            }
         } catch (error) {
             console.error('❌ PocketBase save error:', error);
             console.error('Error details:', error.response || error.message);
@@ -619,23 +685,20 @@ class MaskedEmployeeForm {
     }
 
     organizeAnswersByChapter(answers) {
-        // Define question ID ranges for each chapter
-        const chapterRanges = {
-            chapter01: [1, 2, 3, 4, 5],           // Introductie & Basisinformatie
-            chapter02: [6, 7, 8, 9, 10],          // Masked Identity
-            chapter03: [11, 12, 13, 14, 15, 16],  // Persoonlijke Eigenschappen
-            chapter04: [17, 18, 19, 20, 21],      // Verborgen Talenten
-            chapter05: [22, 23, 24, 25, 26],      // Jeugd & Verleden
-            chapter06: [27, 28, 29, 30, 31],      // Fantasie & Dromen
-            chapter07: [32, 33, 34, 35, 36],      // Eigenaardigheden
-            chapter08: [37, 38, 39, 40],          // Onverwachte Voorkeuren
-            chapter09: [41, 42, 43]               // Film Maken
+        const chapterQuestionMap = {
+            chapter01: [1, 2, 3, 4, 5, 6],        // Basis Informatie
+            chapter02: [7, 8],                    // Je Mysterieuze Identiteit
+            chapter03: [9, 10, 11],               // Verborgen Krachten
+            chapter04: [12, 13],                  // Jouw Alter Ego
+            chapter05: [14, 15, 16, 17],          // Jouw Origin Story
+            chapter06: [18, 19, 20, 21],          // Parallelle Universa
+            chapter07: [22, 23],                  // Guilty Pleasures & Weird Habits
+            chapter08: [24],                      // Jouw Unieke Rituelen
+            chapter09: [41, 42, 43]               // Film Maken (Jouw Geheime Verhaal)
         };
 
         const chapterAnswers = {};
-        
-        // Group answers by chapter
-        Object.entries(chapterRanges).forEach(([chapterKey, questionIds]) => {
+        Object.entries(chapterQuestionMap).forEach(([chapterKey, questionIds]) => {
             const chapterData = {};
             questionIds.forEach(questionId => {
                 if (answers[questionId] !== undefined) {
@@ -715,8 +778,10 @@ class MaskedEmployeeForm {
         }
         // Dutch content is hardcoded in HTML, no need to update
         
-        // Reset checkbox and button
+        // Reset checkbox, email input, and button
         document.getElementById('confidentialityAgree').checked = false;
+        document.getElementById('emailSection').style.display = 'none';
+        document.getElementById('modalEmailInput').value = '';
         document.getElementById('modalAcceptButton').disabled = true;
         
         // Show modal
@@ -734,6 +799,7 @@ class MaskedEmployeeForm {
         // Hide progress indicators
         document.getElementById('stepIndicator').style.display = 'none';
         document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('progressCircleContainer').style.display = 'none';
         
         // Show loading state
         document.querySelector('.loading-summary').style.display = 'flex';
@@ -947,62 +1013,42 @@ class MaskedEmployeeForm {
                 this.displayChapter(this.currentChapter);
             }
         } else {
-            // User confirmed - show email modal
-            this.showEmailModal();
+            // User confirmed - show processing confirmation modal
+            this.showProcessingConfirmationModal();
         }
     }
 
-    showEmailModal() {
-        const modal = document.getElementById('emailModal');
-        const emailInput = document.getElementById('emailInput');
+    showProcessingConfirmationModal() {
+        const modal = document.getElementById('processingConfirmationModal');
         
         // Update modal text based on language
         const lang = this.currentLanguage;
-        document.getElementById('emailModalTitle').textContent = 
-            lang === 'nl' ? '📧 Waar mogen we de uitkomst naar toe mailen?' : '📧 Where can we send the results?';
-        document.getElementById('sendEmailButtonText').textContent = 
-            lang === 'nl' ? 'Verstuur' : 'Send';
-        emailInput.placeholder = lang === 'nl' ? 'jouw@email.nl' : 'your@email.com';
-        
-        // Clear previous email
-        emailInput.value = '';
+        if (lang === 'en') {
+            document.getElementById('processingConfirmationTitle').textContent = '🎨 Fantastic!';
+            document.getElementById('confirmProcessingButtonText').textContent = 'Fantastic!';
+        }
         
         // Show modal
         modal.style.display = 'flex';
-        
-        // Focus on email input
-        setTimeout(() => emailInput.focus(), 300);
     }
 
-    closeEmailModal() {
-        document.getElementById('emailModal').style.display = 'none';
+    closeProcessingConfirmationModal() {
+        document.getElementById('processingConfirmationModal').style.display = 'none';
     }
 
-    async handleEmailSubmit() {
-        const emailInput = document.getElementById('emailInput');
-        const email = emailInput.value.trim();
-        
-        // Validate email
-        if (!email || !this.isValidEmail(email)) {
-            alert(this.currentLanguage === 'nl' ? 
-                'Vul een geldig e-mailadres in' : 
-                'Please enter a valid email address');
-            emailInput.focus();
-            return;
-        }
-        
-        // Store email
-        this.userEmail = email;
+    async handleProcessingConfirmation() {
+        // Email already collected from confidentiality agreement
+        // Use this.playerEmail instead of asking again
         
         // Close modal
-        this.closeEmailModal();
+        this.closeProcessingConfirmationModal();
         
         // Show loading
         this.showLoading(true);
         
         try {
-            // Send initial email with character description
-            console.log('📧 Sending initial email with character data...');
+            // Send initial email with character description using playerEmail
+            console.log('📧 Sending initial email with character data to:', this.playerEmail);
             await this.sendDescriptionEmail();
             console.log('✅ Initial email sent');
             
@@ -1010,7 +1056,7 @@ class MaskedEmployeeForm {
             this.showProcessingPage();
             
             // Start image generation with stored character data
-            console.log('🎨 Starting image generation with email:', email);
+            console.log('🎨 Starting image generation with email:', this.playerEmail);
             if (this.currentCharacterData) {
                 this.generateAndUploadImage(this.currentCharacterData).catch(err => {
                     console.error('❌ Image generation failed:', err);
@@ -1042,7 +1088,7 @@ class MaskedEmployeeForm {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: this.userEmail,
+                    email: this.playerEmail,
                     playerName: this.playerName,
                     gameName: this.gameName,
                     language: this.currentLanguage,
@@ -1055,7 +1101,7 @@ class MaskedEmployeeForm {
             const result = await response.json();
             
             if (result.success) {
-                console.log('✅ Description email sent to:', this.userEmail);
+                console.log('✅ Description email sent to:', this.playerEmail);
             } else {
                 console.warn('⚠️ Email send failed:', result.error);
             }
@@ -1213,7 +1259,7 @@ class MaskedEmployeeForm {
             
             await pb.collection('MEQuestions').update(this.playerRecordId, {
                 image_prompt: JSON.stringify(promptData),
-                email: this.userEmail
+                email: this.playerEmail
             });
             
             // Create form data for file upload
@@ -1253,7 +1299,7 @@ class MaskedEmployeeForm {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: this.userEmail,
+                    email: this.playerEmail,
                     playerName: this.playerName,
                     gameName: this.gameName,
                     language: this.currentLanguage,
@@ -1306,6 +1352,16 @@ class MaskedEmployeeForm {
     isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
+    }
+
+    formatTimestamp(date) {
+        // Format: "03 Nov 12:54"
+        const months = ['Jan', 'Feb', 'Mrt', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = months[date.getMonth()];
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${day} ${month} ${hours}:${minutes}`;
     }
     
     async startImageGeneration() {
@@ -1480,6 +1536,7 @@ class MaskedEmployeeForm {
         // Hide progress indicators
         document.getElementById('stepIndicator').style.display = 'none';
         document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('progressCircleContainer').style.display = 'none';
         
         // Reset preview page
         document.querySelector('.loading-preview').style.display = 'block';
@@ -1588,9 +1645,9 @@ class MaskedEmployeeForm {
         }
         nameOnly = nameOnly.trim();
         
-        // Parse personality traits into bars
-        console.log('📊 Personality traits data:', characterData.personality_traits);
-        const personalityBars = this.createPersonalityBars(characterData.personality_traits || '');
+        // Create personality sliders from user's actual answers
+        console.log('📊 Creating personality sliders from user answers');
+        const personalitySliders = this.createPersonalitySliders();
         
         // Extract sections from AI summary
         const sections = this.parseAISummary(characterData.ai_summary || '');
@@ -1607,17 +1664,26 @@ class MaskedEmployeeForm {
                     <p><strong>🎨 ${this.currentLanguage === 'nl' ? 'Stijl' : 'Style'}:</strong> ${this.formatCharacterType(characterData.character_type)}</p>
                     <div class="personality-section">
                         <p><strong>✨ ${this.currentLanguage === 'nl' ? 'Jouw nieuwe en unieke Persoonlijkheid' : 'Your new and unique Personality'}:</strong></p>
-                        ${personalityBars}
+                        ${personalitySliders}
                     </div>
                 </div>
                 
                 <div class="summary-section">
-                    <h3>${this.currentLanguage === 'nl' ? 'Een perfecte samenvatting van wie je bent:' : 'A perfect summary of who you are:'}</h3>
-                    <h4>📖 ${this.currentLanguage === 'nl' ? 'Jouw Verhaal in Vogelvlucht' : 'Your Story at a Glance'}</h4>
+                    ${!sections.heading ? `<h3>${this.currentLanguage === 'nl' ? 'Een perfecte samenvatting van wie je bent:' : 'A perfect summary of who you are:'}</h3>` : ''}
+                    
+                    ${sections.heading ? `
+                    <h3 style="color: #8A2BE2; font-size: 1.5em; margin: 20px 0 10px 0;">${sections.heading}</h3>
+                    ` : ''}
+                    
+                    ${sections.subheading ? `
+                    <h4 style="color: #666; font-size: 1.2em; font-style: italic; margin: 10px 0 15px 0;">${sections.subheading}</h4>
+                    ` : ''}
+                    
+                    ${!sections.heading ? `<h4>📖 ${this.currentLanguage === 'nl' ? 'Jouw Verhaal in Vogelvlucht' : 'Your Story at a Glance'}</h4>` : ''}
                     <p>${sections.character || characterData.ai_summary}</p>
                     
                     ${sections.environment ? `
-                    <h4>${this.currentLanguage === 'nl' ? 'En waar je zoal uithangt' : 'And where you hang out'}</h4>
+                    <h4 style="color: #8A2BE2; font-size: 1.3em; margin: 20px 0 10px 0;">🌍 ${this.currentLanguage === 'nl' ? 'En waar je zoal uithangt' : 'And where you hang out'}</h4>
                     <p>${sections.environment}</p>
                     ` : ''}
                 </div>
@@ -1646,32 +1712,89 @@ class MaskedEmployeeForm {
         previewContent.style.display = 'block';
     }
     
+    createPersonalitySliders() {
+        // Get user's actual slider values from their answers (question 2)
+        const traitMapping = [
+            { id: 'dreamy_pragmatic', left: 'Dromerig', right: 'Pragmatisch' },
+            { id: 'introverted_social', left: 'Introvert', right: 'Sociaal' },
+            { id: 'chaotic_organized', left: 'Chaotisch', right: 'Georganiseerd' },
+            { id: 'cautious_reckless', left: 'Voorzichtig', right: 'Roekeloos' },
+            { id: 'philosophical_practical', left: 'Filosofisch', right: 'Praktisch' },
+            { id: 'serious_lighthearted', left: 'Serieus', right: 'Luchtig' }
+        ];
+        
+        let html = '<div class="personality-sliders-display">';
+        
+        traitMapping.forEach(trait => {
+            const answerKey = `2_trait_${trait.id}`;
+            const value = this.answers[answerKey] || 5; // Default to middle if not found
+            
+            html += `
+                <div class="trait-slider-display">
+                    <div class="trait-labels">
+                        <span class="trait-left">${trait.left}</span>
+                        <span class="trait-right">${trait.right}</span>
+                    </div>
+                    <div class="slider-track">
+                        <div class="slider-fill" style="width: ${(value / 9) * 100}%"></div>
+                        <div class="slider-thumb" style="left: ${((value - 1) / 8) * 100}%">
+                            <span class="slider-value">${value}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += '</div>';
+        return html;
+    }
+
     createPersonalityBars(personalityText) {
-        // Parse personality traits like "Adventurous: 0\nPractical: 0\nPlayful: 2\nWise: 0\nCreative: 6"
-        const traits = {
-            'Adventurous': 0,
-            'Practical': 0,
-            'Playful': 0,
-            'Wise': 0,
-            'Creative': 0
-        };
+        // Parse personality traits - supports both formats:
+        // Old: "Adventurous: 5" (out of 6)
+        // New: "Mysterieus Creatief: 8/10" (out of 10)
+        const traits = {};
+        let maxScore = 10; // Default to 10
+        
+        if (!personalityText || personalityText.trim() === '') {
+            console.warn('⚠️ No personality traits data');
+            return '<div class="personality-bars"><p>Geen persoonlijkheidsdata beschikbaar</p></div>';
+        }
         
         // Extract values from text
         const lines = personalityText.split('\n');
         lines.forEach(line => {
-            const match = line.match(/(Adventurous|Practical|Playful|Wise|Creative):\s*(\d+)/i);
+            // Match any trait name with score (handles both "Name: 5" and "Name: 8/10")
+            const match = line.match(/^([^:]+):\s*(\d+)(?:\/(\d+))?/);
             if (match) {
-                traits[match[1]] = parseInt(match[2]);
+                const traitName = match[1].trim();
+                const score = parseInt(match[2]);
+                const outOf = match[3] ? parseInt(match[3]) : null;
+                
+                // Determine max score from first trait with /X format
+                if (outOf && maxScore === 10) {
+                    maxScore = outOf;
+                }
+                
+                traits[traitName] = score;
             }
         });
         
-        // Create HTML for bars
+        // If no traits found, return empty state
+        if (Object.keys(traits).length === 0) {
+            console.warn('⚠️ Could not parse personality traits from:', personalityText);
+            return '<div class="personality-bars"><p>Geen persoonlijkheidsdata beschikbaar</p></div>';
+        }
+        
+        console.log('✅ Parsed personality traits:', traits, 'Max score:', maxScore);
+        
+        // Create HTML for bars with fixed-width labels for alignment
         let html = '<div class="personality-bars">';
         for (const [trait, value] of Object.entries(traits)) {
-            const percentage = (value / 6) * 100;
+            const percentage = (value / maxScore) * 100;
             html += `
                 <div class="personality-bar-container">
-                    <span class="trait-label">${trait}:</span>
+                    <span class="trait-label" style="min-width: 220px; display: inline-block;">${trait}:</span>
                     <div class="personality-bar">
                         <div class="personality-fill" style="width: ${percentage}%"></div>
                     </div>
@@ -1684,23 +1807,48 @@ class MaskedEmployeeForm {
     }
     
     parseAISummary(summary) {
-        // Try to extract KARAKTER and OMGEVING sections
+        // Remove the PERSOONLIJKHEID section if present
+        let cleanedSummary = summary.replace(/3\.\s*PERSOONLIJKHEID[^:]*:[\s\S]*?(?====\s*PERSOONLIJKHEID\s*===)[\s\S]*?(?=\n\n|$)/gi, '');
+        cleanedSummary = cleanedSummary.replace(/===\s*PERSOONLIJKHEID\s*===[\s\S]*?(?=\n\n|$)/gi, '');
+        
         const sections = {
+            heading: '',
+            subheading: '',
             character: '',
             environment: ''
         };
         
-        // Look for "1. KARAKTER" and "2. OMGEVING" sections
-        const karakterMatch = summary.match(/1\.\s*KARAKTER[^:]*:([\s\S]*?)(?=2\.\s*OMGEVING|$)/i);
-        const omgevingMatch = summary.match(/2\.\s*OMGEVING[^:]*:([\s\S]*?)$/i);
-        
-        if (karakterMatch) {
-            sections.character = karakterMatch[1].trim();
+        // NEW FORMAT: Extract "Dit ben je eigenlijk heel diep van binnen:"
+        const headingMatch = cleanedSummary.match(/Dit ben je eigenlijk heel diep van binnen:/i);
+        if (headingMatch) {
+            sections.heading = 'Dit ben je eigenlijk heel diep van binnen:';
+            
+            // Extract subheading "Een [adjective] [Type]"
+            const subheadingMatch = cleanedSummary.match(/Een\s+([^\.]+?(?:Prins|Prinses|Heks|Fee|Tovenaar|Ridder|Panda|Leeuw|Olifant|Aardbei|Tomaat|Banaan|Wortel|Uitvinder|Ontdekkingsreiziger|Actrice|Held|Krijger|Kabouter))/i);
+            if (subheadingMatch) {
+                sections.subheading = subheadingMatch[0].trim();
+            }
+            
+            // Extract character body starting with "Jij bent"
+            const bodyMatch = cleanedSummary.match(/Jij bent[\s\S]*?(?====\s*OMGEVING\s*===|2\.\s*OMGEVING|$)/i);
+            if (bodyMatch) {
+                sections.character = bodyMatch[0].trim();
+            }
         } else {
-            // If no sections found, use full summary
-            sections.character = summary;
+            // OLD FORMAT: Look for "1. KARAKTER" or "=== KARAKTER ===" sections
+            const karakterMatch = cleanedSummary.match(/(?:1\.\s*KARAKTER[^:]*:|===\s*KARAKTER\s*===)([\s\S]*?)(?=2\.\s*OMGEVING|===\s*OMGEVING\s*===|$)/i);
+            
+            if (karakterMatch) {
+                sections.character = karakterMatch[1].trim();
+            } else {
+                // If no sections found, try to extract everything before OMGEVING
+                const beforeOmgeving = cleanedSummary.split(/===\s*OMGEVING\s*===/i)[0];
+                sections.character = beforeOmgeving.trim();
+            }
         }
         
+        // Extract environment section (works for all formats including plain "OMGEVING:")
+        const omgevingMatch = cleanedSummary.match(/(?:2\.\s*OMGEVING[^:]*:|===\s*OMGEVING\s*===|OMGEVING:)([\s\S]*?)$/i);
         if (omgevingMatch) {
             sections.environment = omgevingMatch[1].trim();
         }
@@ -1855,8 +2003,8 @@ class MaskedEmployeeForm {
         // Hide preview page
         document.getElementById('characterPreviewPage').style.display = 'none';
         
-        // Show email modal
-        this.showEmailModal();
+        // Show processing confirmation modal
+        this.showProcessingConfirmationModal();
     }
 
     async saveDescriptionsToPocketBase() {
@@ -2008,6 +2156,7 @@ class MaskedEmployeeForm {
         // Hide progress indicators
         document.getElementById('stepIndicator').style.display = 'none';
         document.getElementById('progressContainer').style.display = 'none';
+        document.getElementById('progressCircleContainer').style.display = 'none';
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -2053,14 +2202,56 @@ class MaskedEmployeeForm {
             this.showConfidentialityModal();
         });
         
-        // Confidentiality checkbox
+        // Confidentiality checkbox - show email section when checked
         document.getElementById('confidentialityAgree').addEventListener('change', (e) => {
-            document.getElementById('modalAcceptButton').disabled = !e.target.checked;
+            const emailSection = document.getElementById('emailSection');
+            if (e.target.checked) {
+                // Fade in email section
+                emailSection.style.display = 'block';
+                emailSection.style.opacity = '0';
+                setTimeout(() => {
+                    emailSection.style.transition = 'opacity 0.5s ease-in';
+                    emailSection.style.opacity = '1';
+                }, 10);
+                // Focus on email input
+                setTimeout(() => {
+                    document.getElementById('modalEmailInput').focus();
+                }, 500);
+            } else {
+                // Hide email section
+                emailSection.style.display = 'none';
+                document.getElementById('modalEmailInput').value = '';
+                document.getElementById('modalAcceptButton').disabled = true;
+            }
         });
         
-        // Modal accept button
+        // Email input - enable button when valid email is entered
+        document.getElementById('modalEmailInput').addEventListener('input', (e) => {
+            const email = e.target.value.trim();
+            const isValid = this.isValidEmail(email);
+            document.getElementById('modalAcceptButton').disabled = !isValid;
+        });
+        
+        // Modal accept button - save email and start gameshow
         document.getElementById('modalAcceptButton').addEventListener('click', () => {
+            const email = document.getElementById('modalEmailInput').value.trim();
+            if (!this.isValidEmail(email)) {
+                alert(this.currentLanguage === 'nl' ? 
+                    'Vul een geldig e-mailadres in' : 
+                    'Please enter a valid email address');
+                return;
+            }
+            
+            // Store email and timestamp BEFORE anything else
+            this.playerEmail = email;
+            this.startTimestamp = new Date().toISOString(); // ISO format for PocketBase DateTime field
             this.confidentialityAccepted = true;
+            
+            console.log('✅ Confidentiality accepted with email:', this.playerEmail);
+            console.log('✅ Start timestamp:', this.startTimestamp);
+            console.log('✅ Current language:', this.currentLanguage);
+            
+            // Hide modal and start gameshow
             this.hideConfidentialityModal();
             this.startGameshow();
         });
@@ -2114,23 +2305,12 @@ class MaskedEmployeeForm {
             this.handleFinalSubmission();
         });
 
-        // Email modal submit button
-        document.getElementById('sendEmailButton').addEventListener('click', () => {
-            this.handleEmailSubmit();
-        });
-
-        // Email input - submit on Enter key
-        document.getElementById('emailInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                this.handleEmailSubmit();
-            }
+        // Processing confirmation button
+        document.getElementById('confirmProcessingButton').addEventListener('click', () => {
+            this.handleProcessingConfirmation();
         });
 
         // Character Preview page buttons
-        document.getElementById('regenerateButton').addEventListener('click', () => {
-            this.regenerateCharacter();
-        });
-
         document.getElementById('acceptCharacterButton').addEventListener('click', () => {
             this.acceptCharacterAndContinue();
         });
@@ -2283,7 +2463,6 @@ class MaskedEmployeeForm {
         // Preview page
         safeUpdate('previewTitle', t.previewTitle);
         safeUpdate('loadingPreviewText', t.loadingPreview);
-        safeUpdate('regenerateButtonText', t.regenerateButton);
         safeUpdate('acceptButtonText', t.acceptButton);
         safeUpdate('previewNote', t.previewNote);
         
@@ -2454,6 +2633,7 @@ class MaskedEmployeeForm {
             // Show progress indicators
             document.getElementById('stepIndicator').style.display = 'block';
             document.getElementById('progressContainer').style.display = 'flex';
+            document.getElementById('progressCircleContainer').style.display = 'block';
             
             this.displayChapter(this.currentChapter);
             
@@ -2491,6 +2671,14 @@ class MaskedEmployeeForm {
         const progressPercentage = Math.round((chapterNumber / this.totalChapters) * 100);
         document.getElementById('progressFill').style.width = `${progressPercentage}%`;
         document.getElementById('progressPercentage').textContent = `${progressPercentage}%`;
+        
+        // Update circular progress
+        const circle = document.getElementById('progressCircle');
+        if (circle) {
+            const circumference = 220; // 2 * π * r (r=35)
+            const offset = circumference - (progressPercentage / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+        }
 
         // Update chapter info with language support
         document.getElementById('chapterTitle').textContent = chapter.title[lang] || chapter.title;
@@ -2562,6 +2750,69 @@ class MaskedEmployeeForm {
             });
 
             questionDiv.appendChild(optionsList);
+        } else if (question.type === 'personality-traits') {
+            // Personality traits with sliders (1-9 scale)
+            const traitsContainer = document.createElement('div');
+            traitsContainer.className = 'personality-traits-container';
+            
+            question.traits.forEach((trait, traitIndex) => {
+                const traitDiv = document.createElement('div');
+                traitDiv.className = 'trait-slider-group';
+                
+                // Labels row
+                const labelsRow = document.createElement('div');
+                labelsRow.className = 'trait-labels';
+                
+                const leftLabel = document.createElement('span');
+                leftLabel.className = 'trait-label-left';
+                leftLabel.textContent = trait.left[lang] || trait.left;
+                
+                const rightLabel = document.createElement('span');
+                rightLabel.className = 'trait-label-right';
+                rightLabel.textContent = trait.right[lang] || trait.right;
+                
+                labelsRow.appendChild(leftLabel);
+                labelsRow.appendChild(rightLabel);
+                
+                // Slider row
+                const sliderRow = document.createElement('div');
+                sliderRow.className = 'trait-slider-row';
+                
+                const slider = document.createElement('input');
+                slider.type = 'range';
+                slider.className = 'trait-slider';
+                slider.min = '1';
+                slider.max = '9';
+                slider.step = '1';
+                slider.value = '5'; // Default middle value
+                slider.name = `question_${question.id}_trait_${trait.id}`;
+                slider.required = true;
+                
+                // Restore previous answer if exists
+                const answerKey = `${question.id}_trait_${trait.id}`;
+                if (this.answers[answerKey] !== undefined) {
+                    slider.value = this.answers[answerKey];
+                }
+                
+                // Value display
+                const valueDisplay = document.createElement('span');
+                valueDisplay.className = 'trait-value';
+                valueDisplay.textContent = slider.value;
+                
+                // Update value display on change
+                slider.addEventListener('input', (e) => {
+                    valueDisplay.textContent = e.target.value;
+                });
+                
+                sliderRow.appendChild(slider);
+                sliderRow.appendChild(valueDisplay);
+                
+                traitDiv.appendChild(labelsRow);
+                traitDiv.appendChild(sliderRow);
+                traitsContainer.appendChild(traitDiv);
+            });
+            
+            questionDiv.appendChild(traitsContainer);
         } else if (question.type === 'text') {
             // Check if this question has scenes (Chapter 9 questions)
             if (question.scenes && Array.isArray(question.scenes[lang])) {
@@ -2591,8 +2842,20 @@ class MaskedEmployeeForm {
                         textarea.value = this.answers[answerKey];
                     }
                     
+                    // Character counter
+                    const charCounter = document.createElement('div');
+                    charCounter.className = 'char-counter';
+                    charCounter.textContent = `${textarea.value.length} tekens`;
+                    
+                    // Update counter on input
+                    textarea.addEventListener('input', (e) => {
+                        const count = e.target.value.length;
+                        charCounter.textContent = lang === 'nl' ? `${count} tekens` : `${count} characters`;
+                    });
+                    
                     sceneDiv.appendChild(sceneLabel);
                     sceneDiv.appendChild(textarea);
+                    sceneDiv.appendChild(charCounter);
                     scenesContainer.appendChild(sceneDiv);
                 });
                 
@@ -2613,7 +2876,19 @@ class MaskedEmployeeForm {
                     textarea.value = this.answers[question.id];
                 }
 
+                // Character counter
+                const charCounter = document.createElement('div');
+                charCounter.className = 'char-counter';
+                charCounter.textContent = `${textarea.value.length} tekens`;
+                
+                // Update counter on input
+                textarea.addEventListener('input', (e) => {
+                    const count = e.target.value.length;
+                    charCounter.textContent = lang === 'nl' ? `${count} tekens` : `${count} characters`;
+                });
+
                 questionDiv.appendChild(textarea);
+                questionDiv.appendChild(charCounter);
             }
         }
 
@@ -2679,6 +2954,9 @@ class MaskedEmployeeForm {
             if (question.type === 'multiple-choice') {
                 const radios = questionDiv.querySelectorAll('input[type="radio"]');
                 hasAnswer = Array.from(radios).some(radio => radio.checked);
+            } else if (question.type === 'personality-traits') {
+                // Sliders always have a value (default is 5), so they're always valid
+                hasAnswer = true;
             } else if (question.type === 'text') {
                 const textarea = questionDiv.querySelector('textarea');
                 hasAnswer = textarea.value.trim().length > 0;
@@ -2713,13 +2991,21 @@ class MaskedEmployeeForm {
                 if (checkedRadio) {
                     this.answers[question.id] = parseInt(checkedRadio.value);
                     
-                    // Special handling for Question 7 (Character Type Selection)
-                    if (question.id === 7 && question.characterTypeMapping) {
+                    // Special handling for Question 5 (Character Type Selection)
+                    if (question.id === 5 && question.characterTypeMapping) {
                         const selectedOption = question.options[this.currentLanguage][parseInt(checkedRadio.value)];
                         this.characterType = question.characterTypeMapping[selectedOption];
                         console.log('✅ Character type selected:', this.characterType);
                     }
                 }
+            } else if (question.type === 'personality-traits') {
+                // Save all trait slider values
+                const sliders = questionDiv.querySelectorAll('.trait-slider');
+                sliders.forEach(slider => {
+                    const traitId = slider.name; // e.g., "question_3_trait_dreamy_pragmatic"
+                    const answerKey = traitId.replace('question_', ''); // e.g., "3_trait_dreamy_pragmatic"
+                    this.answers[answerKey] = parseInt(slider.value);
+                });
             } else if (question.type === 'text') {
                 // Check if this question has scenes
                 const lang = this.currentLanguage;
@@ -2735,8 +3021,8 @@ class MaskedEmployeeForm {
                     const textarea = questionDiv.querySelector('textarea');
                     this.answers[question.id] = textarea.value.trim();
                     
-                    // Special handling for Question 6 (Department)
-                    if (question.id === 6) {
+                    // Special handling for Question 4 (Department)
+                    if (question.id === 4) {
                         this.department = textarea.value.trim();
                         console.log('✅ Department saved:', this.department);
                     }

@@ -595,12 +595,31 @@ text-align: left;
     font-family: inherit;
     resize: vertical;
     min-height: 120px;
+    background-color: #ffffff !important;
+    color: #333333 !important;
 }
 
 .text-input:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    background-color: #ffffff !important;
+    color: #333333 !important;
+}
+
+/* Ensure all input and textarea elements have proper colors */
+input[type="text"],
+input[type="email"],
+textarea {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    background-color: #ffffff !important;
+    color: #333333 !important;
 }
 
 /* Scene-based questions (Chapter 9) */
@@ -632,7 +651,8 @@ text-align: left;
 
 .scene-textarea {
     min-height: 80px !important;
-    background: #f8f9fa;
+    background-color: #ffffff !important;
+    color: #333333 !important;
 }
 
 .player-info {
@@ -1921,4 +1941,206 @@ text-align: left;
     margin: 0;
     color: #333;
     line-height: 1.6;
+}
+
+/* Personality Traits Sliders */
+.personality-traits-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.trait-slider-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.trait-labels {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 0.95em;
+}
+
+.trait-label-left {
+    color: #8A2BE2;
+}
+
+.trait-label-right {
+    color: #667eea;
+}
+
+.trait-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.trait-slider {
+    flex: 1;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #8A2BE2, #667eea);
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.trait-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #8A2BE2;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.trait-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 12px rgba(138, 43, 226, 0.4);
+}
+
+.trait-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #8A2BE2;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    transition: all 0.2s ease;
+}
+
+.trait-slider::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 3px 12px rgba(138, 43, 226, 0.4);
+}
+
+.trait-value {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 1.1em;
+    color: #8A2BE2;
+    background: white;
+    padding: 5px 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Character Counter */
+.char-counter {
+    text-align: right;
+    font-size: 0.85em;
+    color: #666;
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.scene-input-group {
+    position: relative;
+}
+
+/* Circular Progress Indicator */
+.progress-circle-container {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 5px;
+}
+
+.progress-circle {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.progress-circle svg {
+    transform: rotate(0deg);
+}
+
+.progress-percentage-circle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: 700;
+    font-size: 1.2em;
+    color: #8A2BE2;
+}
+
+/* Personality Sliders Display (Read-only) */
+.personality-sliders-display {
+    margin: 20px 0;
+}
+
+.trait-slider-display {
+    margin-bottom: 25px;
+}
+
+.trait-slider-display .trait-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.trait-slider-display .trait-left {
+    color: #8A2BE2;
+    font-weight: 500;
+}
+
+.trait-slider-display .trait-right {
+    color: #4169E1;
+    font-weight: 500;
+}
+
+.trait-slider-display .slider-track {
+    position: relative;
+    height: 8px;
+    background: linear-gradient(to right, #8A2BE2, #4169E1);
+    border-radius: 4px;
+    margin-bottom: 5px;
+}
+
+.trait-slider-display .slider-fill {
+    position: absolute;
+    height: 100%;
+    background: linear-gradient(to right, #8A2BE2, #4169E1);
+    border-radius: 4px;
+    opacity: 0.7;
+}
+
+.trait-slider-display .slider-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 24px;
+    background: white;
+    border: 3px solid #8A2BE2;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.trait-slider-display .slider-value {
+    font-size: 11px;
+    font-weight: 700;
+    color: #8A2BE2;
 }

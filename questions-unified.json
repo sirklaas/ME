@@ -42,8 +42,8 @@
       ]
     },
     "penalty_clause": {
-      "nl": "💰 BOETECLAUSULE: Bij overtreding van de geheimhoudingsplicht wordt een boete van €9.750 in rekening gebracht. Deze regel geldt voor alle deelnemers en medewerkers die kennis hebben van de deelnemerslijst.",
-      "en": "💰 PENALTY CLAUSE: In case of violation of the confidentiality obligation, a fine of €9,750 will be charged. This rule applies to all participants and employees who have knowledge of the participants list."
+      "nl": "💰 BOETECLAUSULE: Bij overtreding van de geheimhoudingsplicht wordt een boete van €750 in rekening gebracht. Deze regel geldt voor alle deelnemers en medewerkers die kennis hebben van de deelnemerslijst.",
+      "en": "💰 PENALTY CLAUSE: In case of violation of the confidentiality obligation, a fine of €750 will be charged. This rule applies to all participants and employees who have knowledge of the participants list."
     },
     "how_it_works_title": {
       "nl": "🎯 HOE HET WERKT:",
@@ -104,72 +104,46 @@
         },
         {
           "id": 2,
-          "type": "multiple-choice",
+          "type": "personality-traits",
           "question": {
-            "nl": "Ben je getrouwd, in een relatie, of single?",
-            "en": "Are you married, in a relationship, or single?"
+            "nl": "Kies uit deze tegenpolen waar jij staat",
+            "en": "Choose where you stand on these opposites"
           },
-          "options": {
-            "nl": [
-              "Getrouwd",
-              "In een relatie",
-              "Single",
-              "Het is ingewikkeld"
-            ],
-            "en": [
-              "Married",
-              "In a relationship",
-              "Single",
-              "It's complicated"
-            ]
-          }
+          "traits": [
+            {
+              "id": "dreamy_pragmatic",
+              "left": {"nl": "Dromerig", "en": "Dreamy"},
+              "right": {"nl": "Pragmatisch", "en": "Pragmatic"}
+            },
+            {
+              "id": "introverted_social",
+              "left": {"nl": "Introvert", "en": "Introverted"},
+              "right": {"nl": "Sociaal", "en": "Social"}
+            },
+            {
+              "id": "chaotic_organized",
+              "left": {"nl": "Chaotisch", "en": "Chaotic"},
+              "right": {"nl": "Georganiseerd", "en": "Organized"}
+            },
+            {
+              "id": "cautious_reckless",
+              "left": {"nl": "Voorzichtig", "en": "Cautious"},
+              "right": {"nl": "Roekeloos", "en": "Reckless"}
+            },
+            {
+              "id": "philosophical_practical",
+              "left": {"nl": "Filosofisch", "en": "Philosophical"},
+              "right": {"nl": "Praktisch", "en": "Practical"}
+            },
+            {
+              "id": "serious_lighthearted",
+              "left": {"nl": "Serieus", "en": "Serious"},
+              "right": {"nl": "Luchtig", "en": "Lighthearted"}
+            }
+          ]
         },
         {
           "id": 3,
-          "type": "multiple-choice",
-          "question": {
-            "nl": "Hoeveel fantasie heb je",
-            "en": "How much imagination do you have"
-          },
-          "options": {
-            "nl": [
-              "geen",
-              "best wel een beetje",
-              "heel veel",
-              "out of this world"
-            ],
-            "en": [
-              "none",
-              "quite a bit",
-              "a lot",
-              "out of this world"
-            ]
-          }
-        },
-        {
-          "id": 4,
-          "type": "multiple-choice",
-          "question": {
-            "nl": "In welke leeftijdscategorie valt jouw karakter?",
-            "en": "In which age category does your character fall?"
-          },
-          "options": {
-            "nl": [
-              "10-20 jaar",
-              "20-40 jaar",
-              "40-50 jaar",
-              "50+ jaar"
-            ],
-            "en": [
-              "10-20 years",
-              "20-40 years",
-              "40-50 years",
-              "50+ years"
-            ]
-          }
-        },
-        {
-          "id": 5,
           "type": "multiple-choice",
           "question": {
             "nl": "Hoe lang werk je bij dit bedrijf?",
@@ -191,7 +165,7 @@
           }
         },
         {
-          "id": 6,
+          "id": 4,
           "type": "text",
           "question": {
             "nl": "Op welke afdeling werk je?",
@@ -203,11 +177,11 @@
           }
         },
         {
-          "id": 7,
+          "id": 5,
           "type": "multiple-choice",
           "question": {
-            "nl": "Hoe zou je jouw favoriete karakter omschrijven? Als een...",
-            "en": "How would you describe your favorite character? As a..."
+            "nl": "Klik aan in welke groep je karakter valt",
+            "en": "Click which group your character falls into"
           },
           "options": {
             "nl": [
@@ -237,88 +211,66 @@
             "🎬 Pixar or Disney Character (for example: inventor, adventurer)": "pixar_disney",
             "📚 Fairy Tale Character (for example: prince, princess, witch)": "fairy_tales"
           }
+        },
+        {
+          "id": 6,
+          "type": "text",
+          "question": {
+            "nl": "Wat is je favoriete hobby of bezigheid buiten werk?",
+            "en": "What is your favorite hobby or activity outside of work?"
+          },
+          "placeholder": {
+            "nl": "Bijvoorbeeld: gaming, koken, sporten, muziek maken, lezen...",
+            "en": "For example: gaming, cooking, sports, making music, reading..."
+          }
         }
       ]
     },
     {
       "id": 2,
       "title": {
-        "nl": "Vragen over jouw Masked Identity",
-        "en": "Questions about your Masked Identity"
+        "nl": "Je Mysterieuze Identiteit",
+        "en": "Your Mysterious Identity"
       },
       "description": {
-        "nl": "Laten we jouw mysterieuze kant ontdekken",
-        "en": "Let's discover your mysterious side"
+        "nl": "Laten we samen jouw verborgen persoonlijkheid ontdekken",
+        "en": "Let's discover your hidden personality together"
       },
       "questions": [
-        {
-          "id": 6,
-          "type": "text",
-          "question": {
-            "nl": "Wat omschrijft jouw persoonlijkheid het beste ?",
-            "en": "What best reflects your personality?"
-          },
-          "placeholder": {
-            "nl": "Bijvoorbeeld: een leeuw, omdat ik leidinggevend ben / agent want ik ben streng / tomaat, dromer etc",
-            "en": "For example: a lion, because I'm a leader / policeman cause im strict / tomato cause im juicy, a dreamer etc"
-          }
-        },
         {
           "id": 7,
           "type": "text",
           "question": {
-            "nl": "Welke kleur kostuum zou het beste bij jouw karakter passen en waarom?",
-            "en": "Which color costume would best suit your character and why?"
+            "nl": "Welke kleur en textuur past het best bij jou en waarom?",
+            "en": "Which color and texture best suits you and why?"
           },
           "placeholder": {
-            "nl": "Beschrijf de kleur en gebruik je fantasie maar leg vooral uit waarom...",
-            "en": "Describe the color and use your fantasy but especially explain why..."
+            "nl": "Denk aan: metallic goud met veren, neon groen met glitter, diepzwart fluweel...",
+            "en": "Think of: metallic gold with feathers, neon green with glitter, deep black velvet..."
           }
         },
         {
           "id": 8,
           "type": "multiple-choice",
           "question": {
-            "nl": "Welk element uit de natuur representeert jou het beste?",
-            "en": "Which element from nature represents you best?"
+            "nl": "Welk element zou jouw superkracht voeden?",
+            "en": "Which element would fuel your superpower?"
           },
           "options": {
             "nl": [
-              "Vuur - passievol en energiek",
-              "Water - kalm en aanpassingsvermogen",
-              "Aarde - stabiel en betrouwbaar",
-              "Lucht - vrij en creatief"
+              "🔥 Vuur - explosieve energie & passie",
+              "💧 Water - adaptieve intelligentie & flow",
+              "🌍 Aarde - ongekende kracht & stabiliteit",
+              "💨 Lucht - grenzeloze vrijheid & visie",
+              "⚡ Elektriciteit - pure innovatie & shock factor"
             ],
             "en": [
-              "Fire - passionate and energetic",
-              "Water - calm and adaptable",
-              "Earth - stable and reliable",
-              "Air - free and creative"
+              "🔥 Fire - explosive energy & passion",
+              "💧 Water - adaptive intelligence & flow",
+              "🌍 Earth - unprecedented strength & stability",
+              "💨 Air - boundless freedom & vision",
+              "⚡ Electricity - pure innovation & shock factor"
             ]
-          }
-        },
-        {
-          "id": 9,
-          "type": "text",
-          "question": {
-            "nl": "Welk thema of symbool zou jou het beste weergeven?",
-            "en": "What theme or symbol would be describing you the best"
-          },
-          "placeholder": {
-            "nl": "Beschrijf je icoon of symbool in detail...",
-            "en": "Describe the design of your icon or symbol in detail..."
-          }
-        },
-        {
-          "id": 10,
-          "type": "text",
-          "question": {
-            "nl": "Welke muziekstijl zou het beste bij jouw persoonlijkheid passen? En vertel waarom.",
-            "en": "Which music style would best suit your personality? And describe why."
-          },
-          "placeholder": {
-            "nl": "Bijvoorbeeld: rock, klassiek, jazz, pop...",
-            "en": "For example: rock, classical, jazz, pop..."
           }
         }
       ]
@@ -326,84 +278,48 @@
     {
       "id": 3,
       "title": {
-        "nl": "Persoonlijke Eigenschappen & Karakter",
-        "en": "Personal Traits & Character"
+        "nl": "Verborgen Krachten",
+        "en": "Hidden Powers"
       },
       "description": {
-        "nl": "Vertel ons meer over wie je werkelijk bent",
-        "en": "Tell us more about who you really are"
+        "nl": "Onthul je geheime wapens en talenten",
+        "en": "Reveal your secret weapons and talents"
       },
       "questions": [
+        {
+          "id": 9,
+          "type": "text",
+          "question": {
+            "nl": "Welke bizarre superkracht zou je kiezen en hoe zou je die stiekem op het werk gebruiken?",
+            "en": "What bizarre superpower would you choose and how would you secretly use it at work?"
+          },
+          "placeholder": {
+            "nl": "Telepathie tijdens vergaderingen, tijdreizen naar de vrijdagmiddag, onzichtbaarheid bij de koffieautomaat...",
+            "en": "Telepathy during meetings, time travel to Friday afternoon, invisibility at the coffee machine..."
+          }
+        },
+        {
+          "id": 10,
+          "type": "text",
+          "question": {
+            "nl": "Je hebt 3 geheime talenten die je collega's shockeren - wat zijn ze?",
+            "en": "You have 3 secret talents that would shock your colleagues - what are they?"
+          },
+          "placeholder": {
+            "nl": "Opera zingen, hackende, professioneel armworstelen, magische trucs, speedcubing...",
+            "en": "Opera singing, hacking, professional arm wrestling, magic tricks, speedcubing..."
+          }
+        },
         {
           "id": 11,
           "type": "text",
           "question": {
-            "nl": "Als je een superkracht zou kunnen kiezen, welke zou dat zijn en waarom?",
-            "en": "If you could choose a superpower, what would it be and why?"
+            "nl": "Welk instrument zou je bespelen in jouw droomwereld?",
+            "en": "Which instrument would you play in your dream world?"
           },
           "placeholder": {
-            "nl": "Beschrijf je superkracht en waarom je deze zou kiezen...",
-            "en": "Describe your superpower and why you would choose it..."
-          }
-        },
-        {
-          "id": 12,
-          "type": "text",
-          "question": {
-            "nl": "Wat is je meest bizarre angst waar niemand van weet?",
-            "en": "What is your most bizarre fear that nobody knows about?"
-          },
-          "placeholder": {
-            "nl": "Vertel over je meest ongewone angst...",
-            "en": "Tell about your most unusual fear..."
-          }
-        },
-        {
-          "id": 13,
-          "type": "text",
-          "question": {
-            "nl": "Welke beroemde persoon zou jouw perfecte diner-gast zijn?",
-            "en": "Which famous person would be your perfect dinner guest?"
-          },
-          "placeholder": {
-            "nl": "Noem de persoon en leg uit waarom...",
-            "en": "Name the person and explain why..."
-          }
-        },
-        {
-          "id": 14,
-          "type": "text",
-          "question": {
-            "nl": "Over welk onderwerp zou je het liefst praten tijdens dat diner?",
-            "en": "What topic would you most like to talk about during that dinner?"
-          },
-          "placeholder": {
-            "nl": "Beschrijf twee verschillende gespreksonderwerpen...",
-            "en": "Describe two different conversation topics..."
-          }
-        },
-        {
-          "id": 15,
-          "type": "text",
-          "question": {
-            "nl": "Als je leven een Netflix-serie zou zijn, wat zou de titel zijn?",
-            "en": "If your life were a Netflix series, what would the title be?"
-          },
-          "placeholder": {
-            "nl": "Verzin een creatieve titel voor je levensserie, plus een pay-off",
-            "en": "Come up with a creative title for your life series, plus a tagline"
-          }
-        },
-        {
-          "id": 16,
-          "type": "text",
-          "question": {
-            "nl": "Wat is het meest krankzinnigste dat je ooit hebt gedaan?",
-            "en": "What is the craziest thing you've ever done?"
-          },
-          "placeholder": {
-            "nl": "Vertel over je meest krankzinnigste moment...",
-            "en": "Tell about your craziest moment..."
+            "nl": "Elektrische gitaar, didgeridoo, theremin, een complete drumkit...",
+            "en": "Electric guitar, didgeridoo, theremin, a complete drum kit..."
           }
         }
       ]
@@ -411,72 +327,36 @@
     {
       "id": 4,
       "title": {
-        "nl": "Verborgen Talenten & Hobby's",
-        "en": "Hidden Talents & Hobbies"
+        "nl": "Jouw Alter Ego",
+        "en": "Your Alter Ego"
       },
       "description": {
-        "nl": "Onthul je geheime vaardigheden en passies",
-        "en": "Reveal your secret skills and passions"
+        "nl": "Symbolen en soundtracks van jouw identiteit",
+        "en": "Symbols and soundtracks of your identity"
       },
       "questions": [
         {
-          "id": 17,
+          "id": 12,
           "type": "text",
           "question": {
-            "nl": "Welk geheim talent heb je waar je collega's versteld van zouden staan?",
-            "en": "What secret talent do you have that would amaze your colleagues?"
+            "nl": "Als je een symbool of logo had dat je alter ego representeert, hoe zou het eruitzien?",
+            "en": "If you had a symbol or logo representing your alter ego, what would it look like?"
           },
           "placeholder": {
-            "nl": "Beschrijf twee of meer verborgen talenten...",
-            "en": "Describe two or more hidden talents..."
+            "nl": "Een vlammende laptop, een dansende molecule, een kosmische koffiekop...",
+            "en": "A flaming laptop, a dancing molecule, a cosmic coffee cup..."
           }
         },
         {
-          "id": 18,
+          "id": 13,
           "type": "text",
           "question": {
-            "nl": "Wat is je meest ongewone hobby of verzameling waarvan niemand af weet?",
-            "en": "What is your most unusual hobby or collection that nobody knows about?"
+            "nl": "Welke soundtrack speelt er keihard wanneer jij een ruimte binnenkomt?",
+            "en": "What soundtrack plays loudly when you enter a room?"
           },
           "placeholder": {
-            "nl": "Vertel over deze bijzondere hobby in detail...",
-            "en": "Tell about this special hobby in detail..."
-          }
-        },
-        {
-          "id": 19,
-          "type": "text",
-          "question": {
-            "nl": "Kan je [of zou je willen kunnen ] een instrument bespelen dat niemand op het werk van je verwacht?",
-            "en": "Can you [or would you like to be able to] play an instrument that no one at work would expect from you?"
-          },
-          "placeholder": {
-            "nl": "Welk instrument is datt en waarom is het zo onverwacht...",
-            "en": "Which instrument is it and why is it so unexpected..."
-          }
-        },
-        {
-          "id": 20,
-          "type": "text",
-          "question": {
-            "nl": "Welke sport of activiteit heb je vroeger beoefend die totaal niet bij je huidige imago past?",
-            "en": "Which sport or activity did you practice in the past that doesn't fit your current image at all?"
-          },
-          "placeholder": {
-            "nl": "Beschrijf de sport en waarom het niet past bij je imago...",
-            "en": "Describe the sport and why it doesn't fit your image..."
-          }
-        },
-        {
-          "id": 21,
-          "type": "text",
-          "question": {
-            "nl": "Wat is je meest creatieve uitlaatklep buiten je werk om?",
-            "en": "What is your most creative outlet outside of work?"
-          },
-          "placeholder": {
-            "nl": "Vertel uitvoerig over je creatieve uitlaadklep[pen]...",
-            "en": "Tell extensively about your creative outlet(s)..."
+            "nl": "80s synthwave, heavy metal, klassieke symfonie, vaporwave, lo-fi beats...",
+            "en": "80s synthwave, heavy metal, classical symphony, vaporwave, lo-fi beats..."
           }
         }
       ]
@@ -484,72 +364,60 @@
     {
       "id": 5,
       "title": {
-        "nl": "Jeugd & Verleden",
-        "en": "Youth & Past"
+        "nl": "Jouw Origin Story",
+        "en": "Your Origin Story"
       },
       "description": {
-        "nl": "Een blik in je verleden geeft inzicht in de toekomst",
-        "en": "A look into your past provides insight into the future"
+        "nl": "Elk superheld heeft een verleden",
+        "en": "Every superhero has a past"
       },
       "questions": [
         {
-          "id": 22,
+          "id": 14,
           "type": "text",
           "question": {
-            "nl": "Wat wilde je worden toen je 8 jaar oud was?",
-            "en": "What did you want to be when you were 8 years old?"
+            "nl": "Wat wilde je worden op je 8e, en hoe is dat gerelateerd aan wie je NU bent?",
+            "en": "What did you want to be at age 8, and how is that related to who you are NOW?"
           },
           "placeholder": {
-            "nl": "Vertel over je kinderdroom...",
-            "en": "Tell about your childhood dream..."
+            "nl": "Astronaut → nu ruimtelijk denker, piraat → nu risk-taker, kok → nu problem solver...",
+            "en": "Astronaut → now spatial thinker, pirate → now risk-taker, chef → now problem solver..."
           }
         },
         {
-          "id": 23,
+          "id": 15,
           "type": "text",
           "question": {
-            "nl": "Welke schoolvakken waren vroeger je absolute favorieten en waarom?",
-            "en": "Which school subjects were your absolute favorites and why?"
+            "nl": "Wat is je meest epische jeugdherinnering die je persoonlijkheid heeft gevormd?",
+            "en": "What is your most epic childhood memory that shaped your personality?"
           },
           "placeholder": {
-            "nl": "Noem jouw favoriete vakken en leg uit waarom...",
-            "en": "Name your favorite subjects and explain why..."
+            "nl": "Die keer dat je... (en waarom dit je heeft gemaakt tot wie je bent)",
+            "en": "That time when you... (and why this made you who you are)"
           }
         },
         {
-          "id": 24,
+          "id": 16,
           "type": "text",
           "question": {
-            "nl": "Wat is je meest gênante jeugdherinnering die nu eigenlijk best grappig is?",
-            "en": "What is your most embarrassing childhood memory that is actually quite funny now?"
+            "nl": "Welk advies zou je 16-jarige-jij NOOIT verwachten van je huidige zelf?",
+            "en": "What advice would 16-year-old you NEVER expect from your current self?"
           },
           "placeholder": {
-            "nl": "Mijn gênante maar grappige herinnering...",
-            "en": "My embarrassing but funny memory..."
+            "nl": "Iets dat je jonge zelf zou laten denken: 'Echt? DAT zeg IK?!'",
+            "en": "Something that would make your younger self think: 'Really? I'M saying THAT?!'"
           }
         },
         {
-          "id": 25,
+          "id": 17,
           "type": "text",
           "question": {
-            "nl": "Welke trend uit je jeugd mis je het meest?",
-            "en": "Which trend from your early years do you miss the most?"
+            "nl": "Welke bizarre angst uit je jeugd heb je nog steeds (en geef je ook toe)?",
+            "en": "What bizarre childhood fear do you still have (and admit)?"
           },
           "placeholder": {
-            "nl": "Deze trend mis ik nog elke dag...",
-            "en": "I still miss this trend every day..."
-          }
-        },
-        {
-          "id": 26,
-          "type": "text",
-          "question": {
-            "nl": "Jij bent op jouw 16e verjaardag als gast, welk advies zou je jezelf geven?",
-            "en": "You are a guest on your 16th birthday, what advice would you give yourself?"
-          },
-          "placeholder": {
-            "nl": "Mijn advies aan mijzelf..",
-            "en": "My advice to myself..."
+            "nl": "Bang voor eenden, tostapparaten, winkelpoppen...",
+            "en": "Afraid of ducks, toasters, mannequins..."
           }
         }
       ]
@@ -557,72 +425,97 @@
     {
       "id": 6,
       "title": {
-        "nl": "Fantasie & Dromen",
-        "en": "Fantasy & Dreams"
+        "nl": "Parallelle Universa",
+        "en": "Parallel Universes"
       },
       "description": {
-        "nl": "Vertel ons over je dromen en fantasieën",
-        "en": "Tell us about your dreams and fantasies"
+        "nl": "In andere werelden ben je nog gekker",
+        "en": "In other worlds you're even crazier"
       },
       "questions": [
         {
-          "id": 27,
+          "id": 18,
           "type": "text",
           "question": {
-            "nl": "In welke film- of boekenwereld zou je een maand willen leven?",
-            "en": "In which movie or book world would you like to live for a month?"
+            "nl": "In welk film/game/boek-universum zou je een maand willen leven en wat zou je hoofdquest zijn?",
+            "en": "In which movie/game/book universe would you want to live for a month and what would be your main quest?"
           },
           "placeholder": {
-            "nl": "Beschrijf de wereld uitvoerig en waarom je daar zou willen zijn...",
-            "en": "Describe the world extensively and why you would want to be there..."
+            "nl": "Star Wars → starten van een Jedi bakkerij, Harry Potter → quidditch-agent worden...",
+            "en": "Star Wars → start a Jedi bakery, Harry Potter → become a quidditch agent..."
           }
         },
         {
-          "id": 28,
+          "id": 19,
           "type": "text",
           "question": {
-            "nl": "Je wordt wakker werd met al het geld van Elon Musk, wat zou je daarmee dan gelijk kopen?",
-            "en": "You wake up with all of Elon Musk's money, what would you buy right away?"
+            "nl": "Je wordt wakker met het vermogen van Elon Musk - wat is je eerste bizarre aankoop?",
+            "en": "You wake up with Elon Musk's wealth - what's your first bizarre purchase?"
           },
           "placeholder": {
-            "nl": "Wat zou je allereerste aankoop zijn...",
-            "en": "What would be your very first purchase..."
+            "nl": "Een privé-eiland vol trampolines, 1000 golden retrievers, een chocoladefabriek...",
+            "en": "A private island full of trampolines, 1000 golden retrievers, a chocolate factory..."
           }
         },
         {
-          "id": 29,
+          "id": 20,
           "type": "text",
           "question": {
-            "nl": "Welke periode fascineert je het meest en waarom?",
-            "en": "Which period fascinates you the most and why?"
+            "nl": "Welke historische of fictieve persoon zou je uitnodigen voor een dinner party en over welk absurd onderwerp?",
+            "en": "Which historical or fictional person would you invite to a dinner party and what absurd topic would you discuss?"
           },
           "placeholder": {
-            "nl": "Noem de periode en leg uit wat je fascineert...",
-            "en": "Name the period and explain what fascinates you..."
+            "nl": "Cleopatra → over TikTok strategie, Einstein → over tijdreizen en dating apps...",
+            "en": "Cleopatra → about TikTok strategy, Einstein → about time travel and dating apps..."
           }
         },
         {
-          "id": 30,
+          "id": 21,
           "type": "text",
           "question": {
-            "nl": "Je mag een restaurant openen, welke keuken zou je serveren en hoe zou het heten?",
-            "en": "You can open a restaurant, what cuisine would you serve and what would it be called?"
+            "nl": "Als je leven een Netflix-serie was, wat zou de titel zijn en welke plot twist komt in seizoen 2?",
+            "en": "If your life were a Netflix series, what would the title be and what plot twist comes in season 2?"
           },
           "placeholder": {
-            "nl": "Beschrijf je restaurant concept...",
-            "en": "Describe your restaurant concept..."
+            "nl": "Titel + onverwachte wending die niemand zag aankomen...",
+            "en": "Title + unexpected twist that nobody saw coming..."
+          }
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": {
+        "nl": "Guilty Pleasures & Weird Habits",
+        "en": "Guilty Pleasures & Weird Habits"
+      },
+      "description": {
+        "nl": "Iedereen heeft vreemde kanten",
+        "en": "Everyone has strange sides"
+      },
+      "questions": [
+        {
+          "id": 22,
+          "type": "text",
+          "question": {
+            "nl": "Welke smaakcombinatie eet je die anderen weerzinwekkend vinden, maar jij geniaal vindt?",
+            "en": "What flavor combination do you eat that others find disgusting but you think is genius?"
+          },
+          "placeholder": {
+            "nl": "Pindakaas met augurken, chips in yoghurt, pizza met ananas en banaan...",
+            "en": "Peanut butter with pickles, chips in yogurt, pizza with pineapple and banana..."
           }
         },
         {
-          "id": 31,
+          "id": 23,
           "type": "text",
           "question": {
-            "nl": "Welke plek op aarde [ mag fictie zijn] staat bovenaan je bucketlist en wat trekt je daar naartoe?",
-            "en": "Which place on earth [can be fictional] is at the top of your bucket list and what draws you there?"
+            "nl": "Welke muziek luister je stiekem die NIEMAND van je zou verwachten?",
+            "en": "What music do you secretly listen to that NOBODY would expect from you?"
           },
           "placeholder": {
-            "nl": "Beschrijf deze plek en waarom je er naartoe wilt...",
-            "en": "Describe this place and why you want to go there..."
+            "nl": "K-pop, death metal, klassieke opera, Nederlandse schlagers, ASMR...",
+            "en": "K-pop, death metal, classical opera, Dutch schlagers, ASMR..."
           }
         }
       ]
@@ -630,151 +523,30 @@
     {
       "id": 7,
       "title": {
-        "nl": "Eigenaardigheden & Gewoontes",
-        "en": "Quirks & Habits"
+        "nl": "Jouw Unieke Rituelen",
+        "en": "Your Unique Rituals"
       },
       "description": {
-        "nl": "Jouw gekke gewoontes en excentrieke eigenaardigheden",
-        "en": "Your crazy habits and eccentric quirks"
+        "nl": "De kleine dingen die jou maken tot wie je bent",
+        "en": "The little things that make you who you are"
       },
       "questions": [
         {
-          "id": 32,
+          "id": 24,
           "type": "text",
           "question": {
-            "nl": "Welke vreemde gewoonte heb je waar je familie altijd om lacht?",
-            "en": "What strange habit do you have that your family always laughs about?"
+            "nl": "Welk absurd ritueel of bijgeloof heb je waar je niet vanaf komt?",
+            "en": "What absurd ritual or superstition do you have that you can't let go of?"
           },
           "placeholder": {
-            "nl": "Beschrijf jouw vreemde gewoonte...",
-            "en": "Describe your strange habit..."
-          }
-        },
-        {
-          "id": 33,
-          "type": "text",
-          "question": {
-            "nl": "Wat is je meest onlogische bijgeloof of ritueel?",
-            "en": "What is your most illogical superstition or ritual?"
-          },
-          "placeholder": {
-            "nl": "Vertel er maar eens uitgebreid over",
-            "en": "Tell us about it in detail"
-          }
-        },
-        {
-          "id": 34,
-          "type": "text",
-          "question": {
-            "nl": "Welke smaakcombinatie eet je graag die anderen vies vinden?",
-            "en": "What flavor combination do you enjoy eating that others find disgusting?"
-          },
-          "placeholder": {
-            "nl": "Beschrijf deze vreemde smaakcombinatie...",
-            "en": "Describe this strange flavor combination..."
-          }
-        },
-        {
-          "id": 35,
-          "type": "multiple-choice",
-          "question": {
-            "nl": "Op welk moment van de dag ben je het meest productief?",
-            "en": "At what time of day are you most productive?"
-          },
-          "options": {
-            "nl": [
-              "Vroeg in de ochtend (5-8 uur)",
-              "Ochtend (8-12 uur)",
-              "Middag (12-17 uur)",
-              "Avond (17-24  uur)",
-              "Nacht (00+ uur)"
-            ],
-            "en": [
-              "Early morning (5-8 AM)",
-              "Morning (8 AM-12 PM)",
-              "Afternoon (12-5 PM)",
-              "Evening(5-11 PM )",
-              "Night (11 PM+)"
-            ]
-          }
-        },
-        {
-          "id": 36,
-          "type": "text",
-          "question": {
-            "nl": "Wat is jouw meest ongewone manier om stress af te reageren?",
-            "en": "What is your most unusual way to relieve stress?"
-          },
-          "placeholder": {
-            "nl": "Je bent super stressed - Wat is jouw unieke manier om stress af te reageren ",
-            "en": "Your Super stressed - Describe how you relieve stress in a unique way..."
+            "nl": "3x kloppen voor geluk, alleen linkse sokken eerst, praten tegen planten...",
+            "en": "Knock 3 times for luck, only left socks first, talking to plants..."
           }
         }
       ]
     },
     {
       "id": 8,
-      "title": {
-        "nl": "Onverwachte Voorkeuren",
-        "en": "Unexpected Preferences"
-      },
-      "description": {
-        "nl": "Verras ons met je nogal onverwachte kanten",
-        "en": "Surprise us with your rather unexpected sides"
-      },
-      "questions": [
-        {
-          "id": 37,
-          "type": "text",
-          "question": {
-            "nl": "Waar luister je stiekem graag naar - iets dat niemand van je zou verwachten?",
-            "en": "What music genre do you secretly enjoy listening to - something that no one would expect from you?"
-          },
-          "placeholder": {
-            "nl": "Vertel over je guilty pleasures",
-            "en": "Tell about your guilty pleasures"
-          }
-        },
-        {
-          "id": 38,
-          "type": "text",
-          "question": {
-            "nl": "Welk type TV-programma is je guilty pleasure?",
-            "en": "What type of TV program is your guilty pleasure?"
-          },
-          "placeholder": {
-            "nl": "Beschrijf je foutste TV-programma...",
-            "en": "Describe your worst TV program..."
-          }
-        },
-        {
-          "id": 39,
-          "type": "text",
-          "question": {
-            "nl": "Als je een [ nog een ] tattoo zou nemen, wat zou het zijn en waar zou je het laten zetten?",
-            "en": "If you were to get [ another ] tattoo, what would it be and where would you get it?"
-          },
-          "placeholder": {
-            "nl": "Beschrijf je hypothetische tattoo...",
-            "en": "Describe your hypothetical tattoo..."
-          }
-        },
-        {
-          "id": 40,
-          "type": "text",
-          "question": {
-            "nl": "Welke kleur beschrijft jouw persoonlijkheid het beste en waarom?",
-            "en": "Which color best describes your personality and why?"
-          },
-          "placeholder": {
-            "nl": "Noem de kleur en leg uit waarom...",
-            "en": "Name the color and explain why..."
-          }
-        }
-      ]
-    },
-    {
-      "id": 9,
       "title": {
         "nl": "Jouw Geheime Verhaal in Beeld",
         "en": "Your Secret Story on Screen"
@@ -860,14 +632,14 @@
     }
   ],
   "meta": {
-    "version": "2.0",
-    "created": "2025-10-08",
-    "total_questions": 43,
-    "total_chapters": 9,
+    "version": "3.0",
+    "created": "2025-11-06",
+    "total_questions": 26,
+    "total_chapters": 8,
     "languages": [
       "nl",
       "en"
     ],
-    "estimated_time_minutes": 35
+    "estimated_time_minutes": 18
   }
 }
