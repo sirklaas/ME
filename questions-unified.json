@@ -314,12 +314,12 @@
           "id": 11,
           "type": "text",
           "question": {
-            "nl": "Welk instrument zou je bespelen in jouw droomwereld?",
-            "en": "Which instrument would you play in your dream world?"
+            "nl": "Noem een bekend nummer waarvan jij zeker weet dat iedereen meedanst",
+            "en": "Name a famous song that you're sure everyone will dance to"
           },
           "placeholder": {
-            "nl": "Elektrische gitaar, didgeridoo, theremin, een complete drumkit...",
-            "en": "Electric guitar, didgeridoo, theremin, a complete drum kit..."
+            "nl": "Zoek wel de precieze naam van de artiest en de titel op Youtube of Spotify enz.",
+            "en": "Look up the exact name of the artist and title on Youtube or Spotify etc."
           }
         }
       ]

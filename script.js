@@ -636,6 +636,7 @@ class MaskedEmployeeForm {
             // Add character data fields
             character_name: characterData.character_name || '',
             character_type: characterData.character_type || '',
+            character_base_type: characterData.character_base_type || '', // NEW: For duplicate prevention
             personality_traits: characterData.personality_traits || '',
             ai_summary: characterData.ai_summary || '',
             story_prompt1: characterData.story_prompt_level1 || '',

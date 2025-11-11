@@ -184,6 +184,86 @@ function getCharacterUsageCounts($characterType) {
 }
 
 /**
+ * Extract character base type from AI summary
+ * Examples: "Een vrolijke Tomaat" -> "tomaat", "Jij bent Leo, een majestueuze Leeuw" -> "leeuw"
+ */
+function extractCharacterBaseType($aiSummary) {
+    $characterType = null;
+    
+    // Pattern 1: "Een [adjective] [TYPE]" (e.g., "Een vrolijke Panda", "Een sappige Tomaat")
+    if (preg_match('/Een\s+\w+\s+([A-Z][a-zëïöüáéíóú]+)/u', $aiSummary, $matches)) {
+        $characterType = trim($matches[1]);
+    }
+    // Pattern 2: "Jij bent [Name], een [adjective] [TYPE]" (e.g., "Jij bent Leo, een majestueuze Leeuw")
+    elseif (preg_match('/Jij bent\s+\w+,\s+een\s+\w+\s+([A-Z][a-zëïöüáéíóú]+)/u', $aiSummary, $matches)) {
+        $characterType = trim($matches[1]);
+    }
+    // Pattern 3: Just "Een [TYPE]" at start of line (e.g., "Een Leeuw", "Een Tomaat")
+    elseif (preg_match('/^Een\s+([A-Z][a-zëïöüáéíóú]+)/um', $aiSummary, $matches)) {
+        $characterType = trim($matches[1]);
+    }
+    // Pattern 4: "Jij bent [Name]" followed by newline and "Een [TYPE]"
+    elseif (preg_match('/Jij bent\s+\w+.*?\n+Een\s+([A-Z][a-zëïöüáéíóú]+)/us', $aiSummary, $matches)) {
+        $characterType = trim($matches[1]);
+    }
+    
+    // Return lowercase for consistency
+    return $characterType ? strtolower($characterType) : '';
+}
+
+/**
+ * Get list of used character base types from PocketBase for a specific game
+ * This prevents duplicate characters within the same game
+ */
+function getUsedCharacterBaseTypes($gameName, $characterCategory = null) {
+    require_once __DIR__ . '/api-keys.php';
+    $pbUrl = defined('POCKETBASE_URL') ? POCKETBASE_URL : 'https://pb.masked-employee.com';
+    
+    $usedBaseTypes = [];
+    
+    try {
+        // Query records for this specific game
+        $filter = "gamename='" . addslashes($gameName) . "'";
+        if ($characterCategory) {
+            $filter .= " && character_type='" . addslashes($characterCategory) . "'";
+        }
+        
+        $url = $pbUrl . '/api/collections/ME_questions/records?perPage=500&filter=' . urlencode($filter);
+        
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+        
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($httpCode === 200 && $response) {
+            $data = json_decode($response, true);
+            
+            if (isset($data['items'])) {
+                foreach ($data['items'] as $record) {
+                    // Get character_base_type field
+                    if (isset($record['character_base_type']) && !empty($record['character_base_type'])) {
+                        $baseType = strtolower(trim($record['character_base_type']));
+                        $usedBaseTypes[] = $baseType;
+                        error_log("🔒 Used in this game: " . $baseType);
+                    }
+                }
+            }
+        }
+    } catch (Exception $e) {
+        error_log("Error querying used character base types: " . $e->getMessage());
+    }
+    
+    $uniqueBaseTypes = array_unique($usedBaseTypes);
+    error_log("📊 Total unique characters used in game '$gameName': " . count($uniqueBaseTypes));
+    error_log("📋 Used characters: " . implode(', ', $uniqueBaseTypes));
+    
+    return $uniqueBaseTypes;
+}
+
+/**
  * Get list of all used character NAMES and TYPES from PocketBase to avoid duplicates
  * Returns array with 'names' and 'types' keys
  */
@@ -748,11 +828,28 @@ try {
             $allOptions = $characterOptions['animals_80'];
     }
     
+    // 🔥 NEW: Get used character base types for THIS game and filter them out
+    $gameName = $data['gamename'] ?? 'default_game';
+    $usedBaseTypes = getUsedCharacterBaseTypes($gameName, $characterType);
+    
+    // Filter out already used characters from the list
+    $availableOptions = array_values(array_diff($allOptions, $usedBaseTypes));
+    
+    error_log("🎯 Total options for $characterType: " . count($allOptions));
+    error_log("🔒 Used in this game: " . count($usedBaseTypes));
+    error_log("✅ Available options: " . count($availableOptions));
+    
+    // If all characters are used, allow reuse (fallback)
+    if (empty($availableOptions)) {
+        error_log("⚠️ WARNING: All characters used! Allowing reuse.");
+        $availableOptions = $allOptions;
+    }
+    
     // Query PocketBase to get usage counts for this character type
     $usageCounts = getCharacterUsageCounts($characterType);
     
-    // Sort options by usage count (least used first)
-    $sortedOptions = sortByUsageCount($allOptions, $usageCounts);
+    // Sort AVAILABLE options by usage count (least used first)
+    $sortedOptions = sortByUsageCount($availableOptions, $usageCounts);
     
     // Use sorted options (least-used characters will be at the front)
     $animals = ($characterType === 'animals') ? $sortedOptions : $characterOptions['animals_80'];
@@ -1023,11 +1120,16 @@ try {
     }
     $personalityTraitsString = trim($personalityTraitsString);
     
+    // 🔥 NEW: Extract character base type from AI summary for duplicate prevention
+    $characterBaseType = extractCharacterBaseType($aiSummary);
+    error_log("💾 Extracted character_base_type: " . $characterBaseType);
+    
     // Return all generated content
     $result = [
         'success' => true,
         'character_name' => $characterName,
         'character_type' => $characterType,
+        'character_base_type' => $characterBaseType, // NEW: For duplicate prevention
         'personality_traits' => $personalityTraitsString,
         'ai_summary' => $aiSummary,
         'story_prompt_level1' => $storyLevel1,
