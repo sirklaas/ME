@@ -1,0 +1,5 @@
+{
+  "name": "ME Voting App",
+  "description": "A dynamic webpage for real-time audience voting. A presenter can start a one-minute voting timer and then reveal the results with suspenseful, animated bars and percentages for four visual options.",
+  "requestFramePermissions": []
+}
