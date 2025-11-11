@@ -46,6 +46,10 @@ if (!$data || !isset($data['answers']) || !isset($data['playerName'])) {
     exit;
 }
 
+// Get language preference (default to Dutch)
+$language = $data['language'] ?? 'nl';
+error_log("🌍 Language preference: " . $language);
+
 /**
  * Calculate answer weight based on length and creativity
  */
@@ -801,7 +805,12 @@ try {
     }
     
     // CALL 1: Generate combined character summary (character + environment + props)
-    $systemPrompt1 = "You are creating diverse, creative character descriptions for a workplace game show. CRITICAL RULES: 1) Characters MUST be actual animals, fruits/vegetables, fantasy heroes, Pixar-style figures, or fairy tale characters - NOT people with masks. 2) Pick ONE specific option from the provided list. 3) ABSOLUTELY NO MASKS ANYWHERE - the character IS the animal/fruit/etc itself. 4) Characters wear clothes and have personality. 5) NEVER mention masks, maskers, or masked in your description. Write in Dutch.";
+    // Set language instruction based on user preference
+    $languageInstruction = ($language === 'en') 
+        ? "Write in English." 
+        : "Write in Dutch.";
+    
+    $systemPrompt1 = "You are creating diverse, creative character descriptions for a workplace game show. CRITICAL RULES: 1) Characters MUST be actual animals, fruits/vegetables, fantasy heroes, Pixar-style figures, or fairy tale characters - NOT people with masks. 2) Pick ONE specific option from the provided list. 3) ABSOLUTELY NO MASKS ANYWHERE - the character IS the animal/fruit/etc itself. 4) Characters wear clothes and have personality. 5) NEVER mention masks, maskers, or masked in your description. " . $languageInstruction;
     
     // Load 80 options per character type
     $characterOptions = json_decode(file_get_contents('character-options-80.json'), true);
@@ -935,15 +944,24 @@ try {
             "- ⚠️ BELANGRIJK: Gebruik VARIATIE uit de lijst!\n\n";
     }
     
+    // Language-specific heading text
+    if ($language === 'en') {
+        $heading1 = "This is who you really are deep down inside:";
+        $youAre = "You are";
+    } else {
+        $heading1 = "Dit ben je eigenlijk heel diep van binnen:";
+        $youAre = "Jij bent";
+    }
+    
     $userPrompt1 = "⚠️ BELANGRIJK: Het karakter MOET een echt dier/fruit/fantasy wezen zijn - GEEN persoon met masker!\n\n" .
         "CHARACTER TYPE: $characterType\n\n" .
         "$typeExample\n\n" .
         $specialInstructions .
-        "Creëer een karakter beschrijving in het Nederlands met deze 3 secties:\n\n" .
+        "Creëer een karakter beschrijving met deze 3 secties:\n\n" .
         "1. KARAKTER (100-150 woorden):\n" .
-        "- Begin met een HEADING op een aparte regel: 'Dit ben je eigenlijk heel diep van binnen:'\n" .
+        "- Begin met een HEADING op een aparte regel: '$heading1'\n" .
         "- Dan een SUBHEADING op een aparte regel: 'Een [bijvoeglijk naamwoord] [DIER/FRUIT/HELD TYPE]' (bijvoorbeeld: 'Een charmante Prins' of 'Een speelse Panda' of 'Een vrolijke Aardbei')\n" .
-        "- Dan de BODY die begint met: 'Jij bent [Naam], een...'\n" .
+        "- Dan de BODY die begint met: '$youAre [Naam], een...'\n" .
         "- ⚠️ BELANGRIJK: Gebruik de naam SLECHTS EEN KEER in de hele tekst!\n" .
         "- ⚠️ WEES CREATIEF met namen - gebruik DIVERSE en UNIEKE namen die bij de persoonlijkheid passen!\n" .
         "- 💡 TIP: Kies namen die de persoonlijkheid weerspiegelen (bijv. 'Luna' voor dromerig, 'Storm' voor roekeloos, 'Sage' voor filosofisch)\n" .
