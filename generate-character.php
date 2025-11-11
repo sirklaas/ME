@@ -944,24 +944,32 @@ try {
             "- ⚠️ BELANGRIJK: Gebruik VARIATIE uit de lijst!\n\n";
     }
     
-    // Language-specific heading text
+    // Language-specific text for character generation
     if ($language === 'en') {
         $heading1 = "This is who you really are deep down inside:";
         $youAre = "You are";
+        $subheadingExample = "'A [adjective] [ANIMAL/FRUIT/HERO TYPE]' (e.g., 'A charming Prince' or 'A playful Panda' or 'A cheerful Strawberry')";
+        $bodyInstruction = "Then the BODY starting with: '$youAre [Name], a...'";
+        $environmentHeading = "🌍 Where you hang out";
+        $personalityHeading = "=== PERSONALITY ===";
     } else {
         $heading1 = "Dit ben je eigenlijk heel diep van binnen:";
         $youAre = "Jij bent";
+        $subheadingExample = "'Een [bijvoeglijk naamwoord] [DIER/FRUIT/HELD TYPE]' (bijvoorbeeld: 'Een charmante Prins' of 'Een speelse Panda' of 'Een vrolijke Aardbei')";
+        $bodyInstruction = "Dan de BODY die begint met: '$youAre [Naam], een...'";
+        $environmentHeading = "🌍 En waar je zoal uithangt";
+        $personalityHeading = "=== PERSOONLIJKHEID ===";
     }
     
     $userPrompt1 = "⚠️ BELANGRIJK: Het karakter MOET een echt dier/fruit/fantasy wezen zijn - GEEN persoon met masker!\n\n" .
         "CHARACTER TYPE: $characterType\n\n" .
         "$typeExample\n\n" .
         $specialInstructions .
-        "Creëer een karakter beschrijving met deze 3 secties:\n\n" .
-        "1. KARAKTER (100-150 woorden):\n" .
-        "- Begin met een HEADING op een aparte regel: '$heading1'\n" .
-        "- Dan een SUBHEADING op een aparte regel: 'Een [bijvoeglijk naamwoord] [DIER/FRUIT/HELD TYPE]' (bijvoorbeeld: 'Een charmante Prins' of 'Een speelse Panda' of 'Een vrolijke Aardbei')\n" .
-        "- Dan de BODY die begint met: '$youAre [Naam], een...'\n" .
+        "Create a character description with these 3 sections:\n\n" .
+        "1. CHARACTER (100-150 words):\n" .
+        "- Start with ONLY this HEADING on a separate line: '$heading1'\n" .
+        "- Then a SUBHEADING on a separate line: $subheadingExample\n" .
+        "$bodyInstruction\n" .
         "- ⚠️ BELANGRIJK: Gebruik de naam SLECHTS EEN KEER in de hele tekst!\n" .
         "- ⚠️ WEES CREATIEF met namen - gebruik DIVERSE en UNIEKE namen die bij de persoonlijkheid passen!\n" .
         "- 💡 TIP: Kies namen die de persoonlijkheid weerspiegelen (bijv. 'Luna' voor dromerig, 'Storm' voor roekeloos, 'Sage' voor filosofisch)\n" .
@@ -1013,12 +1021,13 @@ try {
                         "  * Sociaal: Een bruisend koninklijk bal, een gezellige dorpsfeest, een drukke sprookjesmarkt\n" .
                         "  * Avontuurlijk: Een donker verwoud vol gevaren, een hoge bergtop met drakenest, een verborgen grot met schatten\n" .
                         "  * Praktisch: Een goed georganiseerde paleiskeuken, een efficiënte koninklijke bibliotheek, een nette kruidentuin\n")))) .
-        "- KIES EEN LOCATIE die de persoonlijkheid weerspiegelt en VERMIJD clichés!\n\n" .
+        "- KIES EEN LOCATIE die de persoonlijkheid weerspiegelt en VERMIJD clichés!\n" .
+        "- Begin deze sectie met: '$environmentHeading' op een aparte regel\n\n" .
         "3. PERSOONLIJKHEID:\n" .
         "- De speler heeft hun persoonlijkheid al gedefinieerd met deze traits (gebruik deze in je beschrijving):\n" .
         $personalityTraitsFromUser . "\n" .
         "- Integreer deze eigenschappen natuurlijk in je karakterbeschrijving\n" .
-        "- Begin deze sectie met: '=== PERSOONLIJKHEID ===' op een aparte regel\n" .
+        "- Begin deze sectie met: '$personalityHeading' op een aparte regel\n" .
         "- Geef elke trait weer in het format: 'Trait Naam: score/9'\n\n" .
         "⚠️ NOGMAALS: Kies EEN specifiek item uit de lijst hierboven. GEEN gemaskeerde personen!\n" .
         "⚠️ VERBODEN WOORDEN: Gebruik NOOIT de woorden 'masker', 'mask', 'gemaskeerd', 'masked' in je beschrijving!\n\n" .
