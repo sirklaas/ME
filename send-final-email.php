@@ -258,8 +258,11 @@ if ($language === 'nl') {
             </div>
             
             <div class='hero-section'>
-                <h2>🎨 Jouw Karakter Afbeelding</h2>
-                <p>Je unieke karakter is klaar!</p>
+                <img src='https://www.pinkmilk.eu/ME/MaskHero2.webp' alt='Masked Employee' class='hero-image' style='width: 100%; height: auto; display: block;'>
+                <div style='padding: 30px 20px;'>
+                    <h2 style='font-family: Verdana, Geneva, sans-serif; color: #ffffff; font-size: 28px; margin: 0 0 10px 0; font-weight: normal;'>🎨 Jouw Karakter Afbeelding</h2>
+                    <p style='font-family: Verdana, Geneva, sans-serif; color: #cccccc; font-size: 14px; margin: 0;'>Je unieke karakter is klaar!</p>
+                </div>
             </div>
             
             <div class='content'>
@@ -482,8 +485,11 @@ if ($language === 'nl') {
             </div>
             
             <div class='hero-section'>
-                <h2>🎨 Your Character Image</h2>
-                <p>Your unique character is ready!</p>
+                <img src='https://www.pinkmilk.eu/ME/MaskHero2.webp' alt='Masked Employee' class='hero-image' style='width: 100%; height: auto; display: block;'>
+                <div style='padding: 30px 20px;'>
+                    <h2 style='font-family: Verdana, Geneva, sans-serif; color: #ffffff; font-size: 28px; margin: 0 0 10px 0; font-weight: normal;'>🎨 Your Character Image</h2>
+                    <p style='font-family: Verdana, Geneva, sans-serif; color: #cccccc; font-size: 14px; margin: 0;'>Your unique character is ready!</p>
+                </div>
             </div>
             
             <div class='content'>
