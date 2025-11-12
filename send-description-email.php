@@ -54,8 +54,8 @@ function formatCharacterDescription($desc) {
     // Replace "De [Type] genaamd [Name] is" with "Je bent"
     $desc = preg_replace('/De\s+\w+\s+genaamd\s+[^\s]+\s+is\s+/i', 'Je bent ', $desc);
     
-    // Remove personality section (will be replaced with sliders)
-    $desc = preg_replace('/===\s*PERSOONLIJKHEID\s*===[\s\S]*?(?=\n\n|$)/i', '', $desc);
+    // Replace personality section heading
+    $desc = preg_replace('/===\s*PERSOONLIJKHEID\s*===/i', '-----   Persoonlijkheid   -----', $desc);
     
     // Clean up excessive line breaks (more than 2 consecutive newlines)
     $desc = preg_replace('/\n{3,}/', "\n\n", $desc);
@@ -151,7 +151,7 @@ if ($language === 'nl') {
                 margin: 0 0 15px 0;
             }
             .character-box { 
-                background-color: #C2E2FA; 
+                background-color: #C0D1D8; 
                 padding: 20px; 
                 margin: 20px 0; 
                 border-radius: 8px;
@@ -170,6 +170,10 @@ if ($language === 'nl') {
                 color: #ffffff; 
                 margin: 10px 0;
             }
+            .gradient-divider { 
+                border-top: 1px solid rgba(255, 255, 255, 0.3); 
+                margin: 15px 0; 
+            }
             .footer-text { 
                 font-family: Verdana, Geneva, sans-serif; 
                 font-size: 11px; 
@@ -182,13 +186,13 @@ if ($language === 'nl') {
     <body>
         <div class='email-wrapper'>
             <div class='header'>
-                <h1>The Masked Employee</h1>
+                <h1>TaTa, we zijn eruit!</h1>
             </div>
             
             <img src='https://www.pinkmilk.eu/ME/mask_hero.webp' alt='Masked Employee' class='hero-image'>
             
             <div class='hero-text'>
-                <p>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</p>
+                <p>Met behulp van de allernieuwste AI technologie en op basis van jouw antwoorden hebben we jouw Uniek Karakter gecreëerd.</p>
             </div>
             
             <div class='divider'></div>
@@ -205,6 +209,7 @@ if ($language === 'nl') {
                 <div class='gradient-box'>
                     <p><strong>🎨 Wat gebeurt er nu?</strong></p>
                     <p>We genereren nu een unieke afbeelding van je karakter. Je ontvangt binnenkort een tweede email met de afbeelding!</p>
+                    <div class='gradient-divider'></div>
                     <p><strong>⚠️ Belangrijk:</strong> Vergeet niet dat absolute geheimhouding verplicht is! Vertel niemand over je deelname, karakter of de show.</p>
                 </div>
                 
