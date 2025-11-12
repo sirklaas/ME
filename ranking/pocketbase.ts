@@ -115,7 +115,7 @@ export function generateSessionId(): string {
 // Upload image to server
 export async function uploadImage(base64Data: string, filename: string): Promise<string | null> {
   try {
-    const response = await fetch('https://pinkmilk.eu/ME/upload-image.php', {
+    const response = await fetch('https://www.pinkmilk.eu/public/ME/upload-image.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
