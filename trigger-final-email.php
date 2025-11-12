@@ -6,7 +6,7 @@
 
 // PocketBase configuration
 $pbUrl = 'https://pinkmilk.pockethost.io';
-$pbCollection = 'masked_employee_submissions';
+$pbCollection = 'MEQuestions';
 
 // Get record ID from URL parameter
 $recordId = $_GET['recordId'] ?? '';
