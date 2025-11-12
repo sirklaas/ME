@@ -151,7 +151,7 @@ if ($language === 'nl') {
                 margin: 0 0 15px 0;
             }
             .character-box { 
-                background-color: #C0D1D8; 
+                background-color: #caf0f8; 
                 padding: 20px; 
                 margin: 20px 0; 
                 border-radius: 8px;
