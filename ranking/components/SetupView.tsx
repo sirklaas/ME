@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ImageItem } from '../types';
 import { DEFAULT_IMAGES } from '../constants';
 import ControlButton from './ControlButton';
-import { generateSessionId } from '../pocketbase';
+import { generateSessionId, saveSessionConfig, loadSessionConfig } from '../pocketbase';
 
 // Make TypeScript aware of the XLSX library from the CDN
 declare const XLSX: any;
@@ -69,14 +69,35 @@ const SetupView: React.FC = () => {
     reader.readAsArrayBuffer(file);
   };
 
-  const handleSaveConfiguration = useCallback(() => {
+  const handleSaveConfiguration = useCallback(async () => {
     try {
-      const config = { players, images };
-      localStorage.setItem('votingSetupData', JSON.stringify(config));
-      setStatusMessage({ type: 'success', text: 'Configuration saved successfully!' });
+      const sessionId = localStorage.getItem('votingSessionId') || 'default_session';
+      console.log('Saving configuration to PocketBase for session:', sessionId);
+      
+      // Save to PocketBase
+      const success = await saveSessionConfig(sessionId, images, players);
+      
+      if (success) {
+        // Also save to localStorage as backup
+        const config = { players, images };
+        localStorage.setItem('votingSetupData', JSON.stringify(config));
+        
+        setStatusMessage({ 
+          type: 'success', 
+          text: `✅ Saved to PocketBase! ${players.length} players, ${images.length} images` 
+        });
+      } else {
+        setStatusMessage({ 
+          type: 'error', 
+          text: 'Failed to save to PocketBase. Check console for details.' 
+        });
+      }
     } catch (error) {
       console.error("Failed to save config:", error);
-      setStatusMessage({ type: 'error', text: 'Could not save configuration.' });
+      setStatusMessage({ 
+        type: 'error', 
+        text: `Error: ${error instanceof Error ? error.message : 'Could not save configuration'}` 
+      });
     }
   }, [players, images]);
 

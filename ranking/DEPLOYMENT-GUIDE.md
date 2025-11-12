@@ -1,7 +1,7 @@
 # Deployment Guide - Live Audience Voting App
 
 **Target:** GitHub repository in `ranking` directory  
-**Live URL:** https://ranking.pinkmilk.eu  
+**Live URL:** https://ranking.pinkmilk.eu/votes/  
 **PocketBase:** https://ranking.pinkmilk.eu (same domain)
 
 ---

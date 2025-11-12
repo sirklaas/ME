@@ -111,3 +111,57 @@ export function getVoterFingerprint(): string {
 export function generateSessionId(): string {
   return `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
+
+// Types for session configuration
+export interface SessionConfig {
+  id?: string;
+  session_id: string;
+  images: Array<{ id: number; url: string; title: string }>;
+  players: string[];
+  created?: string;
+  updated?: string;
+}
+
+// Save session configuration to PocketBase
+export async function saveSessionConfig(sessionId: string, images: any[], players: string[]): Promise<boolean> {
+  try {
+    // Check if config already exists for this session
+    const existing = await pb.collection('voting_session').getFirstListItem<SessionConfig>(
+      `session_id = "${sessionId}"`
+    ).catch(() => null);
+
+    const configData = {
+      session_id: sessionId,
+      images: images,
+      players: players,
+    };
+
+    if (existing) {
+      // Update existing config
+      await pb.collection('voting_session').update(existing.id!, configData);
+    } else {
+      // Create new config
+      await pb.collection('voting_session').create(configData);
+    }
+
+    console.log('Configuration saved to PocketBase (voting_session):', configData);
+    return true;
+  } catch (error) {
+    console.error('Failed to save configuration to PocketBase:', error);
+    return false;
+  }
+}
+
+// Load session configuration from PocketBase
+export async function loadSessionConfig(sessionId: string): Promise<SessionConfig | null> {
+  try {
+    const config = await pb.collection('voting_session').getFirstListItem<SessionConfig>(
+      `session_id = "${sessionId}"`
+    );
+    console.log('Configuration loaded from PocketBase (voting_session):', config);
+    return config;
+  } catch (error) {
+    console.log('No configuration found in PocketBase for session:', sessionId);
+    return null;
+  }
+}

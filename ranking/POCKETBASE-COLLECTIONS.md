@@ -28,7 +28,7 @@ deleteRule: null // Deny all
 
 ---
 
-## Collection 2: `session_configs`
+## Collection 2: `voting_session`
 
 **Purpose:** Store session configuration (images, players)
 
@@ -77,10 +77,10 @@ Go to: **https://ranking.pinkmilk.eu/_/**
 6. Set API Rules (see above)
 7. Save
 
-### 3. Create `session_configs` Collection
+### 3. Create `voting_session` Collection
 
 1. Click "New Collection"
-2. Name: `session_configs`
+2. Name: `voting_session`
 3. Type: Base Collection
 4. Add fields:
    - `session_id` → Text (Required)
@@ -109,7 +109,7 @@ Go to: **https://ranking.pinkmilk.eu/_/**
 }
 ```
 
-### `session_configs` Record:
+### `voting_session` Record:
 ```json
 {
   "id": "config123",
