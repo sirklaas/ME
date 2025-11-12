@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ImageItem } from '../types';
 import { DEFAULT_IMAGES } from '../constants';
 import ControlButton from './ControlButton';
-import { generateSessionId, saveSessionConfig, loadSessionConfig } from '../pocketbase';
+import { generateSessionId, saveSessionConfig, loadSessionConfig, uploadImage } from '../pocketbase';
 
 // Make TypeScript aware of the XLSX library from the CDN
 declare const XLSX: any;
@@ -29,12 +29,28 @@ const SetupView: React.FC = () => {
   const [images, setImages] = useState<ImageItem[]>(getInitialConfig().images);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
-  const handleImageChange = (index: number, file: File) => {
+  const handleImageChange = async (index: number, file: File) => {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
+      const base64Data = e.target?.result as string;
       const newImages = [...images];
-      newImages[index].url = e.target?.result as string;
+      
+      // Show base64 preview immediately
+      newImages[index].url = base64Data;
       setImages(newImages);
+      
+      // Upload to server in background
+      setStatusMessage({ type: 'success', text: `Uploading image ${index + 1}...` });
+      const serverUrl = await uploadImage(base64Data, file.name);
+      
+      if (serverUrl) {
+        // Update with server URL
+        newImages[index].url = serverUrl;
+        setImages(newImages);
+        setStatusMessage({ type: 'success', text: `Image ${index + 1} uploaded successfully!` });
+      } else {
+        setStatusMessage({ type: 'error', text: `Failed to upload image ${index + 1}. Using local copy.` });
+      }
     };
     reader.readAsDataURL(file);
   };
@@ -74,14 +90,21 @@ const SetupView: React.FC = () => {
       const sessionId = localStorage.getItem('votingSessionId') || 'default_session';
       console.log('Saving configuration to PocketBase for session:', sessionId);
       
+      // Save full config to localStorage (includes base64 image data)
+      const config = { players, images };
+      localStorage.setItem('votingSetupData', JSON.stringify(config));
+      
+      // For PocketBase, save image metadata with server URLs
+      const imageMetadata = images.map(img => ({
+        id: img.id,
+        title: img.title,
+        url: img.url // Now contains server URL or default URL
+      }));
+      
       // Save to PocketBase
-      const success = await saveSessionConfig(sessionId, images, players);
+      const success = await saveSessionConfig(sessionId, imageMetadata, players);
       
       if (success) {
-        // Also save to localStorage as backup
-        const config = { players, images };
-        localStorage.setItem('votingSetupData', JSON.stringify(config));
-        
         setStatusMessage({ 
           type: 'success', 
           text: `✅ Saved to PocketBase! ${players.length} players, ${images.length} images` 

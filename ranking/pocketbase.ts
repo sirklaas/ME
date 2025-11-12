@@ -5,8 +5,8 @@
 const PocketBase = window.PocketBase;
 
 // Initialize PocketBase client
-// Using ranking subdomain for dedicated voting app instance
-export const pb = new PocketBase('https://ranking.pinkmilk.eu');
+// Using PocketHost instance
+export const pb = new PocketBase('https://pinkmilk.pockethost.io');
 
 // Disable auto-cancellation for better reliability
 pb.autoCancellation(false);
@@ -112,6 +112,39 @@ export function generateSessionId(): string {
   return `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
 
+// Upload image to server
+export async function uploadImage(base64Data: string, filename: string): Promise<string | null> {
+  try {
+    const response = await fetch('https://ranking.pinkmilk.eu/upload-image.php', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        image: base64Data,
+        filename: filename
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Upload failed: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    if (result.success) {
+      console.log('Image uploaded successfully:', result.url);
+      return result.url;
+    } else {
+      console.error('Upload failed:', result.error);
+      return null;
+    }
+  } catch (error) {
+    console.error('Failed to upload image:', error);
+    return null;
+  }
+}
+
 // Types for session configuration
 export interface SessionConfig {
   id?: string;
@@ -132,22 +165,32 @@ export async function saveSessionConfig(sessionId: string, images: any[], player
 
     const configData = {
       session_id: sessionId,
-      images: images,
-      players: players,
+      images: JSON.stringify(images.length > 0 ? images : []), // Ensure valid array
+      players: JSON.stringify(players.length > 0 ? players : []), // Ensure valid array
     };
+
+    console.log('Attempting to save to PocketBase:', configData);
 
     if (existing) {
       // Update existing config
       await pb.collection('voting_session').update(existing.id!, configData);
+      console.log('Updated existing record:', existing.id);
     } else {
       // Create new config
-      await pb.collection('voting_session').create(configData);
+      const result = await pb.collection('voting_session').create(configData);
+      console.log('Created new record:', result);
     }
 
-    console.log('Configuration saved to PocketBase (voting_session):', configData);
+    console.log('Configuration saved to PocketBase (voting_session)');
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to save configuration to PocketBase:', error);
+    console.error('Error details:', {
+      status: error?.status,
+      message: error?.message,
+      data: error?.data,
+      response: error?.response
+    });
     return false;
   }
 }
