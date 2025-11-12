@@ -67,7 +67,7 @@ try {
     // Return the URL
     $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") 
               . "://" . $_SERVER['HTTP_HOST'];
-    $imageUrl = $baseUrl . '/vote_images/' . $uniqueFilename;
+    $imageUrl = $baseUrl . '/ME/vote_images/' . $uniqueFilename;
     
     echo json_encode([
         'success' => true,

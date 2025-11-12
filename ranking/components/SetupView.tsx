@@ -28,6 +28,31 @@ const SetupView: React.FC = () => {
   const [players, setPlayers] = useState<string[]>(getInitialConfig().players);
   const [images, setImages] = useState<ImageItem[]>(getInitialConfig().images);
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Load config from PocketBase on mount
+  useEffect(() => {
+    const loadConfig = async () => {
+      const sessionId = localStorage.getItem('votingSessionId') || 'default_session';
+      const config = await loadSessionConfig(sessionId);
+      
+      if (config) {
+        console.log('Loaded config from PocketBase:', config);
+        if (config.images && Array.isArray(config.images)) {
+          setImages(config.images);
+        }
+        if (config.players && Array.isArray(config.players)) {
+          setPlayers(config.players);
+        }
+        setStatusMessage({ type: 'success', text: 'Configuration loaded from PocketBase' });
+      } else {
+        console.log('No config found in PocketBase, using defaults');
+      }
+      setIsLoading(false);
+    };
+    
+    loadConfig();
+  }, []);
 
   const handleImageChange = async (index: number, file: File) => {
     const reader = new FileReader();
@@ -90,9 +115,8 @@ const SetupView: React.FC = () => {
       const sessionId = localStorage.getItem('votingSessionId') || 'default_session';
       console.log('Saving configuration to PocketBase for session:', sessionId);
       
-      // Save full config to localStorage (includes base64 image data)
-      const config = { players, images };
-      localStorage.setItem('votingSetupData', JSON.stringify(config));
+      // DON'T save to localStorage - causes quota exceeded with base64 images
+      // Only save to PocketBase with server URLs
       
       // For PocketBase, save image metadata with server URLs
       const imageMetadata = images.map(img => ({

@@ -115,7 +115,7 @@ export function generateSessionId(): string {
 // Upload image to server
 export async function uploadImage(base64Data: string, filename: string): Promise<string | null> {
   try {
-    const response = await fetch('https://ranking.pinkmilk.eu/upload-image.php', {
+    const response = await fetch('https://pinkmilk.eu/ME/upload-image.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -198,11 +198,34 @@ export async function saveSessionConfig(sessionId: string, images: any[], player
 // Load session configuration from PocketBase
 export async function loadSessionConfig(sessionId: string): Promise<SessionConfig | null> {
   try {
-    const config = await pb.collection('voting_session').getFirstListItem<SessionConfig>(
+    const config = await pb.collection('voting_session').getFirstListItem<any>(
       `session_id = "${sessionId}"`
     );
-    console.log('Configuration loaded from PocketBase (voting_session):', config);
-    return config;
+    
+    // Parse JSON strings back to arrays
+    let images = typeof config.images === 'string' ? JSON.parse(config.images) : config.images;
+    
+    // Replace old 'uploaded_image' placeholders with default images
+    if (Array.isArray(images)) {
+      images = images.map((img: any, index: number) => {
+        if (img.url === 'uploaded_image') {
+          return {
+            ...img,
+            url: `https://picsum.photos/seed/${img.id || index}/800/600`
+          };
+        }
+        return img;
+      });
+    }
+    
+    const parsedConfig: SessionConfig = {
+      ...config,
+      images: images,
+      players: typeof config.players === 'string' ? JSON.parse(config.players) : config.players,
+    };
+    
+    console.log('Configuration loaded from PocketBase (voting_session):', parsedConfig);
+    return parsedConfig;
   } catch (error) {
     console.log('No configuration found in PocketBase for session:', sessionId);
     return null;
