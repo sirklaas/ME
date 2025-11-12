@@ -295,7 +295,7 @@ if ($language === 'nl') {
                 </div>
                 
                 <div class='danger-box'>
-                    <strong>⚠️ BELANGRIJK:</strong> Deel deze afbeelding of informatie niet met collega's! De €750 boeteclausule blijft van kracht.
+                    <strong>⚠️ BELANGRIJK:</strong> Deel deze afbeelding of informatie niet met collega's! De <strong>€750</strong> boeteclausule blijft van kracht.
                 </div>
                 
                 <p>We kijken ernaar uit je te zien bij de show! 🎭</p>
@@ -523,7 +523,7 @@ if ($language === 'nl') {
                 </div>
                 
                 <div class='danger-box'>
-                    <strong>⚠️ IMPORTANT:</strong> Don't share this image or information with colleagues! The €750 penalty clause remains in effect.
+                    <strong>⚠️ IMPORTANT:</strong> Don't share this image or information with colleagues! The <strong>€750</strong> penalty clause remains in effect.
                 </div>
                 
                 <p>We look forward to seeing you at the show! 🎭</p>

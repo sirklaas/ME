@@ -109,122 +109,73 @@ if ($language === 'nl') {
             }
             .header { 
                 background-color: #ffffff; 
-                padding: 30px 20px 10px 20px; 
+                padding: 20px; 
                 text-align: center; 
             }
             .header h1 { 
                 font-family: Verdana, Geneva, sans-serif; 
-                font-size: 24px; 
+                font-size: 16px; 
                 font-weight: normal; 
                 color: #000000; 
-                margin: 0 0 20px 0; 
+                margin: 0; 
             }
-            .hero-section { 
-                background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); 
-                padding: 40px 20px; 
-                text-align: center; 
-                border-radius: 20px; 
-                margin: 0 20px 30px 20px;
-                position: relative;
-                overflow: hidden;
+            .hero-image { 
+                width: 100%; 
+                height: auto; 
+                display: block; 
             }
-            .hero-section h2 { 
+            .hero-text { 
+                background-color: #ffffff; 
+                padding: 20px 40px; 
+                text-align: center;
+            }
+            .hero-text p { 
                 font-family: Verdana, Geneva, sans-serif; 
-                color: #ffffff; 
-                font-size: 28px; 
-                margin: 0 0 10px 0; 
-                font-weight: normal;
-            }
-            .hero-section p { 
-                font-family: Verdana, Geneva, sans-serif; 
-                color: #cccccc; 
                 font-size: 14px; 
+                line-height: 1.6; 
+                color: #333333; 
                 margin: 0;
             }
+            .divider { 
+                border-top: 1px solid #cccccc; 
+                margin: 20px 40px; 
+            }
             .content { 
-                padding: 0 40px 40px 40px; 
+                padding: 0 40px 20px 40px; 
             }
             .content p { 
                 font-family: Verdana, Geneva, sans-serif; 
                 font-size: 14px; 
                 line-height: 1.8; 
                 color: #333333; 
-                margin: 0 0 20px 0;
-            }
-            .feature-box { 
-                background-color: #f9f9f9; 
-                padding: 20px; 
-                margin: 25px 0; 
-                border-radius: 8px;
-            }
-            .feature-box h3 { 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 16px; 
-                font-weight: bold; 
-                color: #000000; 
                 margin: 0 0 15px 0;
             }
-            .feature-item { 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 14px; 
-                color: #333333; 
-                margin: 10px 0; 
-                padding-left: 0;
+            .character-box { 
+                background-color: #C2E2FA; 
+                padding: 20px; 
+                margin: 20px 0; 
+                border-radius: 8px;
             }
-            .cta-button { 
-                display: inline-block; 
-                background-color: #00bcd4; 
-                color: #ffffff; 
-                padding: 15px 40px; 
-                text-decoration: none; 
-                border-radius: 25px; 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 14px; 
-                font-weight: bold; 
-                margin: 20px 0;
-                text-align: center;
-            }
-            .divider { 
-                border-top: 1px solid #e0e0e0; 
-                margin: 30px 0; 
-            }
-            .footer { 
-                background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); 
-                color: #ffffff; 
-                padding: 30px 40px; 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 12px;
-            }
-            .footer h4 { 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 16px; 
-                font-weight: bold; 
-                margin: 0 0 15px 0; 
+            .gradient-box { 
+                background: linear-gradient(90deg, #1A2A80 0%, #090040 100%); 
+                padding: 20px; 
+                margin: 20px 0; 
+                border-radius: 8px;
                 color: #ffffff;
             }
-            .footer p { 
+            .gradient-box p { 
                 font-family: Verdana, Geneva, sans-serif; 
-                margin: 5px 0; 
-                color: #cccccc; 
-                line-height: 1.6;
+                font-size: 14px; 
+                line-height: 1.8; 
+                color: #ffffff; 
+                margin: 10px 0;
             }
-            .footer a { 
-                color: #00bcd4; 
-                text-decoration: none;
-            }
-            .warning-box {
-                background-color: #fff3cd;
-                border-left: 4px solid #ffc107;
-                padding: 15px;
-                margin: 20px 0;
-                border-radius: 4px;
-            }
-            .danger-box {
-                background-color: #f8d7da;
-                border-left: 4px solid #dc3545;
-                padding: 15px;
-                margin: 20px 0;
-                border-radius: 4px;
+            .footer-text { 
+                font-family: Verdana, Geneva, sans-serif; 
+                font-size: 11px; 
+                color: #666666; 
+                text-align: center; 
+                padding: 10px 40px 30px 40px;
             }
         </style>
     </head>
@@ -234,28 +185,27 @@ if ($language === 'nl') {
                 <h1>The Masked Employee</h1>
             </div>
             
-            <div class='hero-section'>
-                <h2>🎭 Jouw Karakter</h2>
-                <p>Met behulp van de allernieuwste AI technologie</p>
+            <img src='https://www.pinkmilk.eu/ME/mask_hero.webp' alt='Masked Employee' class='hero-image'>
+            
+            <div class='hero-text'>
+                <p>Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</p>
             </div>
+            
+            <div class='divider'></div>
             
             <div class='content'>
                 <p><strong>Hallo " . htmlspecialchars($playerName) . "!</strong></p>
                 
                 <p>Op basis van je antwoorden hebben we een bijzonder karakter voor je tot leven gebracht. Dit is jouw alter ego – een weerspiegeling van jouw geheime kant, verborgen talenten en persoonlijkheid.</p>
                 
-                <div class='feature-box'>
-                    <h3>Na heel veel AI-rekenkracht weten we het nu:</h3>
+                <div class='character-box'>
                     " . formatCharacterDescription($characterDesc) . "
                 </div>
                 
-                <div class='warning-box'>
-                    <strong>🎨 Wat gebeurt er nu?</strong><br>
-                    We genereren nu een unieke afbeelding van je karakter. Je ontvangt binnenkort een tweede email met de afbeelding!
-                </div>
-                
-                <div class='danger-box'>
-                    <strong>⚠️ Belangrijk:</strong> Vergeet niet dat absolute geheimhouding verplicht is! Vertel niemand over je deelname, karakter of de show.
+                <div class='gradient-box'>
+                    <p><strong>🎨 Wat gebeurt er nu?</strong></p>
+                    <p>We genereren nu een unieke afbeelding van je karakter. Je ontvangt binnenkort een tweede email met de afbeelding!</p>
+                    <p><strong>⚠️ Belangrijk:</strong> Vergeet niet dat absolute geheimhouding verplicht is! Vertel niemand over je deelname, karakter of de show.</p>
                 </div>
                 
                 <p>Tot snel bij de show! 🎭</p>
@@ -264,8 +214,7 @@ if ($language === 'nl') {
                 Het Masked Employee Team</p>
             </div>
             
-            <div class='footer'>
-                <h4>Need help?</h4>
+            <div class='footer-text'>
                 <p>Dit is een automatisch gegenereerde email voor " . htmlspecialchars($gameName) . "</p>
             </div>
         </div>
