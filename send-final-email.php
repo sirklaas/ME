@@ -88,7 +88,7 @@ if (!filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
 
 // Email content based on language
 if ($language === 'nl') {
-    $subject = '🎨 Jouw Karakter Afbeelding is Klaar! - ' . $gameName;
+    $subject = '🎨 Wat een plaatje! - ' . $gameName;
     
     // Create download URL
     $downloadUrl = 'https://www.pinkmilk.eu/ME/download-image.php?url=' . urlencode($imageUrl) . '&name=' . urlencode($characterName);
@@ -117,15 +117,21 @@ if ($language === 'nl') {
             }
             .header { 
                 background-color: #ffffff; 
-                padding: 30px 20px 10px 20px; 
+                padding: 20px; 
                 text-align: center; 
             }
             .header h1 { 
                 font-family: Verdana, Geneva, sans-serif; 
-                font-size: 24px; 
+                font-size: 16px; 
                 font-weight: normal; 
                 color: #000000; 
-                margin: 0 0 20px 0; 
+                margin: 0; 
+            }
+            .hero-image { 
+                width: 100%; 
+                height: auto; 
+                display: block; 
+                margin-bottom: 30px;
             }
             .hero-section { 
                 background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); 
@@ -171,8 +177,8 @@ if ($language === 'nl') {
                 margin: 0 0 15px 0;
             }
             .reveal-box { 
-                background-color: #fff3cd; 
-                border: 3px solid #ffc107; 
+                background: linear-gradient(135deg, #edf2f4 0%, #edf2f4 100%); 
+                border: 3px solid #d90429; 
                 padding: 30px; 
                 margin: 30px 0; 
                 border-radius: 10px; 
@@ -180,19 +186,19 @@ if ($language === 'nl') {
             }
             .reveal-box h2 {
                 font-family: Verdana, Geneva, sans-serif;
-                color: #856404;
+                color: #03045e;
                 margin-top: 0;
                 font-size: 20px;
             }
             .reveal-box h3 {
                 font-family: Verdana, Geneva, sans-serif;
-                color: #856404;
+                color: #3d348b;
                 font-size: 16px;
                 font-weight: normal;
             }
             .cta-button { 
                 display: inline-block; 
-                background-color: #00bcd4; 
+                background-color: #d90429; 
                 color: #ffffff; 
                 padding: 15px 40px; 
                 text-decoration: none; 
@@ -202,68 +208,40 @@ if ($language === 'nl') {
                 font-weight: bold; 
                 margin: 20px 0;
             }
-            .success-box {
-                background-color: #d4edda;
-                border-left: 4px solid #28a745;
-                padding: 20px;
-                margin: 20px 0;
-                border-radius: 4px;
-            }
-            .success-box h3 {
-                font-family: Verdana, Geneva, sans-serif;
-                color: #155724;
-                margin-top: 0;
-                font-size: 16px;
-            }
-            .success-box ul {
-                font-family: Verdana, Geneva, sans-serif;
-                font-size: 14px;
-                color: #155724;
-                margin: 10px 0;
-                padding-left: 20px;
-            }
-            .danger-box {
-                background-color: #f8d7da;
-                border-left: 4px solid #dc3545;
-                padding: 15px;
-                margin: 20px 0;
-                border-radius: 4px;
-            }
-            .footer { 
-                background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); 
-                color: #ffffff; 
-                padding: 30px 40px; 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 12px;
-            }
-            .footer h4 { 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 16px; 
-                font-weight: bold; 
-                margin: 0 0 15px 0; 
+            .gradient-box { 
+                background: linear-gradient(90deg, #1A2A80 0%, #090040 100%); 
+                padding: 20px; 
+                margin: 20px 0; 
+                border-radius: 8px;
                 color: #ffffff;
             }
-            .footer p { 
+            .gradient-box p { 
                 font-family: Verdana, Geneva, sans-serif; 
-                margin: 5px 0; 
-                color: #cccccc; 
-                line-height: 1.6;
+                font-size: 14px; 
+                line-height: 1.8; 
+                color: #ffffff; 
+                margin: 10px 0;
+            }
+            .gradient-divider { 
+                border-top: 1px solid rgba(255, 255, 255, 0.3); 
+                margin: 15px 0; 
+            }
+            .footer-text { 
+                font-family: Verdana, Geneva, sans-serif; 
+                font-size: 11px; 
+                color: #666666; 
+                text-align: center; 
+                padding: 10px 40px 30px 40px;
             }
         </style>
     </head>
     <body>
         <div class='email-wrapper'>
             <div class='header'>
-                <h1>The Masked Employee</h1>
+                <h1>Wat een plaatje!</h1>
             </div>
             
-            <div class='hero-section'>
-                <img src='https://www.pinkmilk.eu/ME/MaskHero2.webp' alt='Masked Employee' class='hero-image' style='width: 100%; height: auto; display: block;'>
-                <div style='padding: 30px 20px;'>
-                    <h2 style='font-family: Verdana, Geneva, sans-serif; color: #ffffff; font-size: 28px; margin: 0 0 10px 0; font-weight: normal;'>🎨 Jouw Karakter Afbeelding</h2>
-                    <p style='font-family: Verdana, Geneva, sans-serif; color: #cccccc; font-size: 14px; margin: 0;'>Je unieke karakter is klaar!</p>
-                </div>
-            </div>
+            <img src='https://www.pinkmilk.eu/ME/MaskedHero3.webp' alt='Masked Employee' class='hero-image'>
             
             <div class='content'>
                 <p><strong>Hallo " . htmlspecialchars($playerName) . "!</strong></p>
@@ -284,18 +262,14 @@ if ($language === 'nl') {
                     " . formatCharacterDescription($characterDesc) . "
                 </div>
                 
-                <div class='success-box'>
-                    <h3>🎭 Wat gebeurt er nu?</h3>
-                    <ul>
-                        <li>✅ Je karakter en afbeelding zijn opgeslagen</li>
-                        <li>🎬 Binnenkort ontvang je meer informatie over de show</li>
-                        <li>🤐 <strong>Absolute geheimhouding blijft van kracht!</strong></li>
-                        <li>🎉 Bereid je voor op een onvergetelijke ervaring</li>
-                    </ul>
-                </div>
-                
-                <div class='danger-box'>
-                    <strong>⚠️ BELANGRIJK:</strong> Deel deze afbeelding of informatie niet met collega's! De <strong>€750</strong> boeteclausule blijft van kracht.
+                <div class='gradient-box'>
+                    <p><strong>🎭 Wat gebeurt er nu?</strong></p>
+                    <p>✅ Je karakter en afbeelding zijn opgeslagen<br>
+                    🎬 Binnenkort ontvang je meer informatie over de show<br>
+                    🤐 <strong>Absolute geheimhouding blijft van kracht!</strong><br>
+                    🎉 Bereid je voor op een onvergetelijke ervaring</p>
+                    <div class='gradient-divider'></div>
+                    <p><strong>⚠️ BELANGRIJK:</strong> Deel deze afbeelding of informatie niet met collega's! De <strong>€750</strong> boeteclausule blijft van kracht.</p>
                 </div>
                 
                 <p>We kijken ernaar uit je te zien bij de show! 🎭</p>
@@ -304,8 +278,7 @@ if ($language === 'nl') {
                 Het Masked Employee Team</p>
             </div>
             
-            <div class='footer'>
-                <h4>Need help?</h4>
+            <div class='footer-text'>
                 <p>Dit is een automatisch gegenereerde email voor " . htmlspecialchars($gameName) . "</p>
             </div>
         </div>
@@ -344,15 +317,21 @@ if ($language === 'nl') {
             }
             .header { 
                 background-color: #ffffff; 
-                padding: 30px 20px 10px 20px; 
+                padding: 20px; 
                 text-align: center; 
             }
             .header h1 { 
                 font-family: Verdana, Geneva, sans-serif; 
-                font-size: 24px; 
+                font-size: 16px; 
                 font-weight: normal; 
                 color: #000000; 
-                margin: 0 0 20px 0; 
+                margin: 0; 
+            }
+            .hero-image { 
+                width: 100%; 
+                height: auto; 
+                display: block; 
+                margin-bottom: 30px;
             }
             .hero-section { 
                 background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); 
@@ -398,8 +377,8 @@ if ($language === 'nl') {
                 margin: 0 0 15px 0;
             }
             .reveal-box { 
-                background-color: #fff3cd; 
-                border: 3px solid #ffc107; 
+                background: linear-gradient(135deg, #edf2f4 0%, #edf2f4 100%); 
+                border: 3px solid #d90429; 
                 padding: 30px; 
                 margin: 30px 0; 
                 border-radius: 10px; 
@@ -407,19 +386,19 @@ if ($language === 'nl') {
             }
             .reveal-box h2 {
                 font-family: Verdana, Geneva, sans-serif;
-                color: #856404;
+                color: #03045e;
                 margin-top: 0;
                 font-size: 20px;
             }
             .reveal-box h3 {
                 font-family: Verdana, Geneva, sans-serif;
-                color: #856404;
+                color: #3d348b;
                 font-size: 16px;
                 font-weight: normal;
             }
             .cta-button { 
                 display: inline-block; 
-                background-color: #00bcd4; 
+                background-color: #d90429; 
                 color: #ffffff; 
                 padding: 15px 40px; 
                 text-decoration: none; 
@@ -429,68 +408,40 @@ if ($language === 'nl') {
                 font-weight: bold; 
                 margin: 20px 0;
             }
-            .success-box {
-                background-color: #d4edda;
-                border-left: 4px solid #28a745;
-                padding: 20px;
-                margin: 20px 0;
-                border-radius: 4px;
-            }
-            .success-box h3 {
-                font-family: Verdana, Geneva, sans-serif;
-                color: #155724;
-                margin-top: 0;
-                font-size: 16px;
-            }
-            .success-box ul {
-                font-family: Verdana, Geneva, sans-serif;
-                font-size: 14px;
-                color: #155724;
-                margin: 10px 0;
-                padding-left: 20px;
-            }
-            .danger-box {
-                background-color: #f8d7da;
-                border-left: 4px solid #dc3545;
-                padding: 15px;
-                margin: 20px 0;
-                border-radius: 4px;
-            }
-            .footer { 
-                background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); 
-                color: #ffffff; 
-                padding: 30px 40px; 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 12px;
-            }
-            .footer h4 { 
-                font-family: Verdana, Geneva, sans-serif; 
-                font-size: 16px; 
-                font-weight: bold; 
-                margin: 0 0 15px 0; 
+            .gradient-box { 
+                background: linear-gradient(90deg, #1A2A80 0%, #090040 100%); 
+                padding: 20px; 
+                margin: 20px 0; 
+                border-radius: 8px;
                 color: #ffffff;
             }
-            .footer p { 
+            .gradient-box p { 
                 font-family: Verdana, Geneva, sans-serif; 
-                margin: 5px 0; 
-                color: #cccccc; 
-                line-height: 1.6;
+                font-size: 14px; 
+                line-height: 1.8; 
+                color: #ffffff; 
+                margin: 10px 0;
+            }
+            .gradient-divider { 
+                border-top: 1px solid rgba(255, 255, 255, 0.3); 
+                margin: 15px 0; 
+            }
+            .footer-text { 
+                font-family: Verdana, Geneva, sans-serif; 
+                font-size: 11px; 
+                color: #666666; 
+                text-align: center; 
+                padding: 10px 40px 30px 40px;
             }
         </style>
     </head>
     <body>
         <div class='email-wrapper'>
             <div class='header'>
-                <h1>The Masked Employee</h1>
+                <h1>Wat een plaatje!</h1>
             </div>
             
-            <div class='hero-section'>
-                <img src='https://www.pinkmilk.eu/ME/MaskHero2.webp' alt='Masked Employee' class='hero-image' style='width: 100%; height: auto; display: block;'>
-                <div style='padding: 30px 20px;'>
-                    <h2 style='font-family: Verdana, Geneva, sans-serif; color: #ffffff; font-size: 28px; margin: 0 0 10px 0; font-weight: normal;'>🎨 Your Character Image</h2>
-                    <p style='font-family: Verdana, Geneva, sans-serif; color: #cccccc; font-size: 14px; margin: 0;'>Your unique character is ready!</p>
-                </div>
-            </div>
+            <img src='https://www.pinkmilk.eu/ME/MaskedHero3.webp' alt='Masked Employee' class='hero-image'>
             
             <div class='content'>
                 <p><strong>Hello " . htmlspecialchars($playerName) . "!</strong></p>
@@ -502,7 +453,7 @@ if ($language === 'nl') {
                 <div class='reveal-box'>
                     <h2>🔒 SECRET</h2>
                     <h3>Click here only if you're absolutely sure no one can see your screen !!</h3>
-                    <p style='font-size: 14px; color: #856404; margin: 15px 0;'>⚠️ You're about to reveal your secret character</p>
+                    <p style='font-size: 14px; color: #3d348b; margin: 15px 0;'>⚠️ You're about to reveal your secret character</p>
                     <a href='" . htmlspecialchars($revealUrl) . "' class='cta-button' style='text-decoration: none; display: inline-block;'>👁️ REVEAL MY CHARACTER</a>
                 </div>
                 
@@ -512,18 +463,14 @@ if ($language === 'nl') {
                     <p>" . nl2br(htmlspecialchars($characterDesc)) . "</p>
                 </div>
                 
-                <div class='success-box'>
-                    <h3>🎭 What happens next?</h3>
-                    <ul>
-                        <li>✅ Your character and image are saved</li>
-                        <li>🎬 You'll receive more information about the show soon</li>
-                        <li>🤐 <strong>Absolute confidentiality remains in effect!</strong></li>
-                        <li>🎉 Prepare for an unforgettable experience</li>
-                    </ul>
-                </div>
-                
-                <div class='danger-box'>
-                    <strong>⚠️ IMPORTANT:</strong> Don't share this image or information with colleagues! The <strong>€750</strong> penalty clause remains in effect.
+                <div class='gradient-box'>
+                    <p><strong>🎭 What happens next?</strong></p>
+                    <p>✅ Your character and image are saved<br>
+                    🎬 You'll receive more information about the show soon<br>
+                    🤐 <strong>Absolute confidentiality remains in effect!</strong><br>
+                    🎉 Prepare for an unforgettable experience</p>
+                    <div class='gradient-divider'></div>
+                    <p><strong>⚠️ IMPORTANT:</strong> Don't share this image or information with colleagues! The <strong>€750</strong> penalty clause remains in effect.</p>
                 </div>
                 
                 <p>We look forward to seeing you at the show! 🎭</p>
@@ -532,8 +479,7 @@ if ($language === 'nl') {
                 The Masked Employee Team</p>
             </div>
             
-            <div class='footer'>
-                <h4>Need help?</h4>
+            <div class='footer-text'>
                 <p>This is an automatically generated email for " . htmlspecialchars($gameName) . "</p>
             </div>
         </div>
