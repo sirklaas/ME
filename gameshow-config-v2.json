@@ -42,8 +42,8 @@
       ]
     },
     "penalty_clause": {
-      "nl": "💰 BOETECLAUSULE: Bij overtreding van de geheimhoudingsplicht wordt een boete van €9.750 in rekening gebracht. Deze regel geldt voor alle deelnemers en medewerkers die kennis hebben van de deelnemerslijst.",
-      "en": "💰 PENALTY CLAUSE: In case of violation of the confidentiality obligation, a fine of €9,750 will be charged. This rule applies to all participants and employees who have knowledge of the participants list."
+      "nl": "💰 BOETECLAUSULE: Bij overtreding van de geheimhoudingsplicht wordt een boete van €750 in rekening gebracht. Deze regel geldt voor alle deelnemers en medewerkers die kennis hebben van de deelnemerslijst.",
+      "en": "💰 PENALTY CLAUSE: In case of violation of the confidentiality obligation, a fine of €750 will be charged. This rule applies to all participants and employees who have knowledge of the participants list."
     },
     "how_it_works_title": {
       "nl": "🎯 HOE HET WERKT:",
@@ -76,6 +76,7 @@
     "chapter5-jeugd-verleden.json",
     "chapter6-fantasie-dromen.json",
     "chapter7-eigenaardigheden.json",
-    "chapter8-onverwachte-voorkeuren.json"
+    "chapter8-onverwachte-voorkeuren.json",
+    "chapter9-film-maken.json"
   ]
 }

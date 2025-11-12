@@ -15,9 +15,21 @@ if (empty($imageUrl)) {
 
 // Format character description
 function extractFirstCharacter($aiSummary) {
-    // Replace section headers with user-friendly versions
-    $aiSummary = preg_replace('/\d+\.\s*KARAKTER\s*\([^)]+\):\s*/i', "\n\n🎭 Jouw Karakter\n\n", $aiSummary);
-    $aiSummary = preg_replace('/\d+\.\s*OMGEVING\s*\([^)]+\):\s*/i', "\n\n🌍 Dit is jouw wereld\n\n", $aiSummary);
+    // Remove duplicate character names (e.g., "Philip\n\nPhilip" -> "Philip")
+    $aiSummary = preg_replace('/(De\s+\w+\s+genaamd\s+)(\w+)\s*[\n\r]+\s*\2/i', '$1$2', $aiSummary);
+    
+    // Replace section headers with new user-friendly versions (all formats including plain "OMGEVING:")
+    $aiSummary = preg_replace('/\d+\.\s*KARAKTER\s*\([^)]+\):\s*/i', "\n\n📖 Jouw Verhaal in Vogelvlucht\n\n", $aiSummary);
+    $aiSummary = preg_replace('/\d+\.\s*OMGEVING\s*\([^)]+\):\s*/i', "\n\n🌍 En waar je zoal uithangt\n\n", $aiSummary);
+    $aiSummary = preg_replace('/===\s*KARAKTER\s*===/i', "\n\n📖 Jouw Verhaal in Vogelvlucht\n\n", $aiSummary);
+    $aiSummary = preg_replace('/===\s*OMGEVING\s*===/i', "\n\n🌍 En waar je zoal uithangt\n\n", $aiSummary);
+    $aiSummary = preg_replace('/OMGEVING:/i', "\n\n🌍 En waar je zoal uithangt\n\n", $aiSummary);
+    
+    // Replace "De [Type] genaamd [Name] is" with "Je bent"
+    $aiSummary = preg_replace('/De\s+\w+\s+genaamd\s+[^\s]+\s+is\s+/i', 'Je bent ', $aiSummary);
+    
+    // Remove personality section
+    $aiSummary = preg_replace('/===\s*PERSOONLIJKHEID\s*===[\s\S]*?(?=\n\n|$)/i', '', $aiSummary);
     
     // Extract only first character section (stop at next "De [Type] genaamd")
     $nextPattern = '/\n\n+De\s+\w+\s+genaamd/';
@@ -218,7 +230,34 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
             
             <?php if (!empty($description)): ?>
             <div class="character-description">
-                <?php echo nl2br($description); ?>
+                <?php 
+                // Clean up excessive whitespace VERY aggressively
+                $cleanDesc = preg_replace('/\n{2,}/', "\n", $description); // Convert ALL multiple newlines to single
+                $cleanDesc = trim($cleanDesc);
+                
+                // Split into lines and process
+                $lines = explode("\n", $cleanDesc);
+                $htmlOutput = '';
+                
+                foreach ($lines as $line) {
+                    $line = trim($line);
+                    if (empty($line)) continue; // Skip empty lines
+                    
+                    // Check if it's a heading
+                    if (strpos($line, 'Dit ben je eigenlijk heel diep van binnen:') !== false) {
+                        $htmlOutput .= '<h2 style="color: #8A2BE2; font-size: 1.8em; margin: 30px 0 10px 0;">' . htmlspecialchars($line) . '</h2>';
+                    } elseif (preg_match('/^Een\s+/', $line)) {
+                        $htmlOutput .= '<h3 style="color: #666; font-size: 1.3em; font-style: italic; margin: 5px 0 15px 0;">' . htmlspecialchars($line) . '</h3>';
+                    } elseif (preg_match('/^(📖|🌍)\s*/', $line)) {
+                        $htmlOutput .= '<h3 style="color: #8A2BE2; font-size: 1.5em; margin: 25px 0 10px 0;">' . htmlspecialchars($line) . '</h3>';
+                    } else {
+                        // Regular paragraph
+                        $htmlOutput .= '<p style="margin: 8px 0; line-height: 1.6;">' . htmlspecialchars($line) . '</p>';
+                    }
+                }
+                
+                echo $htmlOutput;
+                ?>
             </div>
             <?php endif; ?>
             

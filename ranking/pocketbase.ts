@@ -112,35 +112,26 @@ export function generateSessionId(): string {
   return `session_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
 }
 
-// Upload image to server
-export async function uploadImage(base64Data: string, filename: string): Promise<string | null> {
+// Fetch the 4 voting images from server
+export async function fetchVoteImages(): Promise<any[] | null> {
   try {
-    const response = await fetch('https://www.pinkmilk.eu/public/ME/upload-image.php', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        image: base64Data,
-        filename: filename
-      })
-    });
-
+    const response = await fetch('https://www.pinkmilk.eu/ME/get-vote-images.php');
+    
     if (!response.ok) {
-      throw new Error(`Upload failed: ${response.status}`);
+      throw new Error(`Failed to fetch images: ${response.status}`);
     }
-
+    
     const result = await response.json();
     
-    if (result.success) {
-      console.log('Image uploaded successfully:', result.url);
-      return result.url;
+    if (result.success && result.images) {
+      console.log('Loaded images from server:', result.images);
+      return result.images;
     } else {
-      console.error('Upload failed:', result.error);
+      console.error('Failed to load images:', result.error);
       return null;
     }
   } catch (error) {
-    console.error('Failed to upload image:', error);
+    console.error('Failed to fetch vote images:', error);
     return null;
   }
 }
@@ -149,14 +140,14 @@ export async function uploadImage(base64Data: string, filename: string): Promise
 export interface SessionConfig {
   id?: string;
   session_id: string;
-  images: Array<{ id: number; url: string; title: string }>;
+  titles: string[]; // Just the 4 titles, not full image objects
   players: string[];
   created?: string;
   updated?: string;
 }
 
-// Save session configuration to PocketBase
-export async function saveSessionConfig(sessionId: string, images: any[], players: string[]): Promise<boolean> {
+// Save session configuration to PocketBase (only titles and players)
+export async function saveSessionConfig(sessionId: string, titles: string[], players: string[]): Promise<boolean> {
   try {
     // Check if config already exists for this session
     const existing = await pb.collection('voting_session').getFirstListItem<SessionConfig>(
@@ -165,11 +156,11 @@ export async function saveSessionConfig(sessionId: string, images: any[], player
 
     const configData = {
       session_id: sessionId,
-      images: JSON.stringify(images.length > 0 ? images : []), // Ensure valid array
-      players: JSON.stringify(players.length > 0 ? players : []), // Ensure valid array
+      titles: JSON.stringify(titles), // Just the 4 titles
+      players: JSON.stringify(players),
     };
 
-    console.log('Attempting to save to PocketBase:', configData);
+    console.log('Saving to PocketBase:', configData);
 
     if (existing) {
       // Update existing config
@@ -181,7 +172,7 @@ export async function saveSessionConfig(sessionId: string, images: any[], player
       console.log('Created new record:', result);
     }
 
-    console.log('Configuration saved to PocketBase (voting_session)');
+    console.log('Configuration saved to PocketBase');
     return true;
   } catch (error: any) {
     console.error('Failed to save configuration to PocketBase:', error);
@@ -203,28 +194,13 @@ export async function loadSessionConfig(sessionId: string): Promise<SessionConfi
     );
     
     // Parse JSON strings back to arrays
-    let images = typeof config.images === 'string' ? JSON.parse(config.images) : config.images;
-    
-    // Replace old 'uploaded_image' placeholders with default images
-    if (Array.isArray(images)) {
-      images = images.map((img: any, index: number) => {
-        if (img.url === 'uploaded_image') {
-          return {
-            ...img,
-            url: `https://picsum.photos/seed/${img.id || index}/800/600`
-          };
-        }
-        return img;
-      });
-    }
-    
     const parsedConfig: SessionConfig = {
       ...config,
-      images: images,
-      players: typeof config.players === 'string' ? JSON.parse(config.players) : config.players,
+      titles: typeof config.titles === 'string' ? JSON.parse(config.titles) : (config.titles || []),
+      players: typeof config.players === 'string' ? JSON.parse(config.players) : (config.players || []),
     };
     
-    console.log('Configuration loaded from PocketBase (voting_session):', parsedConfig);
+    console.log('Configuration loaded from PocketBase:', parsedConfig);
     return parsedConfig;
   } catch (error) {
     console.log('No configuration found in PocketBase for session:', sessionId);

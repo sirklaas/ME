@@ -5,16 +5,16 @@
     "en": "Questions about your Masked Identity"
   },
   "description": {
-    "nl": "Laten we jouw mysterieuze kant ontdekken",
-    "en": "Let's discover your mysterious side"
+    "nl": "Laten we samen jouw verborgen persoonlijkheid ontdekken",
+    "en": "Let's discover your hidden personality together"
   },
   "questions": [
     {
       "id": 6,
       "type": "text",
       "question": {
-        "nl": "Als je een dier zou moeten kiezen dat jouw persoonlijkheid het beste weergeeft, welk dier zou dat zijn?",
-        "en": "If you had to choose an animal that best reflects your personality, which animal would that be?"
+        "nl": "Wat omschrijft jouw persoonlijkheid het beste?",
+        "en": "What best reflects your personality?"
       },
       "placeholder": {
         "nl": "Bijvoorbeeld: een leeuw, omdat ik leidinggevend ben...",
@@ -25,8 +25,8 @@
       "id": 7,
       "type": "text",
       "question": {
-        "nl": "Welke kleur kostuum zou het beste bij jouw karakter passen en waarom?",
-        "en": "Which color costume would best suit your character and why?"
+        "nl": "Welke kleur en textuur past het best bij jou en waarom?",
+        "en": "Which color and texture best suits you and why?"
       },
       "placeholder": {
         "nl": "Beschrijf de kleur maar leg vooral uit waarom...",

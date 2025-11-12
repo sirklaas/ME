@@ -33,47 +33,43 @@
     },
     {
       "id": 2,
-      "type": "multiple-choice",
+      "type": "personality-traits",
       "question": {
-        "nl": "Ben je getrouwd, in een relatie, of single?",
-        "en": "Are you married, in a relationship, or single?"
+        "nl": "Kies uit deze tegenpolen waar jij staat",
+        "en": "Choose where you stand on these opposites"
       },
-      "options": {
-        "nl": [
-          "Getrouwd",
-          "In een relatie",
-          "Single",
-          "Het is ingewikkeld"
-        ],
-        "en": [
-          "Married",
-          "In a relationship",
-          "Single",
-          "It's complicated"
-        ]
-      }
-    },
-    {
-      "id": 3,
-      "type": "multiple-choice",
-      "question": {
-        "nl": "Hoeveel fantasie heb je",
-        "en": "How much imagination do you have"
-      },
-      "options": {
-        "nl": [
-          "geen",
-          "best wel een beetje",
-          "heel veel",
-          "out of this world"
-        ],
-        "en": [
-          "none",
-          "quite a bit",
-          "a lot",
-          "out of this world"
-        ]
-      }
+      "traits": [
+        {
+          "id": "dreamy_pragmatic",
+          "left": {"nl": "Dromerig", "en": "Dreamy"},
+          "right": {"nl": "Pragmatisch", "en": "Pragmatic"}
+        },
+        {
+          "id": "introverted_social",
+          "left": {"nl": "Introvert", "en": "Introverted"},
+          "right": {"nl": "Sociaal", "en": "Social"}
+        },
+        {
+          "id": "chaotic_organized",
+          "left": {"nl": "Chaotisch", "en": "Chaotic"},
+          "right": {"nl": "Georganiseerd", "en": "Organized"}
+        },
+        {
+          "id": "cautious_reckless",
+          "left": {"nl": "Voorzichtig", "en": "Cautious"},
+          "right": {"nl": "Roekeloos", "en": "Reckless"}
+        },
+        {
+          "id": "philosophical_practical",
+          "left": {"nl": "Filosofisch", "en": "Philosophical"},
+          "right": {"nl": "Praktisch", "en": "Practical"}
+        },
+        {
+          "id": "serious_lighthearted",
+          "left": {"nl": "Serieus", "en": "Serious"},
+          "right": {"nl": "Luchtig", "en": "Lighthearted"}
+        }
+      ]
     },
     {
       "id": 4,
@@ -135,8 +131,8 @@
       "id": 7,
       "type": "multiple-choice",
       "question": {
-        "nl": "Hoe zou je jouw favoriete karakter omschrijven? Als een...",
-        "en": "How would you describe your favorite character? As a..."
+        "nl": "Klik aan in welke groep je karakter valt",
+        "en": "Click which group your character falls into"
       },
       "options": {
         "nl": [

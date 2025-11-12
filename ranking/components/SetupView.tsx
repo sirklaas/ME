@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { ImageItem } from '../types';
 import { DEFAULT_IMAGES } from '../constants';
 import ControlButton from './ControlButton';
-import { generateSessionId, saveSessionConfig, loadSessionConfig, uploadImage } from '../pocketbase';
+import { generateSessionId, saveSessionConfig, loadSessionConfig, fetchVoteImages } from '../pocketbase';
 
 // Make TypeScript aware of the XLSX library from the CDN
 declare const XLSX: any;
@@ -30,23 +30,40 @@ const SetupView: React.FC = () => {
   const [statusMessage, setStatusMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load config from PocketBase on mount
+  // Load images from server and config from PocketBase on mount
   useEffect(() => {
     const loadConfig = async () => {
+      // First, fetch images from server
+      const serverImages = await fetchVoteImages();
+      
+      if (serverImages) {
+        setImages(serverImages);
+      }
+      
+      // Then, load saved config from PocketBase (for titles and players)
       const sessionId = localStorage.getItem('votingSessionId') || 'default_session';
       const config = await loadSessionConfig(sessionId);
       
       if (config) {
         console.log('Loaded config from PocketBase:', config);
-        if (config.images && Array.isArray(config.images)) {
-          setImages(config.images);
+        
+        // Merge server images with saved titles
+        if (config.titles && Array.isArray(config.titles) && serverImages) {
+          const mergedImages = serverImages.map((serverImg: any, index: number) => {
+            return {
+              ...serverImg,
+              title: config.titles[index] || serverImg.title // Use saved title if exists
+            };
+          });
+          setImages(mergedImages);
         }
+        
         if (config.players && Array.isArray(config.players)) {
           setPlayers(config.players);
         }
-        setStatusMessage({ type: 'success', text: 'Configuration loaded from PocketBase' });
+        setStatusMessage({ type: 'success', text: 'Configuration loaded' });
       } else {
-        console.log('No config found in PocketBase, using defaults');
+        console.log('No config found in PocketBase, using server images');
       }
       setIsLoading(false);
     };
@@ -54,30 +71,10 @@ const SetupView: React.FC = () => {
     loadConfig();
   }, []);
 
-  const handleImageChange = async (index: number, file: File) => {
-    const reader = new FileReader();
-    reader.onload = async (e) => {
-      const base64Data = e.target?.result as string;
-      const newImages = [...images];
-      
-      // Show base64 preview immediately
-      newImages[index].url = base64Data;
-      setImages(newImages);
-      
-      // Upload to server in background
-      setStatusMessage({ type: 'success', text: `Uploading image ${index + 1}...` });
-      const serverUrl = await uploadImage(base64Data, file.name);
-      
-      if (serverUrl) {
-        // Update with server URL
-        newImages[index].url = serverUrl;
-        setImages(newImages);
-        setStatusMessage({ type: 'success', text: `Image ${index + 1} uploaded successfully!` });
-      } else {
-        setStatusMessage({ type: 'error', text: `Failed to upload image ${index + 1}. Using local copy.` });
-      }
-    };
-    reader.readAsDataURL(file);
+  // Images come from server - no upload needed
+  // This function is kept for compatibility but does nothing
+  const handleImageChange = (index: number, file: File) => {
+    setStatusMessage({ type: 'error', text: 'Please upload images to server directly (1_xxx.jpg, 2_xxx.jpg, etc.)' });
   };
 
   const handleTitleChange = (index: number, title: string) => {
@@ -115,18 +112,11 @@ const SetupView: React.FC = () => {
       const sessionId = localStorage.getItem('votingSessionId') || 'default_session';
       console.log('Saving configuration to PocketBase for session:', sessionId);
       
-      // DON'T save to localStorage - causes quota exceeded with base64 images
-      // Only save to PocketBase with server URLs
-      
-      // For PocketBase, save image metadata with server URLs
-      const imageMetadata = images.map(img => ({
-        id: img.id,
-        title: img.title,
-        url: img.url // Now contains server URL or default URL
-      }));
+      // Only save titles and players to PocketBase (images come from server)
+      const titles = images.map(img => img.title);
       
       // Save to PocketBase
-      const success = await saveSessionConfig(sessionId, imageMetadata, players);
+      const success = await saveSessionConfig(sessionId, titles, players);
       
       if (success) {
         setStatusMessage({ 

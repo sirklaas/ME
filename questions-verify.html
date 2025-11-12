@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <title>🎭 The Masked Employee - Gameshow Form</title>
-    <link rel="stylesheet" href="styles.css?v=20251103-glitch">
+    <link rel="stylesheet" href="styles.css?v=20251005-3">
 </head>
 <body>
     <!-- Animated Background -->
@@ -81,7 +81,7 @@
                     Vergeet alles wat je denkt over "normaal doen" op kantoor.<br>
                     Het is de hoogste tijd om die gekke, creatieve, onverwachte kant van jezelf te laten zien.<br>
                     Ben jij thuis misschien operazanger, eet je stiekum pizza met ananas,<br>
-                    ken jij als enige alle K-pop choreografieën uit je hoofd?
+                    ken jij als enige alle stiekem alle K-pop choreografieën uit je hoofd?
                 </p>
                 
                 <div class="excitement-section">
@@ -107,25 +107,11 @@
         </div>
 
         <!-- Progress indicators -->
-        <div class="progress-circle-container" id="progressCircleContainer" style="display: none;">
-            <div class="progress-circle">
-                <svg width="80" height="80">
-                    <circle cx="40" cy="40" r="35" fill="none" stroke="#e0e0e0" stroke-width="6"/>
-                    <circle id="progressCircle" cx="40" cy="40" r="35" fill="none" stroke="#8A2BE2" stroke-width="6" 
-                            stroke-dasharray="220" stroke-dashoffset="220" 
-                            transform="rotate(-90 40 40)" stroke-linecap="round"/>
-                </svg>
-                <div class="progress-percentage-circle" id="progressPercentage">0%</div>
-            </div>
-        </div>
-        
         <div class="step-indicator" id="stepIndicator" style="display: none;">
             <span id="currentStep">1</span> <span id="stepOf">van</span> <span id="totalSteps">8</span>
         </div>
-        <div class="progress-container" style="display: none;" id="progressContainer">
-            <div class="progress-bar" id="progressBar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+        <div class="progress-bar" id="progressBar" style="display: none;">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
 
         <div class="content">
@@ -155,7 +141,8 @@
             <!-- Character Preview Page (NEW) -->
             <div class="page" id="characterPreviewPage" style="display: none;">
                 <div class="preview-container">
-                    <h2 id="previewTitle">Met behulp van de allernieuwste AI technologie hebben we op basis van jouw antwoorden een Uniek Karakter gecreëerd.</h2>
+                    <h2 id="previewTitle">🎭 We hebben je karakter gevonden!</h2>
+                    <p id="previewSubtitle" class="preview-subtitle">Op basis van je antwoorden hebben we dit unieke karakter voor je gecreëerd:</p>
                     
                     <div class="character-preview-box" id="characterPreviewBox">
                         <div class="loading-preview">
@@ -168,6 +155,9 @@
                     </div>
                     
                     <div class="preview-actions">
+                        <button class="btn btn-secondary" id="regenerateButton">
+                            <span id="regenerateButtonText">🔄 Genereer opnieuw</span>
+                        </button>
                         <button class="btn btn-primary" id="acceptCharacterButton">
                             <span id="acceptButtonText">✅ Ja, dit ben ik!</span>
                         </button>
@@ -212,17 +202,15 @@
                 </div>
             </div>
 
-            <!-- Processing Confirmation Modal -->
-            <div id="processingConfirmationModal" class="modal" style="display: none;">
+            <!-- Email Modal -->
+            <div id="emailModal" class="modal" style="display: none;">
                 <div class="modal-content email-modal">
-                    <h2 id="processingConfirmationTitle" style="text-align: center; margin-bottom: 30px;">Dank je wel voor je input<br>Fantastisch gedaan!</h2>
-                    <div style="text-align: center; line-height: 1.8; font-size: 18px;">
-                        <p>Alles wordt nu verwerkt in ons Datacenter.</p>
-                        <p>Je ontvangt een mail met je Karakter beschrijving<br><strong>[maar hou het geheim!]</strong></p>
-                        <p>Daarna worden onze image generators opgestart<br>en die gaan puzzlen en berekenen hoe we jou<br>het beste eruit kunnen laten zien in onze Show.</p>
+                    <h2 id="emailModalTitle">📧 Waar mogen we de uitkomst naar toe mailen?</h2>
+                    <div class="email-input-container">
+                        <input type="email" id="emailInput" placeholder="jouw@email.nl" required>
                     </div>
-                    <button class="btn btn-primary" id="confirmProcessingButton" style="margin-top: 30px;">
-                        <span id="confirmProcessingButtonText">Ga maar aan de slag</span>
+                    <button class="btn btn-primary" id="sendEmailButton">
+                        <span id="sendEmailButtonText">Verstuur</span>
                     </button>
                 </div>
             </div>
@@ -233,8 +221,8 @@
                     <div class="success-icon">🎨</div>
                     <h2 id="processingTitle">Je afbeelding wordt gegenereerd!</h2>
                     <p id="processingMessage">
-                        <span id="processingThankYou">Bedankt [naam]!</span><br><br>
-                        <span id="processingDescription">Je antwoorden zijn opgeslagen en AI genereert nu je unieke karakter afbeelding.</span>
+                        <span id="processingThankYou">Bedankt</span> <span id="processingPlayerName"></span>!<br>
+                        <span id="processingDescription">Je antwoorden zijn opgeslagen en we genereren nu je unieke karakter afbeelding.</span>
                     </p>
                     
                     <!-- Generated Image Container -->
@@ -246,11 +234,15 @@
                         <h3 style="color: #155724; margin-bottom: 15px;" id="processingWhatNow">🎭 Wat gebeurt er nu?</h3>
                         <ul id="processingSteps">
                             <li id="processingStep1">✅ Je antwoorden zijn opgeslagen</li>
-                            <li id="processingStep2">📧 Je ontvangt een email met je karakter omschrijving</li>
-                            <li id="processingStep3">🎨 AI werkt hard aan je karakter afbeelding</li>
-                            <li id="processingStep4">🔒 Onthoud: absolute geheimhouding blijft nog steeds van kracht!</li>
+                            <li id="processingStep2">🎨 AI genereert je karakter afbeelding</li>
+                            <li id="processingStep3">📧 Je ontvangt een kopie per email</li>
+                            <li id="processingStep4">🔒 Onthoud: absolute geheimhouding blijft van kracht!</li>
                         </ul>
                     </div>
+
+                    <button class="btn btn-primary" id="restartButton">
+                        <span id="restartButtonText">Terug naar start</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -269,46 +261,35 @@
                 <h3 id="modalConfidentialityTitle">⚠️ ABSOLUTE GEHEIMHOUDING VERPLICHT ⚠️</h3>
             </div>
             <div class="modal-body">
-                <p id="modalConfidentialityWarning">LET OP: Door deel te nemen aan deze vragenlijst<br>ga je akkoord met de volgende strikte geheimhoudingsregels:</p>
+                <p id="modalConfidentialityWarning">LET OP: Door deel te nemen aan deze vragenlijst<br>ga je akkoord met de volgende geheimhoudingsregels:</p>
                 
-                <p style="margin: 15px 0 10px 0;"><strong>Het is niet toegestaan om:</strong></p>
                 <ul class="forbidden-list" id="modalForbiddenRules">
-                    <li>Deze vragenlijst te bespreken met collega's, vrienden of familie</li>
-                    <li>Je antwoorden te delen met anderen</li>
-                    <li>Te onthullen wie er deelneemt aan de show</li>
-                    <li>Te bespreken welke talenten of eigenschappen je hebt prijsgegeven</li>
-                    <li>Hints te geven - in welke vorm dan ook - over jouw identiteit tijdens de show</li>
+                    <li>Het bespreken van deze vragenlijst met collega's</li>
+                    <li>Het delen van je antwoorden met anderen</li>
+                    <li>Het onthullen wie er deelneemt aan de show</li>
+                    <li>Het bespreken van welke talenten of eigenschappen je hebt prijsgegeven</li>
+                    <li>Het geven van hints over je identiteit tijdens de show</li>
                 </ul>
 
                 <div class="penalty-box">
                     <div class="penalty" id="modalPenaltyClause">
                         <strong>💰 BOETECLAUSULE:</strong><br>
-                        <span style="font-weight: 500;">Bij overtreding van de geheimhoudingsplicht wordt een boete van <strong style="font-weight: 700;">€750</strong> in rekening gebracht.<br>
+                        Bij overtreding van de geheimhoudingsplicht wordt een boete van €750 in rekening gebracht.<br>
                         Deze regel geldt voor alle deelnemers en medewerkers alsmede hun familie en vrienden.<br>
-                        Kortom iedereen die kennis zou kunnen hebben van de deelnemerslijst.</span>
+                        Kortom iedereen die kennis zou kunnen hebben van de deelnemerslijst.
                     </div>
                     
                     <div class="agreement-checkbox">
-                        <label class="glitch-checkbox">
-                            <input type="checkbox" id="confidentialityAgree" class="glitch-input">
-                            <span class="glitch-box"></span>
-                            <span id="agreementText" class="glitch-label">Ja, ik ga volledig akkoord en zweer dit absoluut geheim te houden voor alles en iedereen.</span>
+                        <label>
+                            <input type="checkbox" id="confidentialityAgree">
+                            <span id="agreementText">Ja, ik ga volledig akkoord en zweer dit absoluut geheim te houden voor alles en iedereen.</span>
                         </label>
                     </div>
                     
-                    <!-- Email input section - appears after checkbox is checked -->
-                    <div id="emailSection" style="display: none; margin-top: 20px;">
-                        <div style="display: flex; gap: 15px; align-items: center; justify-content: space-between;">
-                            <div style="flex: 1;">
-                                <input type="email" id="modalEmailInput" placeholder="jouw@email.nl" 
-                                       style="width: 100%; padding: 12px; font-size: 16px; border: 2px solid #8b5cf6; border-radius: 8px; background: rgba(139, 92, 246, 0.1);">
-                            </div>
-                            <div>
-                                <button class="btn btn-primary" id="modalAcceptButton" disabled>
-                                    <span id="modalAcceptButtonText">Ik ga akkoord</span>
-                                </button>
-                            </div>
-                        </div>
+                    <div class="modal-footer-inside">
+                        <button class="btn btn-primary" id="modalAcceptButton" disabled>
+                            <span id="modalAcceptButtonText">Ik ga akkoord</span>
+                        </button>
                     </div>
                 </div>
             </div>

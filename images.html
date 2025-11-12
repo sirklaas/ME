@@ -348,7 +348,14 @@
                     ? `https://pinkmilk.pockethost.io/api/files/${char.collectionId}/${char.id}/${imageField}`
                     : '';
 
-                const characterName = char.character_name || char.charactername || char.name || 'Unknown Character';
+                // Clean up character name (remove duplicates like "Philip\n\nPhilip")
+                let characterName = char.character_name || char.charactername || char.name || 'Unknown Character';
+                const nameParts = characterName.split(/[\n\r]+/).map(n => n.trim()).filter(n => n);
+                if (nameParts.length > 1 && nameParts[0] === nameParts[nameParts.length - 1]) {
+                    characterName = nameParts[0]; // Use first if duplicated
+                } else {
+                    characterName = nameParts[0] || characterName; // Use first line
+                }
 
                 return `
                     <div class="character-card" onclick="openLightbox(${index})">
@@ -387,17 +394,39 @@
             }
             document.getElementById('lightboxTitle').textContent = characterName;
             
-            // Email with copy button
-            const emailHtml = char.email || char.playeremail
+            // Email with copy button - check multiple field names
+            const email = char.email || char.playeremail || char.player_email || char.nameplayer;
+            console.log('📧 Email check:', { email: char.email, playeremail: char.playeremail, nameplayer: char.nameplayer });
+            
+            const emailHtml = email
                 ? `
-                    <span>📧 ${char.email || char.playeremail}</span>
-                    <button class="email-copy-btn" onclick="copyEmail('${char.email || char.playeremail}')">Copy</button>
+                    <span>📧 ${email}</span>
+                    <button class="email-copy-btn" onclick="copyEmail('${email}')">Copy</button>
                   `
                 : '<span style="color: #999;">📧 No email provided</span>';
             document.getElementById('lightboxEmail').innerHTML = emailHtml;
             
             // Use ai_summary and extract only FIRST character
             let description = char.ai_summary || char.character_description || char.characterdescription || char.description || 'No description available';
+            
+            // Remove duplicate character names (e.g., "Philip\n\nPhilip" -> "Philip")
+            description = description.replace(/(De\s+\w+\s+genaamd\s+)(\w+)\s*[\n\r]+\s*\2/gi, '$1$2');
+            
+            // Format description with new headings (all formats including plain "OMGEVING:")
+            description = description.replace(/\d+\.\s*KARAKTER\s*\([^)]+\):\s*/gi, '\n\n📖 Jouw Verhaal in Vogelvlucht\n\n');
+            description = description.replace(/\d+\.\s*OMGEVING\s*\([^)]+\):\s*/gi, '\n\n🌍 En waar je zoal uithangt\n\n');
+            description = description.replace(/===\s*KARAKTER\s*===/gi, '\n\n📖 Jouw Verhaal in Vogelvlucht\n\n');
+            description = description.replace(/===\s*OMGEVING\s*===/gi, '\n\n🌍 En waar je zoal uithangt\n\n');
+            description = description.replace(/OMGEVING:/gi, '\n\n🌍 En waar je zoal uithangt\n\n');
+            
+            // Replace "De [Type] genaamd [Name] is" with "Je bent"
+            description = description.replace(/De\s+\w+\s+genaamd\s+[^\s]+\s+is\s+/gi, 'Je bent ');
+            
+            // Remove personality section
+            description = description.replace(/===\s*PERSOONLIJKHEID\s*===[\s\S]*?(?=\n\n|$)/gi, '');
+            
+            // Clean up excessive line breaks
+            description = description.replace(/\n{3,}/g, '\n\n');
             
             // Extract only first character from ai_summary (may contain multiple characters)
             const characterPattern = /De\s+\w+\s+genaamd\s+\w+/g;

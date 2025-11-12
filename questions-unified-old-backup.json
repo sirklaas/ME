@@ -52,13 +52,13 @@
     "how_it_works": {
       "nl": [
         "Vul de vragenlijst volledig en eerlijk in",
-        "Jouw antwoorden worden gebruikt voor AI-gegenereerde mysterieuze filmpjes",
+        "Jouw antwoorden worden gebruikt door AI om een uniek karakter van jou te maken",
         "Tijdens de show raden teams wie er achter elk masker schuilgaat",
         "Alleen aan het einde wordt hun ware identiteit onthuld!"
       ],
       "en": [
         "Complete the questionnaire below fully and honestly",
-        "Your answers will be used for AI-generated mysterious videos",
+        "Your answers will be used by AI to generate generated your unique character",
         "During the show, teams guess who is behind each mask",
         "Only at the end will your true identity be revealed!"
       ]
@@ -88,8 +88,18 @@
             "en": "What would you like to be?"
           },
           "options": {
-            "nl": ["Man", "Vrouw", "Non-binair", "Weet ik nog niet"],
-            "en": ["Man", "Woman", "Non-binary", "I don't know yet"]
+            "nl": [
+              "Man",
+              "Vrouw",
+              "Non-binair",
+              "Weet ik nog niet"
+            ],
+            "en": [
+              "Man",
+              "Woman",
+              "Non-binary",
+              "I don't know yet"
+            ]
           }
         },
         {
@@ -100,8 +110,18 @@
             "en": "Are you married, in a relationship, or single?"
           },
           "options": {
-            "nl": ["Getrouwd", "In een relatie", "Single", "Het is ingewikkeld"],
-            "en": ["Married", "In a relationship", "Single", "It's complicated"]
+            "nl": [
+              "Getrouwd",
+              "In een relatie",
+              "Single",
+              "Het is ingewikkeld"
+            ],
+            "en": [
+              "Married",
+              "In a relationship",
+              "Single",
+              "It's complicated"
+            ]
           }
         },
         {
@@ -112,20 +132,40 @@
             "en": "How much imagination do you have"
           },
           "options": {
-            "nl": ["geen", "best wel een beetje", "heel veel", "out of this world"],
-            "en": ["none", "quite a bit", "a lot", "out of this world"]
+            "nl": [
+              "geen",
+              "best wel een beetje",
+              "heel veel",
+              "out of this world"
+            ],
+            "en": [
+              "none",
+              "quite a bit",
+              "a lot",
+              "out of this world"
+            ]
           }
         },
         {
           "id": 4,
           "type": "multiple-choice",
           "question": {
-            "nl": "In welke leeftijdscategorie valt jouw character?",
+            "nl": "In welke leeftijdscategorie valt jouw karakter?",
             "en": "In which age category does your character fall?"
           },
           "options": {
-            "nl": ["10-20 jaar", "20-40 jaar", "40-50 jaar", "50+ jaar"],
-            "en": ["10-20 years", "20-40 years", "40-50 years", "50+ years"]
+            "nl": [
+              "10-20 jaar",
+              "20-40 jaar",
+              "40-50 jaar",
+              "50+ jaar"
+            ],
+            "en": [
+              "10-20 years",
+              "20-40 years",
+              "40-50 years",
+              "50+ years"
+            ]
           }
         },
         {
@@ -136,8 +176,66 @@
             "en": "How long have you been working at this company?"
           },
           "options": {
-            "nl": ["Minder dan 1 jaar", "1-3 jaar", "3-5 jaar", "Heel weing"],
-            "en": ["Less than 1 year", "1-3 years", "3-5 years", "Very little"]
+            "nl": [
+              "Minder dan 1 jaar",
+              "1-3 jaar",
+              "3-5 jaar",
+              "Heel weing"
+            ],
+            "en": [
+              "Less than 1 year",
+              "1-3 years",
+              "3-5 years",
+              "Very little"
+            ]
+          }
+        },
+        {
+          "id": 6,
+          "type": "text",
+          "question": {
+            "nl": "Op welke afdeling werk je?",
+            "en": "Which department do you work in?"
+          },
+          "placeholder": {
+            "nl": "Bijvoorbeeld: Marketing, IT, HR, Sales...",
+            "en": "For example: Marketing, IT, HR, Sales..."
+          }
+        },
+        {
+          "id": 7,
+          "type": "multiple-choice",
+          "question": {
+            "nl": "Hoe zou je jouw favoriete karakter omschrijven? Als een...",
+            "en": "How would you describe your favorite character? As a..."
+          },
+          "options": {
+            "nl": [
+              "🐾 Dier (bijvoorbeeld: vos, leeuw, pinguïn)",
+              "🍅 Groente of Fruit (bijvoorbeeld: tomaat, banaan, wortel)",
+              "⚔️ Fantasy Held (bijvoorbeeld: tovenaar, elf, ridder)",
+              "🎬 Pixar of Disney Figuur (bijvoorbeeld: uitvinder, avonturier)",
+              "📚 Sprookjesfiguur (bijvoorbeeld: prins, prinses, heks)"
+            ],
+            "en": [
+              "🐾 Animal (for example: fox, lion, penguin)",
+              "🍅 Fruit or Vegetable (for example: tomato, banana, carrot)",
+              "⚔️ Fantasy Hero (for example: wizard, elf, knight)",
+              "🎬 Pixar or Disney Character (for example: inventor, adventurer)",
+              "📚 Fairy Tale Character (for example: prince, princess, witch)"
+            ]
+          },
+          "characterTypeMapping": {
+            "🐾 Dier (bijvoorbeeld: vos, leeuw, pinguïn)": "animals",
+            "🍅 Groente of Fruit (bijvoorbeeld: tomaat, banaan, wortel)": "fruits_vegetables",
+            "⚔️ Fantasy Held (bijvoorbeeld: tovenaar, elf, ridder)": "fantasy_heroes",
+            "🎬 Pixar of Disney Figuur (bijvoorbeeld: uitvinder, avonturier)": "pixar_disney",
+            "📚 Sprookjesfiguur (bijvoorbeeld: prins, prinses, heks)": "fairy_tales",
+            "🐾 Animal (for example: fox, lion, penguin)": "animals",
+            "🍅 Fruit or Vegetable (for example: tomato, banana, carrot)": "fruits_vegetables",
+            "⚔️ Fantasy Hero (for example: wizard, elf, knight)": "fantasy_heroes",
+            "🎬 Pixar or Disney Character (for example: inventor, adventurer)": "pixar_disney",
+            "📚 Fairy Tale Character (for example: prince, princess, witch)": "fairy_tales"
           }
         }
       ]
@@ -157,12 +255,12 @@
           "id": 6,
           "type": "text",
           "question": {
-            "nl": "Wat omschrijft jouw persoonlijkheid het beste?",
+            "nl": "Wat omschrijft jouw persoonlijkheid het beste ?",
             "en": "What best reflects your personality?"
           },
           "placeholder": {
-            "nl": "Bijvoorbeeld: een leeuw, omdat ik leidinggevend ben...",
-            "en": "For example: a lion, because I'm a leader..."
+            "nl": "Bijvoorbeeld: een leeuw, omdat ik leidinggevend ben / agent want ik ben streng / tomaat, dromer etc",
+            "en": "For example: a lion, because I'm a leader / policeman cause im strict / tomato cause im juicy, a dreamer etc"
           }
         },
         {
@@ -173,8 +271,8 @@
             "en": "Which color costume would best suit your character and why?"
           },
           "placeholder": {
-            "nl": "Beschrijf de kleur maar leg vooral uit waarom...",
-            "en": "Describe the color but especially explain why..."
+            "nl": "Beschrijf de kleur en gebruik je fantasie maar leg vooral uit waarom...",
+            "en": "Describe the color and use your fantasy but especially explain why..."
           }
         },
         {
@@ -203,20 +301,20 @@
           "id": 9,
           "type": "text",
           "question": {
-            "nl": "Als je een masker zou ontwerpen voor jezelf, welk thema of symbool zou centraal staan?",
-            "en": "If you were to design a mask for yourself, what theme or symbol would be central?"
+            "nl": "Welk thema of symbool zou jou het beste weergeven?",
+            "en": "What theme or symbol would be describing you the best"
           },
           "placeholder": {
-            "nl": "Beschrijf het ontwerp van je masker in detail...",
-            "en": "Describe the design of your mask in detail..."
+            "nl": "Beschrijf je icoon of symbool in detail...",
+            "en": "Describe the design of your icon or symbol in detail..."
           }
         },
         {
           "id": 10,
           "type": "text",
           "question": {
-            "nl": "Welke muziekstijl zou het beste bij jouw entrance passen?",
-            "en": "Which music style would best suit your entrance?"
+            "nl": "Welke muziekstijl zou het beste bij jouw persoonlijkheid passen? En vertel waarom.",
+            "en": "Which music style would best suit your personality? And describe why."
           },
           "placeholder": {
             "nl": "Bijvoorbeeld: rock, klassiek, jazz, pop...",
@@ -434,8 +532,8 @@
           "id": 25,
           "type": "text",
           "question": {
-            "nl": "Welke trend uit je tienerjaren mis je het meest?",
-            "en": "Which trend from your teenage years do you miss the most?"
+            "nl": "Welke trend uit je jeugd mis je het meest?",
+            "en": "Which trend from your early years do you miss the most?"
           },
           "placeholder": {
             "nl": "Deze trend mis ik nog elke dag...",
@@ -446,8 +544,8 @@
           "id": 26,
           "type": "text",
           "question": {
-            "nl": "Als je terug kon gaan naar je 16e verjaardag, welk advies zou je jezelf geven?",
-            "en": "If you could go back to your 16th birthday, what advice would you give yourself?"
+            "nl": "Jij bent op jouw 16e verjaardag als gast, welk advies zou je jezelf geven?",
+            "en": "You are a guest on your 16th birthday, what advice would you give yourself?"
           },
           "placeholder": {
             "nl": "Mijn advies aan mijzelf..",
@@ -471,8 +569,8 @@
           "id": 27,
           "type": "text",
           "question": {
-            "nl": "In welke film- of boekenwereld zou je het liefst een maand willen leven?",
-            "en": "In which movie or book world would you most like to live for a month?"
+            "nl": "In welke film- of boekenwereld zou je een maand willen leven?",
+            "en": "In which movie or book world would you like to live for a month?"
           },
           "placeholder": {
             "nl": "Beschrijf de wereld uitvoerig en waarom je daar zou willen zijn...",
@@ -483,8 +581,8 @@
           "id": 28,
           "type": "text",
           "question": {
-            "nl": "Als je morgen wakker werd met het geld van Elon Musk, wat zou je daarmee dan gelijk kopen?",
-            "en": "If you woke up tomorrow with Elon Musk's money, what would you buy right away?"
+            "nl": "Je wordt wakker werd met al het geld van Elon Musk, wat zou je daarmee dan gelijk kopen?",
+            "en": "You wake up with all of Elon Musk's money, what would you buy right away?"
           },
           "placeholder": {
             "nl": "Wat zou je allereerste aankoop zijn...",
@@ -507,8 +605,8 @@
           "id": 30,
           "type": "text",
           "question": {
-            "nl": "Als je een restaurant zou openen, welke keuken zou je serveren en hoe zou het heten?",
-            "en": "If you were to open a restaurant, what cuisine would you serve and what would it be called?"
+            "nl": "Je mag een restaurant openen, welke keuken zou je serveren en hoe zou het heten?",
+            "en": "You can open a restaurant, what cuisine would you serve and what would it be called?"
           },
           "placeholder": {
             "nl": "Beschrijf je restaurant concept...",
@@ -588,13 +686,15 @@
               "Vroeg in de ochtend (5-8 uur)",
               "Ochtend (8-12 uur)",
               "Middag (12-17 uur)",
-              "Avond/nacht (21:00+ uur)"
+              "Avond (17-24  uur)",
+              "Nacht (00+ uur)"
             ],
             "en": [
               "Early morning (5-8 AM)",
               "Morning (8 AM-12 PM)",
               "Afternoon (12-5 PM)",
-              "Evening/night (9 PM+)"
+              "Evening(5-11 PM )",
+              "Night (11 PM+)"
             ]
           }
         },
@@ -606,8 +706,8 @@
             "en": "What is your most unusual way to relieve stress?"
           },
           "placeholder": {
-            "nl": "Beschrijf hoe je op een unieke manier stress afreageert...",
-            "en": "Describe how you relieve stress in a unique way..."
+            "nl": "Je bent super stressed - Wat is jouw unieke manier om stress af te reageren ",
+            "en": "Your Super stressed - Describe how you relieve stress in a unique way..."
           }
         }
       ]
@@ -627,8 +727,8 @@
           "id": 37,
           "type": "text",
           "question": {
-            "nl": "Welk genre muziek luister je stiekem graag dat niemand van je zou verwachten?",
-            "en": "What music genre do you secretly enjoy listening to that no one would expect from you?"
+            "nl": "Waar luister je stiekem graag naar - iets dat niemand van je zou verwachten?",
+            "en": "What music genre do you secretly enjoy listening to - something that no one would expect from you?"
           },
           "placeholder": {
             "nl": "Vertel over je guilty pleasures",
@@ -651,8 +751,8 @@
           "id": 39,
           "type": "text",
           "question": {
-            "nl": "Als je een tattoo zou nemen, wat zou het zijn en waar zou je het laten zetten?",
-            "en": "If you were to get a tattoo, what would it be and where would you get it?"
+            "nl": "Als je een [ nog een ] tattoo zou nemen, wat zou het zijn en waar zou je het laten zetten?",
+            "en": "If you were to get [ another ] tattoo, what would it be and where would you get it?"
           },
           "placeholder": {
             "nl": "Beschrijf je hypothetische tattoo...",
@@ -676,60 +776,84 @@
     {
       "id": 9,
       "title": {
-        "nl": "Film Maken",
-        "en": "Movie Making"
+        "nl": "Jouw Geheime Verhaal in Beeld",
+        "en": "Your Secret Story on Screen"
       },
       "description": {
-        "nl": "Beschrijf de 3 mysterieuze filmpjes die jouw verhaal vertellen",
-        "en": "Describe the 3 mysterious videos that tell your story"
+        "nl": "Laat je mysterieuze kant zien! We gaan samen 3 korte films maken die jouw verhaal onthullen – laag voor laag. Van mysterieus en raadselachtig tot de ultieme onthulling. Elk filmpje bestaat uit 3 scenes: een intrigerende opening, een verdiepend midden en een spannend eind. Ben jij klaar om je masker langzaam af te leggen?",
+        "en": "Show your mysterious side! Together we'll create 3 short films that reveal your story – layer by layer. From mysterious and enigmatic to the ultimate revelation. Each video consists of 3 scenes: an intriguing opening, a deepening middle and an exciting ending. Are you ready to slowly take off your mask?"
       },
       "questions": [
         {
           "id": 41,
           "type": "text",
           "question": {
-            "nl": "Omschrijf het eerste filmpje dat je zou willen maken in 3 scenes. Dit moet een geheime kant van jou vertellen maar nog niet al te veel prijsgeven.",
-            "en": "Describe the first video you would like to make in 3 scenes. This should reveal a secret side of you but not give away too much yet."
+            "nl": "Film 1 - Het Mysterie Achter het Masker: Tijd voor je meest cryptische filmpje! Beschrijf 3 scenes die nieuwsgierigheid wekken maar je geheim nog bewaren. Van een intrigerend begin, via een mysterieus midden, naar een spannend slot. Welke geheime kant van jezelf laat je subtiel doorschemeren?",
+            "en": "Film 1 - The Mystery Behind the Mask: Time for your most cryptic video! Describe 3 scenes that spark curiosity but still keep your secret. From an intriguing beginning, through a mysterious middle, to an exciting finale. Which secret side of yourself do you subtly reveal?"
           },
           "placeholder": {
-            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
-            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+            "nl": "Scene 1 - De Opening: Waar ben je? Wat zie we? Welke sfeer creëer je zonder te veel te onthullen?\nScene 2 - Het Mysterie Verdiept Zich: Wat gebeurt er? Welke subtiele hint geef je weg over wie je bent?\nScene 3 - De Cliffhanger: Hoe eindigt het? Wat laat je achter dat vragen oproept?",
+            "en": "Scene 1 - The Opening: Where are you? What do we see? What atmosphere do you create without revealing too much?\nScene 2 - The Mystery Deepens: What happens? What subtle hint do you give away about who you are?\nScene 3 - The Cliffhanger: How does it end? What do you leave behind that raises questions?"
           },
           "scenes": {
-            "nl": ["Scene 1", "Scene 2", "Scene 3"],
-            "en": ["Scene 1", "Scene 2", "Scene 3"]
+            "nl": [
+              "Scene 1 - De Opening",
+              "Scene 2 - Het Mysterie Verdiept Zich",
+              "Scene 3 - De Cliffhanger"
+            ],
+            "en": [
+              "Scene 1 - The Opening",
+              "Scene 2 - The Mystery Deepens",
+              "Scene 3 - The Cliffhanger"
+            ]
           }
         },
         {
           "id": 42,
           "type": "text",
           "question": {
-            "nl": "Omschrijf het middelste filmpje dat je zou willen maken in 3 scenes. Dit moet een geheime kant van jou vertellen en mag al iets meer prijsgeven.",
-            "en": "Describe the middle video you would like to make in 3 scenes. This should reveal a secret side of you and may give away a bit more."
+            "nl": "Film 2 - De Sluier Verschuift: Omschrijf het middelste filmpje, met iets meer hints dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag al iets meer prijsgeven.",
+            "en": "Film 2 - The Veil Shifts: Describe the middle video, with a few more hints that you would like to make in 3 scenes. A beginning / a middle / and an exciting end. This should tell a secret side of you and may reveal a bit more."
           },
           "placeholder": {
-            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
-            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+            "nl": "Scene 4 - Eerste Onthulling: Welke kant van jezelf laat je nu zien? Wat wordt iets duidelijker?\nScene 5 - De Puzzelstukjes: Welke details voeg je toe? Wat maakt nieuwsgierig naar meer?\nScene 6 - De Spanning Stijgt: Hoe bouw je de spanning verder op? Wat suggereert de grote onthulling?",
+            "en": "Scene 4 - First Revelation: Which side of yourself do you show now? What becomes a bit clearer?\nScene 5 - The Puzzle Pieces: What details do you add? What makes people curious for more?\nScene 6 - The Tension Rises: How do you build the tension further? What suggests the big reveal?"
           },
           "scenes": {
-            "nl": ["Scene 1", "Scene 2", "Scene 3"],
-            "en": ["Scene 1", "Scene 2", "Scene 3"]
+            "nl": [
+              "Scene 4 - Eerste Onthulling",
+              "Scene 5 - De Puzzelstukjes",
+              "Scene 6 - De Spanning Stijgt"
+            ],
+            "en": [
+              "Scene 4 - First Revelation",
+              "Scene 5 - The Puzzle Pieces",
+              "Scene 6 - The Tension Rises"
+            ]
           }
         },
         {
           "id": 43,
           "type": "text",
           "question": {
-            "nl": "Omschrijf het laatste filmpje dat je zou willen maken in 3 scenes. Dit moet een geheime kant van jou vertellen en mag het laatste beetje prijsgeven.",
-            "en": "Describe the final video you would like to make in 3 scenes. This should reveal a secret side of you and may give away the final clues."
+            "nl": "Film 3 - Het Masker Valt: Omschrijf het laatste filmpje dat je zou willen maken in 3 scenes. Een begin / een midden / en een spannend eind. Dit moet een geheime kant van jou vertellen en mag het laatste beetje prijsgeven.",
+            "en": "Film 3 - The Mask Falls: Describe the final video you would like to make in 3 scenes. A beginning / a middle / and an exciting end. This should tell a secret side of you and may reveal the final piece."
           },
           "placeholder": {
-            "nl": "Scene 1: ...\nScene 2: ...\nScene 3: ...",
-            "en": "Scene 1: ...\nScene 2: ...\nScene 3: ..."
+            "nl": "Scene 7 - Het Masker Scheurt een beetje: Hoe begin je jouw onthulling? Wat wordt nu echt zichtbaar?\nScene 8 - De Waarheid Komt Dichterbij: Welke laatste details onthul je? Wat maakt jouw verhaal compleet?\nScene 9 - De Grote Onthulling: Hoe sluit je af? Wat is de verrassende of krachtige finale van jouw verhaal?",
+            "en": "Scene 7 - The Mask Tears a Little: How do you begin your revelation? What becomes truly visible now?\nScene 8 - The Truth Draws Closer: What final details do you reveal? What makes your story complete?\nScene 9 - The Big Reveal: How do you conclude? What is the surprising or powerful finale of your story?"
           },
           "scenes": {
-            "nl": ["Scene 1", "Scene 2", "Scene 3"],
-            "en": ["Scene 1", "Scene 2", "Scene 3"]
+            "nl": [
+              "Scene 7 - Het Masker Scheurt een beetje",
+              "Scene 8 - De Waarheid Komt Dichterbij",
+              "Scene 9 - De Grote Onthulling"
+            ],
+            "en": [
+              "Scene 7 - The Mask Tears a Little",
+              "Scene 8 - The Truth Draws Closer",
+              "Scene 9 - The Big Reveal"
+            ]
           }
         }
       ]
@@ -740,7 +864,10 @@
     "created": "2025-10-08",
     "total_questions": 43,
     "total_chapters": 9,
-    "languages": ["nl", "en"],
+    "languages": [
+      "nl",
+      "en"
+    ],
     "estimated_time_minutes": 35
   }
 }
