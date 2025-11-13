@@ -55,14 +55,15 @@ foreach ($records as $index => $record) {
         continue;
     }
     
-    // Determine if it's a full URL or just filename
+    // Determine if it's a full URL or PocketBase filename
     if (strpos($imageUrl, 'http') === 0) {
         $fullImageUrl = $imageUrl;
         $filename = basename(parse_url($imageUrl, PHP_URL_PATH));
     } else {
-        // It's just a filename - try to download from Leonardo CDN
-        // Note: This might not work if the URL structure is different
-        $fullImageUrl = $imageUrl;
+        // It's a PocketBase filename - construct the file URL
+        // PocketBase file URL format: {pbUrl}/api/files/{collection}/{recordId}/{filename}
+        $recordId = $record['id'];
+        $fullImageUrl = "$pbUrl/api/files/$pbCollection/$recordId/$imageUrl";
         $filename = $imageUrl;
     }
     
