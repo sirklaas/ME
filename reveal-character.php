@@ -92,8 +92,8 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
         }
 
         .reveal-box {
-            background: #fff3cd;
-            border: 3px solid #ffc107;
+            background: linear-gradient(135deg, #edf2f4 0%, #edf2f4 100%);
+            border: 3px solid #d90429;
             padding: 50px 30px;
             border-radius: 20px;
             text-align: center;
@@ -101,41 +101,41 @@ $downloadUrl = 'download-image.php?url=' . urlencode($imageUrl) . '&name=' . url
         }
 
         .reveal-box h1 {
-            color: #856404;
+            color: #03045e;
             font-size: 2.5em;
             margin-bottom: 20px;
         }
 
         .reveal-box h2 {
-            color: #856404;
+            color: #3d348b;
             font-size: 1.5em;
             margin-bottom: 15px;
             line-height: 1.4;
         }
 
         .reveal-box p {
-            color: #856404;
+            color: #3d348b;
             font-size: 1.1em;
             margin-bottom: 30px;
         }
 
         .reveal-btn {
-            background: linear-gradient(135deg, #dc3545, #c82333);
+            background: #d90429;
             color: white;
             padding: 25px 60px;
             font-size: 1.4em;
             font-weight: bold;
             border: none;
-            border-radius: 15px;
+            border-radius: 25px;
             cursor: pointer;
-            box-shadow: 0 8px 25px rgba(220, 53, 69, 0.4);
+            box-shadow: 0 8px 25px rgba(217, 4, 41, 0.4);
             transition: all 0.3s;
         }
 
         .reveal-btn:hover {
-            background: linear-gradient(135deg, #c82333, #dc3545);
+            background: #c10325;
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(220, 53, 69, 0.5);
+            box-shadow: 0 12px 35px rgba(217, 4, 41, 0.5);
         }
 
         .character-content {
